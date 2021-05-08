@@ -13,3 +13,12 @@ export function getLatestWatering(plant) {
     .pop();
 
 }
+
+export function sortByLatestWateringDate(plantA, plantB) {
+
+  const dateA = getLatestWatering(plantA)?.date || 0,
+        dateB = getLatestWatering(plantB)?.date || 0;
+
+  return dateA - dateB;
+
+}
