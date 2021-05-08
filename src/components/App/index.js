@@ -3,14 +3,13 @@ import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import { map } from 'lodash';
 
+import { getLatestWatering } from '~/src/utils';
+
 import style from './index.module.scss';
 
 import LoginView from './LoginView';
 import SpeciesList from './SpeciesList';
 import PlantsList from './PlantsList';
-
-import speciesData from '~/src/data/species';
-import plantsData from '~/src/data/plants';
 
 const App = () => {
 
@@ -67,20 +66,12 @@ const App = () => {
   }
 
   function onSpeciesDataUpdate(data) {
-
-    setSpecies(map(data, (plant, plantId) => ({
-      ...plant,
-      id: plantId
-    })));
-
+    // Maps object to array
+    setSpecies(map(data, (s, id) => ({ ...s, id })));
   }
   function onPlantsDataUpdate(data) {
-
-    setPlants(map(data, (plant, plantId) => ({
-      ...plant,
-      id: plantId
-    })));
-
+    // Maps object to array
+    setPlants(map(data, (p, id) => ({ ...p, id })));
   }
 
   return (

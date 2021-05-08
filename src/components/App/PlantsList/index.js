@@ -1,6 +1,10 @@
 
 import * as React from 'react';
 import firebase from 'firebase/app';
+import moment from 'moment';
+import { map } from 'lodash';
+
+import { getLatestWatering } from '~/src/utils';
 
 import style from './index.module.scss';
 
@@ -10,13 +14,34 @@ const PlantsList = ({
   species = []
 }) => {
 
-  function onSelectSpecies(plantId, speciesId) {
+  function onWaterClick(plantId) {
 
     firebase.database()
-      .ref(`users/${userId}/plants/${plantId}`)
-      .update({
-        species: speciesId
-      });
+      .ref(`users/${userId}/plants/${plantId}/wateringHistory`)
+      .push({
+        date: Date.now()
+      })
+
+  }
+
+  function getLastWateredText(plantId) {
+
+    const plant        = plants.find((p) => p.id === plantId),
+          lastWatering = getLatestWatering(plant);
+
+    if (!lastWatering?.date) return null;
+
+    const daysAgo = moment().diff(lastWatering.date, 'days');
+
+    if (!daysAgo) {
+      return 'Today';
+    }
+
+    if (daysAgo === 1) {
+      return 'Yesterday';
+    }
+
+    return `${daysAgo} days ago`;
 
   }
 
@@ -25,38 +50,41 @@ const PlantsList = ({
 
       <h2>Your plants</h2>
 
-      <table>
+      <table
+        className={style.plants}>
         <thead>
           <tr>
             <th>Plant</th>
-            <th>Specie</th>
+            <th>Specie (Common)</th>
+            <th>Specie (Scientific)</th>
+            <th>Last Watered</th>
+            <th>Water</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-          </tr>
+          {plants.map((plant) => {
+
+            const specie = species.find((s) => s.id === plant.specie);
+
+            return (
+              <tr
+                key={plant.id}>
+                <td>{plant.nickname}</td>
+                <td>{specie?.commonName}</td>
+                <td>{specie?.scientificName}</td>
+                <td>{getLastWateredText(plant.id)}</td>
+                <th>
+                  <button
+                    onClick={() => onWaterClick(plant.id)}>
+                    Water
+                  </button>
+                </th>
+              </tr>
+            )
+          })}
+
         </tbody>
       </table>
-
-      <ul>
-        {plants.map((plant) => {
-
-          const specie = species.find((s) => s.id === plant.specie);
-
-          return (
-            <li key={plant.id}>
-              {plant.nickname}
-              {specie && (
-                <span className={style.specie}>
-                  &nbsp;({specie.scientificName})
-                </span>
-              )}
-            </li>
-          )
-        })}
-      </ul>
 
     </div>
   );
