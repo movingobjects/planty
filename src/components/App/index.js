@@ -89,8 +89,11 @@ const App = () => {
 
       {user ? (
         <main>
-          <SpeciesList species={species} />
-          <PlantsList plants={plants} />
+          {/* <SpeciesList species={species} /> */}
+          <PlantsList
+            userId={user?.uid}
+            plants={plants}
+            species={species} />
         </main>
       ) : (
         <LoginView

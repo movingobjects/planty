@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 
-import styles from './index.module.scss';
+import style from './index.module.scss';
 
 const LoginView = ({
   ready = false,
@@ -9,9 +9,9 @@ const LoginView = ({
 }) => {
 
   return (
-    <div className={styles.wrap}>
+    <div className={style.wrap}>
 
-      <div className={styles.wrapContent}>
+      <div className={style.wrapContent}>
 
         {ready ? (
           <button

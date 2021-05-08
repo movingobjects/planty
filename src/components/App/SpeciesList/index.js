@@ -1,16 +1,16 @@
 
 import * as React from 'react';
 
-import styles from './index.module.scss';
+import style from './index.module.scss';
 
 const SpeciesList = ({
   species = []
 }) => {
 
   return (
-    <div className={styles.wrap}>
+    <div className={style.wrap}>
 
-      <h3>All species</h3>
+      <h2>All species</h2>
 
       <ul>
         {species.map((specie) => (
