@@ -8,3 +8,6 @@ node_modules/
 dist/
 .parcel-cache/
 parcel-bundle-reports/
+
+# Project-specific
+.env
