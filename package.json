@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "parcel serve './src/index.html' --no-cache --open",
-    "build": "rm -rf './docs'; parcel build './src/index.html' --dist-dir './docs' --no-source-maps",
+    "build": "rm -rf './docs'; parcel build './src/index.html'",
     "empty-cache": "rm -rf './.parcel-cache'"
   },
   "devDependencies": {
@@ -27,5 +27,12 @@
     "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
+  },
+  "default": "docs/index.html",
+  "targets": {
+    "default": {
+      "publicUrl": ".",
+      "sourceMap": false
+    }
   }
 }
