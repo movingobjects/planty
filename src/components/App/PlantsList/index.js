@@ -2,10 +2,12 @@
 import * as React from 'react';
 import firebase from 'firebase/app';
 import { map, times } from 'lodash';
+import moment from 'moment';
 
 import {
   getLatestWatering,
-  getWateredLastText
+  getDateLastWatered,
+  getAvgWaterInterval
 } from '~/src/utils';
 
 import style from './index.module.scss';
@@ -32,6 +34,13 @@ const PlantsList = ({
       })
   }
 
+  function onEditClick(plantId) {
+    console.log(`Edit ${plantId}`);
+  }
+  function onRemoveClick(plantId) {
+    console.log(`Remove ${plantId}`);
+  }
+
   return (
     <div className={style.wrap}>
 
@@ -43,16 +52,19 @@ const PlantsList = ({
           <tr>
             <th>Icon</th>
             <th>Plant</th>
-            <th>Specie (Common)</th>
-            <th>Specie (Scientific)</th>
             <th>Last Watered</th>
-            <th>Water</th>
+            <th>Avg Interval</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {plants.map((plant) => {
 
-            const specie = species.find((s) => s.id === plant.specie);
+            const specie          = species.find((s) => s.id === plant.specie),
+                  dateLastWatered = getDateLastWatered(plant),
+                  avgInterval     = getAvgWaterInterval(plant),
+                  lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
+                  avgIntervalText = avgInterval ? moment.duration(avgInterval).humanize() : null;
 
             return (
               <tr
@@ -66,16 +78,32 @@ const PlantsList = ({
                     </p>
                   )}
                 </td>
-                <td><strong>{plant.nickname}</strong></td>
-                <td>{specie?.commonName}</td>
-                <td>{specie?.scientificName}</td>
-                <td>{getWateredLastText(plant)}</td>
-                <th>
+                <td>
+                  <p>
+                    <strong>{plant.nickname}</strong><br />
+                    {specie?.commonName} ({specie?.scientificName})
+                  </p>
+                  <p>
+                    <button
+                      disabled
+                      onClick={() => onEditClick(plant.id)}>
+                      Edit
+                    </button>
+                    <button
+                      disabled
+                      onClick={() => onRemoveClick(plant.id)}>
+                      Remove
+                    </button>
+                  </p>
+                </td>
+                <td>{lastWateredText}</td>
+                <td>{avgIntervalText}</td>
+                <td>
                   <button
                     onClick={() => onWaterClick(plant.id)}>
                     Water
                   </button>
-                </th>
+                </td>
               </tr>
             )
           })}

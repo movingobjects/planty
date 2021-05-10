@@ -1,12 +1,15 @@
 
 import { map } from 'lodash';
-import moment from 'moment';
+
+export function getWateringHistory(plant) {
+  return map(plant?.wateringHistory || [], (w, id) => ({ ...w, id })) || [];
+}
 
 export function getLatestWatering(plant) {
 
-  if (!plant.wateringHistory) return null;
+  const history = getWateringHistory(plant);
 
-  const history = map(plant.wateringHistory, (w, id) => ({ ...w, id })) || []
+  if (!history?.length) return null;
 
   return history
     .slice()
@@ -15,7 +18,7 @@ export function getLatestWatering(plant) {
 
 }
 
-export function sortByLatestWateringDate(plantA, plantB) {
+export function sortByDateLastWatered(plantA, plantB) {
 
   const dateA = getLatestWatering(plantA)?.date || 0,
         dateB = getLatestWatering(plantB)?.date || 0;
@@ -24,12 +27,24 @@ export function sortByLatestWateringDate(plantA, plantB) {
 
 }
 
-export function getWateredLastText(plant) {
+export function getDateLastWatered(plant) {
 
-  const lastWatering = getLatestWatering(plant);
+  return getLatestWatering(plant)?.date;
 
-  if (!lastWatering?.date) return null;
+}
 
-  return moment(lastWatering.date).fromNow();
+export function getAvgWaterInterval(plant) {
+
+  const history = getWateringHistory(plant);
+
+  if (!history?.length || history.length < 2) {
+    return null;
+  }
+
+  const datesCount = history.length,
+        dateFirst  = history[0].date || 0,
+        dateLatest = history[datesCount - 1]?.date || 0;
+
+  return (dateLatest - dateFirst) / (datesCount - 1);
 
 }

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import { map } from 'lodash';
 
-import { sortByLatestWateringDate } from '~/src/utils';
+import { sortByDateLastWatered } from '~/src/utils';
 
 import style from './index.module.scss';
 
@@ -73,7 +73,7 @@ const App = () => {
     // Maps object to array
 
     const updatedPlants = map(data, (p, id) => ({ ...p, id }))
-      .sort(sortByLatestWateringDate);
+      .sort(sortByDateLastWatered);
 
     setPlants(updatedPlants);
   }
