@@ -3,6 +3,7 @@ import * as React from 'react';
 import firebase from 'firebase/app';
 import { map, times } from 'lodash';
 import moment from 'moment';
+import { useHash } from 'react-use';
 
 import {
   getLatestWatering,
@@ -17,6 +18,8 @@ const PlantsList = ({
   plants = [],
   species = []
 }) => {
+
+  const [ hash, setHash ] = useHash();
 
   function onWaterClick(plantId) {
     firebase.database()
@@ -35,7 +38,7 @@ const PlantsList = ({
   }
 
   function onEditClick(plantId) {
-    console.log(`Edit ${plantId}`);
+    setHash(`#/plant/${plantId}/edit`);
   }
   function onRemoveClick(plantId) {
     console.log(`Remove ${plantId}`);

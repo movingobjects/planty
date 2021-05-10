@@ -1,0 +1,58 @@
+
+@import '~/src/styles/vars';
+
+:local {
+
+  div.wrap {
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: $colorOverlay;
+
+    align-items: center;
+    justify-content: center;
+    //z-index: $zModal;
+
+    .panel {
+      width: 750px;
+      padding: 30px;
+      background-color: white;
+      margin-bottom: 50px;
+      //@include addShadow();
+      border-radius: 2px;
+      transition:
+        opacity 0.2s ease,
+        background-color 0.2s ease;
+
+      .content h1:first-child {
+        margin-top: 0;
+        font-size: 24px;
+      }
+
+      &.disabled {
+        pointer-events: none;
+        //background-color: $colorLightA;
+
+        .content {
+          opacity: 0.5;
+
+        }
+      }
+
+      footer {
+        margin-top: 30px;
+        text-align: right;
+
+        button + button {
+          margin-left: 15px;
+        }
+      }
+
+    }
+
+  }
+
+}

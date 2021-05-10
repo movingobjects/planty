@@ -1,17 +1,26 @@
 
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import firebase from 'firebase/app';
 import { map } from 'lodash';
 
+import * as actions from '~/src/actions';
 import { sortByDateLastWatered } from '~/src/utils';
 
-import style from './index.module.scss';
-
+import Switch from '~/src/components/Router/Switch';
+import Route from '~/src/components/Router/Route';
+import Header from './Header';
 import LoginView from './LoginView';
 import SpeciesList from './SpeciesList';
 import PlantsList from './PlantsList';
+import EditPlantModal from './modals/EditPlantModal';
+
+import style from './index.module.scss';
+
 
 const App = () => {
+
+  const route = useSelector((state) => state.route);
 
   const [ authReady, setAuthReady ] = useState(false);
   const [ user, setUser ] = useState(null);
@@ -78,23 +87,47 @@ const App = () => {
     setPlants(updatedPlants);
   }
 
+  if (route === null) {
+    return null;
+  }
+
+  if (!user) {
+    return (
+      <LoginView
+        ready={authReady}
+        onLoginClick={onLoginClick} />
+    )
+  }
+
   return (
     <div className={style.wrap}>
-      <h1>Plants Watering Log</h1>
 
-      {user ? (
-        <main>
-          {/* <SpeciesList species={species} /> */}
-          <PlantsList
+      <Header />
+
+      <main>
+
+        <Switch>
+
+          <Route
+            path='#/species'
+            component={SpeciesList}
+            userId={user?.uid}
+            species={species} />
+
+          <Route
+            path='#/'
+            component={PlantsList}
             userId={user?.uid}
             plants={plants}
             species={species} />
-        </main>
-      ) : (
-        <LoginView
-          ready={authReady}
-          onLoginClick={onLoginClick} />
-      )}
+
+        </Switch>
+
+        <Switch>
+          <Route path='#/plant/:plantId/edit' component={EditPlantModal} />
+        </Switch>
+
+      </main>
 
     </div>
   )

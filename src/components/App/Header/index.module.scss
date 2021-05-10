@@ -1,0 +1,42 @@
+
+@import '~/src/styles/vars';
+
+:local {
+
+  div.wrap {
+    display: flex;
+    align-items: center;
+
+    ul.nav {
+      display: flex;
+      align-items: center;
+      padding: 0;
+      list-style: none;
+      margin-left: 50px;
+
+      li {
+        text-transform: uppercase;
+        font-size: 14px;
+
+        & + li {
+          margin-left: 15px;
+        }
+        &.selected {
+          a {
+            color: $colorHighlight;
+            text-decoration: none;
+            pointer-events: none;
+          }
+        }
+
+        a {
+          color: black;
+        }
+
+      }
+
+    }
+
+  }
+
+}

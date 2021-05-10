@@ -1,11 +1,15 @@
 
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 
+import store from './store';
+
 import App from './components/App';
+import Router from './components/Router';
 
 import './styles/reset.scss';
 
@@ -24,6 +28,10 @@ firebase.initializeApp({
 });
 
 render(
-  <App />,
+  <Provider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
   document.getElementById('app')
 );

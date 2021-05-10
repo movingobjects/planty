@@ -1,14 +1,18 @@
 
 @import '~/src/styles/vars';
 
-div.wrap {
+:local {
 
-  table.plants {
-    border-collapse: collapse;
+  div.wrap {
 
-    td, th {
-      border: 1px solid #ccc;
-      padding: 5px 10px;
+    table.plants {
+      border-collapse: collapse;
+
+      td, th {
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+      }
+
     }
 
   }

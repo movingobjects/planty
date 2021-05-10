@@ -1,7 +1,11 @@
 
 @import '~/src/styles/vars';
 
-div.wrap {
-  padding: 50px;
+:local {
+
+  div.wrap {
+    padding: 50px;
+
+  }
 
 }

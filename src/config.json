@@ -1,0 +1,12 @@
+{
+  "debug": {
+    "enableReduxLogger": false
+  },
+  "router": {
+    "validRoutes": [
+      "",
+      "plant/*/edit",
+      "species"
+    ]
+  }
+}
