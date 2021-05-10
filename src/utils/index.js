@@ -1,5 +1,6 @@
 
 import { map } from 'lodash';
+import moment from 'moment';
 
 export function getLatestWatering(plant) {
 
@@ -20,5 +21,15 @@ export function sortByLatestWateringDate(plantA, plantB) {
         dateB = getLatestWatering(plantB)?.date || 0;
 
   return dateA - dateB;
+
+}
+
+export function getWateredLastText(plant) {
+
+  const lastWatering = getLatestWatering(plant);
+
+  if (!lastWatering?.date) return null;
+
+  return moment(lastWatering.date).fromNow();
 
 }
