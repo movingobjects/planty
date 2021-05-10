@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import firebase from 'firebase/app';
-import { map } from 'lodash';
+import { map, times } from 'lodash';
 
 import {
   getLatestWatering,
@@ -17,13 +17,19 @@ const PlantsList = ({
 }) => {
 
   function onWaterClick(plantId) {
-
     firebase.database()
       .ref(`users/${userId}/plants/${plantId}/wateringHistory`)
       .push({
         date: Date.now()
       })
+  }
 
+  function onSelectIcon(plantId, iconIndex) {
+    firebase.database()
+      .ref(`users/${userId}/plants/${plantId}`)
+      .update({
+        iconIndex
+      })
   }
 
   return (
@@ -35,6 +41,7 @@ const PlantsList = ({
         className={style.plants}>
         <thead>
           <tr>
+            <th>Icon</th>
             <th>Plant</th>
             <th>Specie (Common)</th>
             <th>Specie (Scientific)</th>
@@ -50,7 +57,16 @@ const PlantsList = ({
             return (
               <tr
                 key={plant.id}>
-                <td>{plant.nickname}</td>
+                <td>
+                  {(!!plant.iconIndex || plant.iconIndex === 0) && (
+                    <p>
+                      <img
+                        src={`icons/icon-${plant.iconIndex + 1}.svg`}
+                        width={75} />
+                    </p>
+                  )}
+                </td>
+                <td><strong>{plant.nickname}</strong></td>
                 <td>{specie?.commonName}</td>
                 <td>{specie?.scientificName}</td>
                 <td>{getWateredLastText(plant)}</td>
