@@ -13,8 +13,8 @@
     "url": "https://github.com/movingobjects/plant-watering-log/issues"
   },
   "scripts": {
-    "dev": "parcel serve './src/index.html' --no-cache --open",
-    "build": "rm -rf './docs'; parcel build './src/index.html'",
+    "dev": "parcel serve './src/index.html' --dist-dir ./docs --no-cache --open",
+    "build": "rm -rf './docs'; parcel build './src/index.html' --dist-dir ./docs",
     "empty-cache": "rm -rf './.parcel-cache'"
   },
   "devDependencies": {
