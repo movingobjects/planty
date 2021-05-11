@@ -1,1 +1,1 @@
-# plant-watering-log
+# plants-friend

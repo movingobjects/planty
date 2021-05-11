@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <div className={style.wrap}>
 
-      <h1>Plant Watering Log</h1>
+      <h1>Plants Friend</h1>
 
       <ul className={style.nav}>
         <li className={classNames({
