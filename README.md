@@ -1,1 +1,1 @@
-# plants-friend
+# planty
