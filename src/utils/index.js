@@ -27,6 +27,21 @@ export function sortByDateLastWatered(plantA, plantB) {
 
 }
 
+export function sortByDateNextWater(plantA, plantB) {
+
+  const latestA   = getLatestWatering(plantA)?.date || 0,
+        latestB   = getLatestWatering(plantB)?.date || 0;
+
+  const intervalA = getAvgWaterInterval(plantA) || 0,
+        intervalB = getAvgWaterInterval(plantB) || 0;
+
+  const nextA = latestA + intervalA,
+        nextB = latestB + intervalB;
+
+  return nextA - nextB;
+
+}
+
 export function getDateLastWatered(plant) {
 
   return getLatestWatering(plant)?.date;

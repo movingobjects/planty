@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import { map } from 'lodash';
 
 import * as actions from '~/src/actions';
-import { sortByDateLastWatered } from '~/src/utils';
+import { sortByDateNextWater } from '~/src/utils';
 
 import Switch from '~/src/components/Router/Switch';
 import Route from '~/src/components/Router/Route';
@@ -82,7 +82,7 @@ const App = () => {
     // Maps object to array
 
     const updatedPlants = map(data, (p, id) => ({ ...p, id }))
-      .sort(sortByDateLastWatered);
+      .sort(sortByDateNextWater);
 
     setPlants(updatedPlants);
   }

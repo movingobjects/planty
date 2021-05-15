@@ -8,6 +8,17 @@
     table.plants {
       border-collapse: collapse;
 
+      tr {
+        &.dueSoon {
+          background-color: #fff3dd;
+          color: #b83;
+        }
+        &.dueNow {
+          background-color: #ffccc0;
+          color: #bb554c;
+        }
+      }
+
       td, th {
         border: 1px solid #ccc;
         padding: 5px 10px;

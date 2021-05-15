@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
 import firebase from 'firebase/app';
 import { map, times } from 'lodash';
 import moment from 'moment';
@@ -44,6 +45,8 @@ const PlantsList = ({
     console.log(`Remove ${plantId}`);
   }
 
+  const dateNow = Date.now();
+
   return (
     <div className={style.wrap}>
 
@@ -55,8 +58,9 @@ const PlantsList = ({
           <tr>
             <th>Icon</th>
             <th>Plant</th>
-            <th>Last Watered</th>
             <th>Avg Interval</th>
+            <th>Last Watered</th>
+            <th>Next Watering</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -66,12 +70,22 @@ const PlantsList = ({
             const specie          = species.find((s) => s.id === plant.specie),
                   dateLastWatered = getDateLastWatered(plant),
                   avgInterval     = getAvgWaterInterval(plant),
+                  dateNextWater   = dateLastWatered + avgInterval,
                   lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
-                  avgIntervalText = avgInterval ? moment.duration(avgInterval).humanize() : null;
+                  avgIntervalText = avgInterval ? moment.duration(avgInterval).humanize() : null,
+                  nextWaterText   = dateLastWatered ? moment(dateNextWater).fromNow() : '';
+
+            const twoDays   = moment.duration(2, 'days').valueOf(),
+                  isDueNow  = dateNextWater < dateNow,
+                  isDueSoon = !isDueNow && (dateNextWater - dateNow) < twoDays;
 
             return (
               <tr
-                key={plant.id}>
+                key={plant.id}
+                className={classNames({
+                  [style.dueNow]: isDueNow,
+                  [style.dueSoon]: isDueSoon
+                })}>
                 <td>
                   {(!!plant.iconIndex || plant.iconIndex === 0) && (
                     <p>
@@ -99,8 +113,9 @@ const PlantsList = ({
                     </button>
                   </p>
                 </td>
-                <td>{lastWateredText}</td>
                 <td>{avgIntervalText}</td>
+                <td>{lastWateredText}</td>
+                <td>{isDueNow ? 'Now' : nextWaterText}</td>
                 <td>
                   <button
                     onClick={() => onWaterClick(plant.id)}>
