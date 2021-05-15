@@ -8,5 +8,17 @@
       "plant/*/edit",
       "species"
     ]
+  },
+  "header": {
+    "pages": [
+      {
+        "route": "",
+        "label": "Your plants"
+      },
+      {
+        "route": "species",
+        "label": "All Species"
+      }
+    ]
   }
 }

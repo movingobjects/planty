@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React from 'react';
 import { useHash } from 'react-use';
 
 import Modal from '~/src/components/shared/Modal';

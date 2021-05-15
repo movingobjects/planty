@@ -17,18 +17,14 @@ if (!process.env.FIREBASE_API_KEY?.length) {
   throw new Error('No Firebase API key specified in .env file');
 }
 
-var firebaseConfig = {
-};
-
 firebase.initializeApp({
   apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: "plants-friend.firebaseapp.com",
-  databaseURL: "https://plants-friend-default-rtdb.firebaseio.com",
-  projectId: "plants-friend",
-  storageBucket: "plants-friend.appspot.com",
-  messagingSenderId: "644284774864",
-  appId: "1:644284774864:web:26b4b92efb41958bb5e1d5",
-  measurementId: "G-CT8X00DKDX"
+  authDomain: "planty-log.firebaseapp.com",
+  databaseURL: "https://planty-log-default-rtdb.firebaseio.com",
+  projectId: "planty-log",
+  storageBucket: "planty-log.appspot.com",
+  messagingSenderId: "942477270311",
+  appId: "1:942477270311:web:2ef6d54d080367208a1d02"
 });
 
 render(

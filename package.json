@@ -1,5 +1,5 @@
 {
-  "name": "plants-friend",
+  "name": "planty",
   "productName": "Plant Watering Log",
   "version": "0.1.0",
   "description": "",
@@ -7,10 +7,10 @@
   "author": "Scott Thiessen (http://movingobjects.io)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/movingobjects/plants-friend.git"
+    "url": "git+https://github.com/movingobjects/planty.git"
   },
   "bugs": {
-    "url": "https://github.com/movingobjects/plants-friend/issues"
+    "url": "https://github.com/movingobjects/planty/issues"
   },
   "scripts": {
     "dev": "rm -rf './docs'; parcel serve './src/index.html' --dist-dir ./docs --no-cache --open",

@@ -21,16 +21,16 @@
         & + li {
           margin-left: 15px;
         }
+
+        a {
+          color: black;
+        }
+
         &.selected {
           a {
             color: $colorHighlight;
             text-decoration: none;
-            pointer-events: none;
           }
-        }
-
-        a {
-          color: black;
         }
 
       }

@@ -37,6 +37,10 @@ const Router = ({
       nextHash += '?' + hashParams;
     }
 
+    console.log(`Router::useEffect`, {
+      nextHash
+    });
+
     setHash(nextHash);
     dispatch(batchActions(routeActions));
 

@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React from 'react';
 import firebase from 'firebase/app';
 import { map, times } from 'lodash';
 import moment from 'moment';
