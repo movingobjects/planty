@@ -1,11 +1,12 @@
 
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import style from './index.module.scss';
 
-const SpeciesList = ({
-  species = []
-}) => {
+const SpeciesList = () => {
+
+  const species = useSelector((state) => state.species);
 
   return (
     <div className={style.wrap}>

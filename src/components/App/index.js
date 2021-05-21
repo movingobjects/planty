@@ -1,10 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import { map } from 'lodash';
 
-import * as actions from '~/src/actions';
 import { sortByDateNextWater } from '~/src/utils';
 
 import Switch from '~/src/components/Router/Switch';
@@ -12,7 +11,8 @@ import Route from '~/src/components/Router/Route';
 import Header from './Header';
 import LoginView from './LoginView';
 import SpeciesList from './SpeciesList';
-import PlantsList from './PlantsList';
+import PlantsView from './PlantsView';
+import AddPlantModal from './modals/AddPlantModal';
 import EditPlantModal from './modals/EditPlantModal';
 
 import style from './index.module.scss';
@@ -21,11 +21,13 @@ import style from './index.module.scss';
 const App = () => {
 
   const route = useSelector((state) => state.route);
+  const species = useSelector((state) => state.species);
+  const plants = useSelector((state) => state.plants);
+
+  const dispatch = useDispatch();
 
   const [ authReady, setAuthReady ] = useState(false);
   const [ user, setUser ] = useState(null);
-  const [ species, setSpecies ] = useState([]);
-  const [ plants, setPlants ] = useState([]);
 
   useEffect(() => {
 
@@ -55,6 +57,11 @@ const App = () => {
 
     const userId = user?.uid;
 
+    dispatch({
+      type: 'setUserId',
+      userId
+    });
+
     firebase.database()
       .ref(`users/${userId}/profile`)
       .update({
@@ -65,26 +72,37 @@ const App = () => {
       });
 
     firebase.database()
-      .ref(`species`)
-      .on('value', (data) => onSpeciesDataUpdate(data.val()));
+      .ref('species')
+      .on('value', onSpeciesDataUpdate);
 
     firebase.database()
       .ref(`users/${userId}/plants`)
-      .on('value', (data) => onPlantsDataUpdate(data.val()));
+      .on('value', onPlantsDataUpdate);
 
   }
 
   function onSpeciesDataUpdate(data) {
+
     // Maps object to array
-    setSpecies(map(data, (s, id) => ({ ...s, id })));
+    const nextSpecies = map(data.val(), (s, id) => ({ ...s, id }));
+
+    dispatch({
+      type: 'setSpecies',
+      species: nextSpecies
+    });
+
   }
   function onPlantsDataUpdate(data) {
-    // Maps object to array
 
-    const updatedPlants = map(data, (p, id) => ({ ...p, id }))
+    // Maps object to array
+    const nextPlants = map(data.val(), (p, id) => ({ ...p, id }))
       .sort(sortByDateNextWater);
 
-    setPlants(updatedPlants);
+    dispatch({
+      type: 'setPlants',
+      plants: nextPlants
+    });
+
   }
 
   if (route === null) {
@@ -107,23 +125,12 @@ const App = () => {
       <main>
 
         <Switch>
-
-          <Route
-            path='#/species'
-            component={SpeciesList}
-            userId={user?.uid}
-            species={species} />
-
-          <Route
-            path='#/'
-            component={PlantsList}
-            userId={user?.uid}
-            plants={plants}
-            species={species} />
-
+          <Route path='#/species' component={SpeciesList} />
+          <Route path='#/' component={PlantsView} />
         </Switch>
 
         <Switch>
+          <Route path='#/add' component={AddPlantModal} />
           <Route path='#/plant/:plantId/edit' component={EditPlantModal} />
         </Switch>
 

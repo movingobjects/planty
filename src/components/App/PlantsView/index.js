@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 import firebase from 'firebase/app';
 import { map, times } from 'lodash';
 import moment from 'moment';
@@ -14,13 +15,13 @@ import {
 
 import style from './index.module.scss';
 
-const PlantsList = ({
-  userId = null,
-  plants = [],
-  species = []
-}) => {
+const PlantsView = () => {
 
   const [ hash, setHash ] = useHash();
+
+  const userId = useSelector((state) => state.userId);
+  const species = useSelector((state) => state.species);
+  const plants = useSelector((state) => state.plants);
 
   function onWaterClick(plantId) {
     firebase.database()
@@ -30,14 +31,9 @@ const PlantsList = ({
       })
   }
 
-  function onSelectIcon(plantId, iconIndex) {
-    firebase.database()
-      .ref(`users/${userId}/plants/${plantId}`)
-      .update({
-        iconIndex
-      })
+  function onAddClick() {
+    setHash(`#/add`);
   }
-
   function onEditClick(plantId) {
     setHash(`#/plant/${plantId}/edit`);
   }
@@ -49,6 +45,11 @@ const PlantsList = ({
 
   return (
     <div className={style.wrap}>
+
+      <button
+        onClick={onAddClick}>
+        Add plant
+      </button>
 
       <h2>Your plants</h2>
 
@@ -102,14 +103,8 @@ const PlantsList = ({
                   </p>
                   <p>
                     <button
-                      disabled
                       onClick={() => onEditClick(plant.id)}>
                       Edit
-                    </button>
-                    <button
-                      disabled
-                      onClick={() => onRemoveClick(plant.id)}>
-                      Remove
                     </button>
                   </p>
                 </td>
@@ -134,4 +129,4 @@ const PlantsList = ({
 
 }
 
-export default PlantsList;
+export default PlantsView;

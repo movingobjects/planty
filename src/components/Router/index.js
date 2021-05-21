@@ -9,8 +9,6 @@ import {
   trimToValidRoute
 } from '~/src/utils/routing';
 
-import * as actions from '~/src/actions';
-
 import config from '~/src/config';
 
 const Router = ({
@@ -29,17 +27,21 @@ const Router = ({
     let nextRoute = trimToValidRoute(hashPath, config?.router?.validRoutes),
         nextHash  = `#/${nextRoute}`;
 
-    const routeActions = [ actions.setRoute(nextRoute) ];
+    const routeActions = [
+      {
+        type: 'setRoute',
+        route: nextRoute
+      }
+    ];
 
     if (!!hashParams?.length) {
       const nextParams = parseUrlParams(hashParams);
-      routeActions.push(actions.setUrlParams(nextParams));
+      routeActions.push({
+        type: 'setUrlParams',
+        params: nextParams
+      });
       nextHash += '?' + hashParams;
     }
-
-    console.log(`Router::useEffect`, {
-      nextHash
-    });
 
     setHash(nextHash);
     dispatch(batchActions(routeActions));

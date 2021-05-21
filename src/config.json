@@ -5,6 +5,7 @@
   "router": {
     "validRoutes": [
       "",
+      "add",
       "plant/*/edit",
       "species"
     ]

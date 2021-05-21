@@ -1,10 +1,17 @@
 
-import * as actions from '~/src/actions';
-
 export const route = (state = null, action) => {
   switch (action.type) {
-    case actions.SET_ROUTE:
+    case 'setRoute':
       return action.route;
+    default:
+      return state;
+  }
+}
+
+export const urlParams = (state = null, action) => {
+  switch (action.type) {
+    case 'setUrlParams':
+      return action.params;
     default:
       return state;
   }
@@ -14,10 +21,10 @@ export const confirm = (state = null, action) => {
 
   switch (action.type) {
 
-    case actions.CONFIRM_ACTION:
+    case 'confirmAction':
       return action.opts;
 
-    case actions.CLOSE_CONFIRM:
+    case 'closeConfirm':
       return null;
 
     default:
@@ -25,4 +32,13 @@ export const confirm = (state = null, action) => {
 
   }
 
+}
+
+export const userId = (state = null, action) => {
+  switch (action.type) {
+    case 'setUserId':
+      return action.userId;
+    default:
+      return state;
+  }
 }
