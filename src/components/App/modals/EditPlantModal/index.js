@@ -56,6 +56,16 @@ const EditPlantModal = ({
   function onIconIndexSelect(e) {
     updateEditingPlant('iconIndex', +(e.target.value));
   }
+  function onDeleteClick() {
+
+    firebase.database()
+      .ref(`users/${userId}/plants/${plantId}`)
+      .remove();
+
+    close();
+
+  }
+
   function updateEditingPlant(field, value) {
 
     if (!field) return;
@@ -151,6 +161,7 @@ const EditPlantModal = ({
         )}
 
         <footer>
+          <button onClick={onDeleteClick}>Delete</button>
           <button onClick={cancel}>Cancel</button>
           <button
             disabled={!canSave}
