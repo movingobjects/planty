@@ -80,7 +80,7 @@ const PlantsView = () => {
 
       <button
         onClick={onAddClick}>
-        Add plant
+        Add new plant
       </button>
 
       <h2>Your plants</h2>
@@ -92,7 +92,7 @@ const PlantsView = () => {
             <th>Icon</th>
             <th>Plant</th>
             <th>Last Watered</th>
-            <th>Estimated Next Watering</th>
+            <th>Estimated<br />Next Watering</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -103,18 +103,17 @@ const PlantsView = () => {
                   dateLastWatered = getDateLastWatered(plant),
                   dateNextWater   = plant.dateNextWater,
                   lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
-                  nextWaterText   = dateNextWater ? moment(dateNextWater).fromNow() : '';
+                  nextWaterText   = moment(dateNextWater).calendar();
 
-            const oneDay    = moment.duration(1, 'days').valueOf(),
-                  isDueNow  = dateNextWater < dateNow,
-                  isDueSoon = !isDueNow && (dateNextWater - dateNow) < oneDay;
+            const isDueToday = moment(dateNextWater).isSame(dateNow, 'day'),
+                  isOverdue  = !isDueToday && dateNextWater < dateNow;
 
             return (
               <tr
                 key={plant.id}
                 className={classNames({
-                  [style.dueNow]: isDueNow,
-                  [style.dueSoon]: isDueSoon
+                  [style.overdue]: isOverdue,
+                  [style.dueToday]: isDueToday
                 })}>
                 <td>
                   {(!!plant.iconIndex || plant.iconIndex === 0) && (
@@ -128,7 +127,7 @@ const PlantsView = () => {
                 <td>
                   <p>
                     <strong>{plant.nickname}</strong><br />
-                    {specie?.commonName} ({specie?.scientificName})
+                    {specie?.commonName}
                   </p>
                   <p>
                     <button
@@ -142,13 +141,18 @@ const PlantsView = () => {
                 <td>
                   <button
                     onClick={() => onWaterClick(plant.id)}>
-                    Water
+                    {isDueToday ? 'Water' : 'Water Early'}
                   </button>
-                  <br />
-                  <button
-                    onClick={() => onDeferClick(plant.id)}>
-                    Move to Tomorrow
-                  </button>
+
+                  {isDueToday && (
+                    <>
+                      <br />
+                      <button
+                        onClick={() => onDeferClick(plant.id)}>
+                        Move to Tomorrow
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             )

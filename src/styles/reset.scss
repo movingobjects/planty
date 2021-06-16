@@ -9,7 +9,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: $fontMono;
+  font-family: $fontSans;
 }
 
 h1 {
@@ -24,5 +24,32 @@ h2 {
 }
 
 h3, h4, h5, h6, th, td, p {
-  font-size: 12px;
+  font-size: 14px;
+}
+
+
+button {
+  cursor: pointer;
+  background-color: white;
+  outline: none;
+  border: 2px solid $colorHighlight;
+  color: $colorHighlight;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: $fontSans;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+
+  &:hover {
+    background-color: $colorHighlight;
+    color: white;
+  }
+
+  &:active {
+    background-color: $colorHighlight;
+    color: mix($colorHighlight, white, 50%);
+  }
+
+
 }

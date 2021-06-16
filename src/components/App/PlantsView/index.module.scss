@@ -5,17 +5,21 @@
 
   div.wrap {
 
+    h2 {
+      margin-top: 25px;
+    }
+
     table.plants {
       border-collapse: collapse;
 
       tr {
-        &.dueSoon {
+        &.dueToday {
+          background-color: #d6ecf6;
+          color: #578;
+        }
+        &.overdue {
           background-color: #fff3dd;
           color: #b83;
-        }
-        &.dueNow {
-          background-color: #ffccc0;
-          color: #bb554c;
         }
       }
 

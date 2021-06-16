@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import { map } from 'lodash';
+import moment from 'moment';
 
 import { sortByDateNextWater } from '~/src/utils';
 
@@ -30,6 +31,11 @@ const App = () => {
   const [ user, setUser ] = useState(null);
 
   useEffect(() => {
+    initFirebase();
+    initMoment();
+  }, [ ])
+
+  function initFirebase() {
 
     firebase.auth()
       .onAuthStateChanged((user) => {
@@ -43,7 +49,22 @@ const App = () => {
 
       });
 
-  }, [])
+  }
+
+  function initMoment() {
+
+    moment.updateLocale('en', {
+      calendar : {
+        lastDay : '[Yesterday]',
+        sameDay : '[Today]',
+        nextDay : '[Tomorrow]',
+        lastWeek : '[Last] dddd',
+        nextWeek : '[Next] dddd',
+        sameElse : 'MMMM D'
+      }
+    });
+
+  }
 
   function onLoginClick() {
 
