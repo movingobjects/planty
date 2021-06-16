@@ -28,11 +28,6 @@ const EditPlantModal = ({
   );
   const canSave     = hasChanged && fieldsValid;
 
-  console.log({
-    hasChanged,
-    fieldsValid
-  });
-
   useEffect(() => {
 
     if (!!plant?.id?.length) {

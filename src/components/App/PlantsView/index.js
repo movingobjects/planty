@@ -8,9 +8,8 @@ import moment from 'moment';
 import { useHash } from 'react-use';
 
 import {
-  getLatestWatering,
   getDateLastWatered,
-  getAvgWaterInterval
+  calcDateNextWater
 } from '~/src/utils';
 
 import style from './index.module.scss';
@@ -24,11 +23,44 @@ const PlantsView = () => {
   const plants = useSelector((state) => state.plants);
 
   function onWaterClick(plantId) {
+
+    const plant = plants.find((p) => p.id === plantId);
+
+    if (!plant) return;
+
+    const dateNextWater = calcDateNextWater(plant);
+
+    firebase.database()
+      .ref(`users/${userId}/plants/${plantId}`)
+      .update({
+        dateNextWater
+      });
+
     firebase.database()
       .ref(`users/${userId}/plants/${plantId}/wateringHistory`)
       .push({
         date: Date.now()
-      })
+      });
+
+  }
+  function onDeferClick(plantId) {
+
+    const plant = plants.find((p) => p.id === plantId);
+
+    if (!plant) return;
+
+    const dateNextWater = moment()
+      .add(1, 'days')
+      .startOf('day')
+      .add(8, 'hours')
+      .valueOf()
+
+    firebase.database()
+      .ref(`users/${userId}/plants/${plantId}`)
+      .update({
+        dateNextWater
+      });
+
   }
 
   function onAddClick() {
@@ -59,9 +91,8 @@ const PlantsView = () => {
           <tr>
             <th>Icon</th>
             <th>Plant</th>
-            <th>Avg Interval</th>
             <th>Last Watered</th>
-            <th>Next Watering</th>
+            <th>Estimated Next Watering</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -70,15 +101,13 @@ const PlantsView = () => {
 
             const specie          = species.find((s) => s.id === plant.specie),
                   dateLastWatered = getDateLastWatered(plant),
-                  avgInterval     = getAvgWaterInterval(plant),
-                  dateNextWater   = dateLastWatered + avgInterval,
+                  dateNextWater   = plant.dateNextWater,
                   lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
-                  avgIntervalText = avgInterval ? moment.duration(avgInterval).humanize() : null,
-                  nextWaterText   = dateLastWatered ? moment(dateNextWater).fromNow() : '';
+                  nextWaterText   = dateNextWater ? moment(dateNextWater).fromNow() : '';
 
-            const twoDays   = moment.duration(2, 'days').valueOf(),
+            const oneDay    = moment.duration(1, 'days').valueOf(),
                   isDueNow  = dateNextWater < dateNow,
-                  isDueSoon = !isDueNow && (dateNextWater - dateNow) < twoDays;
+                  isDueSoon = !isDueNow && (dateNextWater - dateNow) < oneDay;
 
             return (
               <tr
@@ -108,13 +137,17 @@ const PlantsView = () => {
                     </button>
                   </p>
                 </td>
-                <td>{avgIntervalText}</td>
                 <td>{lastWateredText}</td>
-                <td>{isDueNow ? 'Now' : nextWaterText}</td>
+                <td>{nextWaterText}</td>
                 <td>
                   <button
                     onClick={() => onWaterClick(plant.id)}>
                     Water
+                  </button>
+                  <br />
+                  <button
+                    onClick={() => onDeferClick(plant.id)}>
+                    Move to Tomorrow
                   </button>
                 </td>
               </tr>
