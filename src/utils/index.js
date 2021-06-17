@@ -36,19 +36,16 @@ export function sortByDateNextWater(plantA, plantB) {
 
 }
 
-export function calcDateNextWater(plant) {
+export function calcDateNextWater(dates) {
 
-  const history = getWateringHistoryArray(plant);
-
-  if (!history?.length || history.length < 2) {
+  if (dates.length < 2) {
     return Date.now();
   }
 
-  const datesCount = history.length,
-        dateFirst  = history[0]?.date || 0,
-        dateLatest = history[datesCount - 1]?.date || 0;
+  const first  = dates[0],
+        latest = dates[dates.length - 1];
 
-  return dateLatest + (dateLatest - dateFirst) / (datesCount - 1);
+  return latest + (latest - first) / (dates.length - 1);
 
 }
 

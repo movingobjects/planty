@@ -9,6 +9,7 @@ import { useHash } from 'react-use';
 
 import {
   getDateLastWatered,
+  getWateringHistoryArray,
   calcDateNextWater
 } from '~/src/utils';
 
@@ -28,7 +29,10 @@ const PlantsView = () => {
 
     if (!plant) return;
 
-    const dateNextWater = calcDateNextWater(plant);
+    const dateNextWater = calcDateNextWater([
+      ...getWateringHistoryArray(plant).map((item) => item.date),
+      Date.now()
+    ]);
 
     firebase.database()
       .ref(`users/${userId}/plants/${plantId}`)
@@ -141,10 +145,10 @@ const PlantsView = () => {
                 <td>
                   <button
                     onClick={() => onWaterClick(plant.id)}>
-                    {isDueToday ? 'Water' : 'Water Early'}
+                    {(isDueToday || isOverdue) ? 'Water' : 'Water Early'}
                   </button>
 
-                  {isDueToday && (
+                  {(isDueToday || isOverdue) && (
                     <>
                       <br />
                       <button
