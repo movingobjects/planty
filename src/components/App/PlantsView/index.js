@@ -6,6 +6,7 @@ import firebase from 'firebase/app';
 import { map, times } from 'lodash';
 import moment from 'moment';
 import { useHash } from 'react-use';
+import { RiAddLine } from 'react-icons/ri';
 
 import {
   getDateLastWatered,
@@ -85,7 +86,8 @@ const PlantsView = () => {
       <div className={style.wrapAddBtn}>
         <button
           onClick={onAddClick}>
-          Add new plant
+          <RiAddLine
+            size='4em' />
         </button>
       </div>
 

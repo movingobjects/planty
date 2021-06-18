@@ -26,15 +26,15 @@ div._wrap_b738f ul._nav_b738f li._selected_b738f a {
 }
 
 
-div._wrap_606ef h2 {
+div._wrap_8e3c7 h2 {
   margin-top: 25px;
 }
-div._wrap_606ef ul._plants_606ef {
+div._wrap_8e3c7 ul._plants_8e3c7 {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-div._wrap_606ef ul._plants_606ef li {
+div._wrap_8e3c7 ul._plants_8e3c7 li {
   position: relative;
   display: inline-block;
   width: 250px;
@@ -44,19 +44,19 @@ div._wrap_606ef ul._plants_606ef li {
   border: 1px solid rgba(0, 128, 64, 0.125);
   border-radius: 10px;
 }
-div._wrap_606ef ul._plants_606ef li div._wrapEditBtn_606ef {
+div._wrap_8e3c7 ul._plants_8e3c7 li div._wrapEditBtn_8e3c7 {
   position: absolute;
   top: 8px;
   right: 6px;
 }
-div._wrap_606ef ul._plants_606ef li div._wrapEditBtn_606ef button {
+div._wrap_8e3c7 ul._plants_8e3c7 li div._wrapEditBtn_8e3c7 button {
   color: #cdc;
 }
-div._wrap_606ef ul._plants_606ef li div._wrapEditBtn_606ef button:active {
+div._wrap_8e3c7 ul._plants_8e3c7 li div._wrapEditBtn_8e3c7 button:active {
   background-color: transparent;
   color: #f55;
 }
-div._wrap_606ef button {
+div._wrap_8e3c7 button {
   cursor: pointer;
   border: none;
   background-color: white;
@@ -66,15 +66,33 @@ div._wrap_606ef button {
   letter-spacing: 0.02em;
   font-weight: 700;
 }
-div._wrap_606ef button._standard_606ef {
+div._wrap_8e3c7 button._standard_8e3c7 {
   border: 2px solid #f55;
   color: #f55;
   padding: 6px 10px;
   border-radius: 4px;
 }
-div._wrap_606ef button:active {
+div._wrap_8e3c7 button:active {
   background-color: #f55;
   color: white;
+}
+div._wrap_8e3c7 div._wrapAddBtn_8e3c7 {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 50;
+}
+div._wrap_8e3c7 div._wrapAddBtn_8e3c7 button {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  color: white;
+  background-color: #f55;
+  box-shadow: 2px 5px 15px 5px rgba(255, 0, 0, 0.15), 1px 7px 10px rgba(64, 0, 64, 0.1);
+}
+div._wrap_8e3c7 div._wrapAddBtn_8e3c7 button:active {
+  background-color: white;
+  color: #f55;
 }
 div._wrap_5cc03 {
   display: flex;
