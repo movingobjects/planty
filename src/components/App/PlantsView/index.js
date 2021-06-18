@@ -19,6 +19,18 @@ import style from './index.module.scss';
 const PlantsView = () => {
 
   const [ hash, setHash ] = useHash();
+  const [ dateTodayEnd ] = useState(
+    moment()
+      .endOf('day')
+      .valueOf()
+  );
+  const [ dateTomorrowEnd ] = useState(
+    moment()
+      .add(1, 'days')
+      .endOf('day')
+      .valueOf()
+  );
+
 
   const userId = useSelector((state) => state.userId);
   const species = useSelector((state) => state.species);
@@ -78,7 +90,84 @@ const PlantsView = () => {
     console.log(`Remove ${plantId}`);
   }
 
-  const dateNow = Date.now();
+  function renderPlantCard(plant) {
+
+    const specie          = species.find((s) => s.id === plant.specie),
+          dateLastWatered = getDateLastWatered(plant),
+          dueToday        = isDueToday(plant);
+
+    const lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
+          nextWaterText   = moment(plant.dateNextWater).calendar();
+
+    return (
+      <li
+        key={plant.id}
+        className={classNames({
+          [style.dueToday]: dueToday
+        })}>
+
+        <div className={style.wrapEditBtn}>
+          <button
+            onClick={() => onEditClick(plant.id)}>
+            Edit
+          </button>
+        </div>
+
+        {(!!plant.iconIndex || plant.iconIndex === 0) && (
+          <p>
+            <img
+              src={`icons/icon-${plant.iconIndex + 1}.svg`}
+              width={75} />
+          </p>
+        )}
+
+        <p>
+          <strong>{plant.nickname}</strong><br />
+          {specie?.commonName}
+        </p>
+
+        <h4>Next watering</h4>
+        <p>{nextWaterText}</p>
+
+        <h4>Last watered</h4>
+        <p>{lastWateredText}</p>
+
+        <button
+          className={style.standard}
+          onClick={() => onWaterClick(plant.id)}>
+          Water
+        </button>
+
+        {dueToday && (
+          <>
+            <br />
+            <button
+              onClick={() => onDeferClick(plant.id)}>
+              Move to Tomorrow
+            </button>
+          </>
+        )}
+      </li>
+    );
+
+  }
+
+  function isDueToday(p) {
+    return p.dateNextWater <= dateTodayEnd;
+  }
+  function isDueTomorrow(p) {
+    return (
+      p.dateNextWater > dateTodayEnd &&
+      p.dateNextWater <= dateTomorrowEnd
+    );
+  }
+
+  const plantsToday = plants.filter(isDueToday);
+  const plantsTomorrow = plants.filter(isDueTomorrow);
+  const plantsLater = plants.filter((p) => (
+    !isDueToday(p) &&
+    !isDueTomorrow(p)
+  ));
 
   return (
     <div className={style.wrap}>
@@ -91,71 +180,27 @@ const PlantsView = () => {
         </button>
       </div>
 
-      <h2>Your plants</h2>
+      {!!plantsToday.length && (
+        <>
+          <h2>Today</h2>
+          <ul className={style.plants}>
+            {plantsToday.map((plant) => renderPlantCard(plant))}
+          </ul>
+        </>
+      )}
 
-      <ul
-        className={style.plants}>
-        {plants.map((plant) => {
+      {!!plantsTomorrow.length && (
+        <>
+          <h2>Tomorrow</h2>
+          <ul className={style.plants}>
+            {plantsTomorrow.map((plant) => renderPlantCard(plant))}
+          </ul>
+        </>
+      )}
 
-          const specie          = species.find((s) => s.id === plant.specie),
-                dateLastWatered = getDateLastWatered(plant),
-                dateNextWater   = plant.dateNextWater,
-                lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
-                nextWaterText   = moment(dateNextWater).calendar();
-
-          const isDueToday = moment(dateNextWater).isSame(dateNow, 'day'),
-                isOverdue  = !isDueToday && dateNextWater < dateNow;
-
-          return (
-            <li
-              key={plant.id}
-              className={classNames({
-                [style.overdue]: isOverdue,
-                [style.dueToday]: isDueToday
-              })}>
-
-              <div className={style.wrapEditBtn}>
-                <button
-                  onClick={() => onEditClick(plant.id)}>
-                  Edit
-                </button>
-              </div>
-
-              {(!!plant.iconIndex || plant.iconIndex === 0) && (
-                <p>
-                  <img
-                    src={`icons/icon-${plant.iconIndex + 1}.svg`}
-                    width={75} />
-                </p>
-              )}
-
-              <p>
-                <strong>{plant.nickname}</strong><br />
-                {specie?.commonName}
-              </p>
-
-              <p>Last watered {lastWateredText}</p>
-              <p>Next watering: {nextWaterText}</p>
-
-              <button
-                className={style.standard}
-                onClick={() => onWaterClick(plant.id)}>
-                {(isDueToday || isOverdue) ? 'Water' : 'Water Early'}
-              </button>
-
-              {(isDueToday || isOverdue) && (
-                <>
-                  <br />
-                  <button
-                    onClick={() => onDeferClick(plant.id)}>
-                    Move to Tomorrow
-                  </button>
-                </>
-              )}
-            </li>
-          );
-
-        })}
+      <h2>Later</h2>
+      <ul className={style.plants}>
+        {plantsLater.map((plant) => renderPlantCard(plant))}
       </ul>
 
     </div>

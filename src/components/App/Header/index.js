@@ -20,7 +20,7 @@ const Header = () => {
 
       <h1>Planty</h1>
 
-      <ul className={style.nav}>
+      {/* <ul className={style.nav}>
         {pages.map((page) => (
           <li
             key={page.route}
@@ -30,7 +30,7 @@ const Header = () => {
             <a href={`#/${page.route}`}>{page.label}</a>
           </li>
         ))}
-      </ul>
+      </ul> */}
 
     </div>
   );
