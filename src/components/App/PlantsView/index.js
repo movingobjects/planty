@@ -82,88 +82,79 @@ const PlantsView = () => {
   return (
     <div className={style.wrap}>
 
-      <button
-        onClick={onAddClick}>
-        Add new plant
-      </button>
+      <div className={style.wrapAddBtn}>
+        <button
+          onClick={onAddClick}>
+          Add new plant
+        </button>
+      </div>
 
       <h2>Your plants</h2>
 
-      <table
+      <ul
         className={style.plants}>
-        <thead>
-          <tr>
-            <th>Icon</th>
-            <th>Plant</th>
-            <th>Last Watered</th>
-            <th>Estimated<br />Next Watering</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {plants.map((plant) => {
+        {plants.map((plant) => {
 
-            const specie          = species.find((s) => s.id === plant.specie),
-                  dateLastWatered = getDateLastWatered(plant),
-                  dateNextWater   = plant.dateNextWater,
-                  lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
-                  nextWaterText   = moment(dateNextWater).calendar();
+          const specie          = species.find((s) => s.id === plant.specie),
+                dateLastWatered = getDateLastWatered(plant),
+                dateNextWater   = plant.dateNextWater,
+                lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
+                nextWaterText   = moment(dateNextWater).calendar();
 
-            const isDueToday = moment(dateNextWater).isSame(dateNow, 'day'),
-                  isOverdue  = !isDueToday && dateNextWater < dateNow;
+          const isDueToday = moment(dateNextWater).isSame(dateNow, 'day'),
+                isOverdue  = !isDueToday && dateNextWater < dateNow;
 
-            return (
-              <tr
-                key={plant.id}
-                className={classNames({
-                  [style.overdue]: isOverdue,
-                  [style.dueToday]: isDueToday
-                })}>
-                <td>
-                  {(!!plant.iconIndex || plant.iconIndex === 0) && (
-                    <p>
-                      <img
-                        src={`icons/icon-${plant.iconIndex + 1}.svg`}
-                        width={75} />
-                    </p>
-                  )}
-                </td>
-                <td>
-                  <p>
-                    <strong>{plant.nickname}</strong><br />
-                    {specie?.commonName}
-                  </p>
-                  <p>
-                    <button
-                      onClick={() => onEditClick(plant.id)}>
-                      Edit
-                    </button>
-                  </p>
-                </td>
-                <td>{lastWateredText}</td>
-                <td>{nextWaterText}</td>
-                <td>
+          return (
+            <li
+              key={plant.id}
+              className={classNames({
+                [style.overdue]: isOverdue,
+                [style.dueToday]: isDueToday
+              })}>
+
+              <div className={style.wrapEditBtn}>
+                <button
+                  onClick={() => onEditClick(plant.id)}>
+                  Edit
+                </button>
+              </div>
+
+              {(!!plant.iconIndex || plant.iconIndex === 0) && (
+                <p>
+                  <img
+                    src={`icons/icon-${plant.iconIndex + 1}.svg`}
+                    width={75} />
+                </p>
+              )}
+
+              <p>
+                <strong>{plant.nickname}</strong><br />
+                {specie?.commonName}
+              </p>
+
+              <p>Last watered {lastWateredText}</p>
+              <p>Next watering: {nextWaterText}</p>
+
+              <button
+                className={style.standard}
+                onClick={() => onWaterClick(plant.id)}>
+                {(isDueToday || isOverdue) ? 'Water' : 'Water Early'}
+              </button>
+
+              {(isDueToday || isOverdue) && (
+                <>
+                  <br />
                   <button
-                    onClick={() => onWaterClick(plant.id)}>
-                    {(isDueToday || isOverdue) ? 'Water' : 'Water Early'}
+                    onClick={() => onDeferClick(plant.id)}>
+                    Move to Tomorrow
                   </button>
+                </>
+              )}
+            </li>
+          );
 
-                  {(isDueToday || isOverdue) && (
-                    <>
-                      <br />
-                      <button
-                        onClick={() => onDeferClick(plant.id)}>
-                        Move to Tomorrow
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            )
-          })}
-
-        </tbody>
-      </table>
+        })}
+      </ul>
 
     </div>
   );

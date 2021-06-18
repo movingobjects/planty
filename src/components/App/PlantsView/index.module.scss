@@ -9,23 +9,61 @@
       margin-top: 25px;
     }
 
-    table.plants {
-      border-collapse: collapse;
+    ul.plants {
+      list-style: none;
+      padding: 0;
+      margin: 0;
 
-      tr {
-        &.dueToday {
-          background-color: #d6ecf6;
-          color: #578;
+      li {
+        position: relative;
+        display: inline-block;
+        width: 250px;
+        margin: 0 10px 10px 0;
+        padding: 25px;
+        background-color: white;
+        border: 1px solid rgba(0, 50%, 25%, 0.125);
+        border-radius: 10px;
+
+        div.wrapEditBtn {
+          position: absolute;
+          top: 8px;
+          right: 6px;
+
+          button {
+            color: #cdc;
+
+            &:active {
+              background-color: transparent;
+              color: $colorHighlight;
+            }
+          }
         }
-        &.overdue {
-          background-color: #ffecd3;
-          color: #b63;
-        }
+
       }
 
-      td, th {
-        border: 1px solid #ccc;
-        padding: 5px 10px;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background-color: white;
+      outline: none;
+      font-family: $fontSans;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+
+      &.standard {
+        border: 2px solid $colorHighlight;
+        color: $colorHighlight;
+        padding: 6px 10px;
+        border-radius: 4px;
+
+      }
+
+      &:active {
+        background-color: $colorHighlight;
+        color: white;
       }
 
     }
