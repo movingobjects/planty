@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import firebase from 'firebase/app';
+import firebase from '@firebase/app';
 import { useHash } from 'react-use';
 import { times } from 'lodash';
 import shortid from 'shortid';
@@ -17,8 +17,7 @@ const AddPlantModal = () => {
 
   const [ hash, setHash ] = useHash();
   const [ editingPlant, setEditingPlant ] = useState({
-    nickname: '',
-    iconIndex: 0
+    nickname: ''
   });
 
   const fieldsValid = (
@@ -46,9 +45,7 @@ const AddPlantModal = () => {
     updateEditingPlant(field, value);
 
   }
-  function onIconIndexSelect(e) {
-    updateEditingPlant('iconIndex', +(e.target.value));
-  }
+
   function updateEditingPlant(field, value) {
 
     if (!field) return;
@@ -116,24 +113,6 @@ const AddPlantModal = () => {
                   key={s.id}
                   value={s.id}>
                   {s.commonName}
-                </option>
-              ))}
-            </select>
-          </p>
-
-          <p>
-            <label
-              htmlFor='iconIndex'>
-              Icon
-            </label>
-            <select
-              value={editingPlant?.iconIndex}
-              onChange={onIconIndexSelect}>
-              {times(50, (index) => (
-                <option
-                  key={index}
-                  value={index}>
-                  Icon {index + 1}
                 </option>
               ))}
             </select>

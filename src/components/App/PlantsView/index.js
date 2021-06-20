@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import firebase from 'firebase/app';
+import firebase from '@firebase/app';
 import { map, times } from 'lodash';
 import moment from 'moment';
 import { useHash } from 'react-use';
 import { RiAddLine } from 'react-icons/ri';
+
+import PlantCard from './PlantCard';
 
 import {
   getDateLastWatered,
@@ -31,125 +33,11 @@ const PlantsView = () => {
       .valueOf()
   );
 
-
   const userId = useSelector((state) => state.userId);
-  const species = useSelector((state) => state.species);
   const plants = useSelector((state) => state.plants);
-
-  function onWaterClick(plantId) {
-
-    const plant = plants.find((p) => p.id === plantId);
-
-    if (!plant) return;
-
-    const dateNextWater = calcDateNextWater([
-      ...getWateringHistoryArray(plant).map((item) => item.date),
-      Date.now()
-    ]);
-
-    firebase.database()
-      .ref(`users/${userId}/plants/${plantId}`)
-      .update({
-        dateNextWater
-      });
-
-    firebase.database()
-      .ref(`users/${userId}/plants/${plantId}/wateringHistory`)
-      .push({
-        date: Date.now()
-      });
-
-  }
-  function onDeferClick(plantId) {
-
-    const plant = plants.find((p) => p.id === plantId);
-
-    if (!plant) return;
-
-    const dateNextWater = moment()
-      .add(1, 'days')
-      .startOf('day')
-      .add(8, 'hours')
-      .valueOf()
-
-    firebase.database()
-      .ref(`users/${userId}/plants/${plantId}`)
-      .update({
-        dateNextWater
-      });
-
-  }
 
   function onAddClick() {
     setHash(`#/add`);
-  }
-  function onEditClick(plantId) {
-    setHash(`#/plant/${plantId}/edit`);
-  }
-  function onRemoveClick(plantId) {
-    console.log(`Remove ${plantId}`);
-  }
-
-  function renderPlantCard(plant) {
-
-    const specie          = species.find((s) => s.id === plant.specie),
-          dateLastWatered = getDateLastWatered(plant),
-          dueToday        = isDueToday(plant);
-
-    const lastWateredText = dateLastWatered ? moment(dateLastWatered).fromNow() : 'Never',
-          nextWaterText   = moment(plant.dateNextWater).calendar();
-
-    return (
-      <li
-        key={plant.id}
-        className={classNames({
-          [style.dueToday]: dueToday
-        })}>
-
-        <div className={style.wrapEditBtn}>
-          <button
-            onClick={() => onEditClick(plant.id)}>
-            Edit
-          </button>
-        </div>
-
-        {(!!plant.iconIndex || plant.iconIndex === 0) && (
-          <p>
-            <img
-              src={`icons/icon-${plant.iconIndex + 1}.svg`}
-              width={75} />
-          </p>
-        )}
-
-        <p>
-          <strong>{plant.nickname}</strong><br />
-          {specie?.commonName}
-        </p>
-
-        <h4>Next watering</h4>
-        <p>{nextWaterText}</p>
-
-        <h4>Last watered</h4>
-        <p>{lastWateredText}</p>
-
-        <button
-          className={style.standard}
-          onClick={() => onWaterClick(plant.id)}>
-          Water
-        </button>
-
-        {dueToday && (
-          <>
-            <br />
-            <button
-              onClick={() => onDeferClick(plant.id)}>
-              Move to Tomorrow
-            </button>
-          </>
-        )}
-      </li>
-    );
-
   }
 
   function isDueToday(p) {
@@ -184,7 +72,12 @@ const PlantsView = () => {
         <>
           <h2>Today</h2>
           <ul className={style.plants}>
-            {plantsToday.map((plant) => renderPlantCard(plant))}
+            {plantsToday.map((plant) => (
+              <PlantCard
+                key={`plantsToday-${plant.id}`}
+                plant={plant}
+                isDueToday={true} />
+            ))}
           </ul>
         </>
       )}
@@ -193,14 +86,22 @@ const PlantsView = () => {
         <>
           <h2>Tomorrow</h2>
           <ul className={style.plants}>
-            {plantsTomorrow.map((plant) => renderPlantCard(plant))}
+            {plantsTomorrow.map((plant) => (
+              <PlantCard
+                key={`plantsTomorrow-${plant.id}`}
+                plant={plant} />
+            ))}
           </ul>
         </>
       )}
 
       <h2>Later</h2>
       <ul className={style.plants}>
-        {plantsLater.map((plant) => renderPlantCard(plant))}
+        {plantsLater.map((plant) => (
+          <PlantCard
+            key={`plantsLater-${plant.id}`}
+            plant={plant} />
+        ))}
       </ul>
 
     </div>

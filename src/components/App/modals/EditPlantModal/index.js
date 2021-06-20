@@ -1,10 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import firebase from 'firebase/app';
+import firebase from '@firebase/app';
+import '@firebase/storage';
 import { useHash } from 'react-use';
 import { times, isEqual } from 'lodash';
+import moment from 'moment';
 
+import config from '~/src/config';
 import Modal from '~/src/components/shared/Modal';
 
 import style from './index.module.scss';
@@ -48,9 +51,6 @@ const EditPlantModal = ({
     updateEditingPlant(field, value);
 
   }
-  function onIconIndexSelect(e) {
-    updateEditingPlant('iconIndex', +(e.target.value));
-  }
   function onDeleteClick() {
 
     firebase.database()
@@ -58,6 +58,15 @@ const EditPlantModal = ({
       .remove();
 
     close();
+
+  }
+  function onFileSelect(e) {
+
+    const file = e.target?.files?.[0];
+
+    if (file) {
+      uploadFile(file)
+    }
 
   }
 
@@ -69,6 +78,60 @@ const EditPlantModal = ({
       ...state,
       [field]: value
     }));
+
+  }
+
+  function uploadFile(file) {
+
+    const storageRef = firebase.storage().ref();
+
+    const timestamp = moment().format('YYYY-MM-DD');
+    const folder    = `users/${userId}/plants/${plantId}`;
+    const filename  = `${timestamp}-${file.name}`;
+    const path  = `${folder}/${filename}`;
+
+    const uploadTask = storageRef
+      .child(path)
+      .put(file, {
+        contentType: 'image/jpeg'
+      });
+
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+
+      // Progress
+      (snapshot) => {
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED:
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING:
+            console.log('Upload is running');
+            break;
+        }
+      },
+
+      // Error
+      (error) => {
+        console.log(`Error uploading file '${path}'`);
+        console.log(error.code);
+      },
+
+      // Upload complete
+      () => {
+
+        uploadTask.snapshot.ref
+          .getDownloadURL()
+          .then((url) => {
+            setEditingPlant((state) => ({
+              ...state,
+              image: url
+            }))
+          });
+
+      });
 
   }
 
@@ -103,6 +166,25 @@ const EditPlantModal = ({
         {editingPlant && (
           <div className={style.wrapForm}>
 
+            {!!editingPlant?.image?.length && (
+              <p className={style.image}>
+                <img
+                  src={editingPlant?.image} />
+              </p>
+            )}
+
+            <p>
+              <label
+                className={style.upload}
+                htmlFor='upload'>
+                Upload image
+              </label>
+              <input
+                id='upload'
+                type='file'
+                onChange={onFileSelect} />
+            </p>
+
             <p>
               <label
                 htmlFor='nickname'>
@@ -129,24 +211,6 @@ const EditPlantModal = ({
                     key={s.id}
                     value={s.id}>
                     {s.commonName}
-                  </option>
-                ))}
-              </select>
-            </p>
-
-            <p>
-              <label
-                htmlFor='iconIndex'>
-                Icon
-              </label>
-              <select
-                value={editingPlant?.iconIndex}
-                onChange={onIconIndexSelect}>
-                {times(50, (index) => (
-                  <option
-                    key={index}
-                    value={index}>
-                    Icon {index + 1}
                   </option>
                 ))}
               </select>

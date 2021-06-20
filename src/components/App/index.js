@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import firebase from 'firebase/app';
+import firebase from '@firebase/app';
 import { map } from 'lodash';
 import moment from 'moment';
 

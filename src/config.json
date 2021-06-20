@@ -10,16 +10,7 @@
       "species"
     ]
   },
-  "header": {
-    "pages": [
-      {
-        "route": "",
-        "label": "Your plants"
-      },
-      {
-        "route": "species",
-        "label": "All Species"
-      }
-    ]
+  "images": {
+    "resizeDimensions": "500x500"
   }
 }

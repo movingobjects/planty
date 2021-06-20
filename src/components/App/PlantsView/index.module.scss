@@ -13,47 +13,6 @@
       list-style: none;
       padding: 0;
       margin: 0;
-
-      li {
-        position: relative;
-        display: inline-block;
-        width: 250px;
-        margin: 0 10px 10px 0;
-        padding: 25px;
-        background-color: white;
-        border: 1px solid rgba(0, 50%, 25%, 0.125);
-        border-radius: 10px;
-
-        div.wrapEditBtn {
-          position: absolute;
-          top: 8px;
-          right: 6px;
-
-          button {
-            color: #cdc;
-
-            &:active {
-              background-color: transparent;
-              color: $colorHighlight;
-            }
-          }
-        }
-
-        h4 {
-          margin: 0 0 2px 0;
-          text-transform: uppercase;
-          font-size: 10px;
-          letter-spacing: 0.01em;
-          font-weight: 700;
-          color: #838c83;
-
-          & + p {
-            margin: 0 0 1em 0;
-          }
-        }
-
-      }
-
     }
 
     button {
@@ -65,14 +24,6 @@
       text-transform: uppercase;
       letter-spacing: 0.02em;
       font-weight: 700;
-
-      &.standard {
-        border: 2px solid $colorHighlight;
-        color: $colorHighlight;
-        padding: 6px 10px;
-        border-radius: 4px;
-
-      }
 
       &:active {
         background-color: $colorHighlight;
