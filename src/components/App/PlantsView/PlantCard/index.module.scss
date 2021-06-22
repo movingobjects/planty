@@ -14,12 +14,6 @@
     border: 1px solid rgba(0, 50%, 25%, 0.125);
     border-radius: 10px;
 
-    &:hover {
-      div.wrapEditBtn {
-        display: block;
-      }
-    }
-
     &.hasImage {
       padding-top: 200px;
     }
@@ -45,7 +39,6 @@
     }
 
     div.wrapEditBtn {
-      display: none;
       position: absolute;
       top: 0px;
       right: 0px;
