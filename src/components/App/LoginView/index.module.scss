@@ -4,6 +4,15 @@
 :local {
 
   div.wrap {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+      margin-bottom: 25px;
+    }
 
   }
 
