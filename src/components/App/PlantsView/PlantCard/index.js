@@ -101,24 +101,22 @@ const PlantCard = ({
       <h4>Last watered</h4>
       <p>{lastWateredText}</p>
 
-      <div className={style.wrapActions}>
+      <button
+        className={style.standard}
+        onClick={onWaterClick}>
+        Water
+      </button>
 
-        <button
-          className={style.water}
-          onClick={onWaterClick}>
-          Water
-        </button>
-
-        {isDueToday && (
+      {isDueToday && (
+        <>
+          <br />
           <button
-            className={style.defer}
+            className={style.standard}
             onClick={onDeferClick}>
             Move to Tomorrow
           </button>
-        )}
-
-      </div>
-
+        </>
+      )}
     </li>
   );
 

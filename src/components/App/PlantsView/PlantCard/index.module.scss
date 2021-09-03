@@ -2,8 +2,6 @@
 @import '~/src/styles/vars';
 
 :local {
-  $colorWater: #09f;
-  $colorDefer: #888;
 
   li.wrap {
     position: relative;
@@ -33,46 +31,11 @@
       }
     }
 
-    div.wrapActions {
-      margin-top: 15px;
-
-      button {
-        display: block;
-        border: 2px solid $colorHighlight;
-        color: $colorHighlight;
-        padding: 8px 10px;
-        border-radius: 4px;
-        width: 100%;
-        margin-top: 10px;
-
-        &:active {
-          color: white;
-          background-color: $colorHighlight;
-        }
-
-        &.water {
-          border-color: $colorWater;
-          color: $colorWater;
-
-          &:active {
-            color: white;
-            background-color: $colorWater;
-          }
-
-        }
-
-        &.defer {
-          border-color: $colorDefer;
-          color: $colorDefer;
-
-          &:active {
-            color: white;
-            background-color: $colorDefer;
-          }
-
-        }
-
-      }
+    button.standard {
+      border: 2px solid $colorHighlight;
+      color: $colorHighlight;
+      padding: 6px 10px;
+      border-radius: 4px;
     }
 
     div.wrapEditBtn {
