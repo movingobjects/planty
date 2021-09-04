@@ -2,7 +2,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 const SpeciesList = () => {
 

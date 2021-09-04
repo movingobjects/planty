@@ -3,7 +3,7 @@ import React from 'react';
 import { useKey } from 'react-use';
 import classNames from 'classnames';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 const Modal = ({
   children = null,

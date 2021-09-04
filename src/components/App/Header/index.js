@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 const Header = () => {
 

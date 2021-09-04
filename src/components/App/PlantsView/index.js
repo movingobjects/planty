@@ -16,7 +16,7 @@ import {
   calcDateNextWater
 } from '~/src/utils';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 const PlantsView = () => {
 

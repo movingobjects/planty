@@ -16,7 +16,7 @@ import PlantsView from './PlantsView';
 import AddPlantModal from './modals/AddPlantModal';
 import EditPlantModal from './modals/EditPlantModal';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 
 const App = () => {

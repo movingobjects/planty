@@ -10,7 +10,7 @@ import moment from 'moment';
 import config from '~/src/config';
 import Modal from '~/src/components/shared/Modal';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 const EditPlantModal = ({
   plantId

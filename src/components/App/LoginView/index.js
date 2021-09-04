@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 const LoginView = ({
   ready = false,

@@ -8,7 +8,7 @@ import shortid from 'shortid';
 
 import Modal from '~/src/components/shared/Modal';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 const AddPlantModal = () => {
 
