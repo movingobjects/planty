@@ -8,20 +8,21 @@ const LoginView = ({
   onLoginClick = () => { }
 }) => {
 
-  if (!ready) {
-    return (
-      <p>Loading...</p>
-    );
-  }
-
   return (
     <div className={style.wrap}>
 
-      <button
-        onClick={onLoginClick}>
-        Login
-      </button>
+      {ready ? (
+        <>
+          <h1>Planty</h1>
 
+          <button
+            onClick={onLoginClick}>
+            Login
+          </button>
+        </>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 
