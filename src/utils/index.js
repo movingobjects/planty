@@ -1,5 +1,6 @@
 
 import { map } from 'lodash';
+import moment from 'moment';
 
 export function getWateringHistoryArray(plant) {
   return map(plant.wateringHistory || [], (w, id) => ({ ...w, id })) || [];
@@ -31,6 +32,14 @@ export function sortByDateNextWater(plantA, plantB) {
 
   const dateA = plantA?.dateNextWater || 0,
         dateB = plantB?.dateNextWater || 0;
+
+  return dateA - dateB;
+
+}
+export function sortByBirthDate(plantA, plantB) {
+
+  const dateA = plantA?.dateBorn ? moment(plantA?.dateBorn).valueOf() : 0,
+        dateB = plantB?.dateBorn ? moment(plantB?.dateBorn).valueOf() : 0;
 
   return dateA - dateB;
 

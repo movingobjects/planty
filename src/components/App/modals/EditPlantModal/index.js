@@ -221,7 +221,19 @@ const EditPlantModal = ({
               <input
                 type='date'
                 name='dateBorn'
-                value={editingPlant?.dateBorn}
+                value={editingPlant?.dateBorn || ''}
+                onChange={onFieldChange} />
+            </p>
+
+            <p>
+              <label
+                htmlFor='source'>
+                Source
+              </label>
+              <input
+                type='text'
+                name='source'
+                value={editingPlant?.source || ''}
                 onChange={onFieldChange} />
             </p>
 

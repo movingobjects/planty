@@ -9,6 +9,7 @@ import { useHash } from 'react-use';
 
 import {
   getDateLastWatered,
+  sortByBirthDate,
   getWateringHistoryArray,
 } from '~/src/utils';
 
@@ -21,6 +22,10 @@ const TimelineView = () => {
   const userId = useSelector((state) => state.userId);
   const plants = useSelector((state) => state.plants);
 
+  const byBirthdate = [ ...plants ]
+    .sort(sortByBirthDate)
+    .reverse();
+
   function onEditClick(plantId) {
     setHash(`#/timeline/edit/${plantId}`);
   }
@@ -29,13 +34,16 @@ const TimelineView = () => {
     <div className={style.wrap}>
 
       <ol>
-        {plants.map((plant, index) => (
+        {byBirthdate.map((plant, index) => (
           <li key={plant.id}>
             <button
               onClick={() => onEditClick(plant.id)}>
               Edit
             </button>
             {plant.nickname}
+            {plant.dateBorn && (
+              <>&nbsp;({moment(plant.dateBorn).fromNow(true)})</>
+            )}
           </li>
         ))}
       </ol>
