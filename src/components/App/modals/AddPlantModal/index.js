@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import firebase from '@firebase/app';
-import { useHash } from 'react-use';
 import { times } from 'lodash';
 import shortid from 'shortid';
 
+import { useCloseModal } from '~/src/hooks/modals';
 import Modal from '~/src/components/shared/Modal';
 
 import * as style from './index.module.scss';
@@ -15,7 +15,7 @@ const AddPlantModal = () => {
   const userId = useSelector((state) => state.userId);
   const species = useSelector((state) => state.species);
 
-  const [ hash, setHash ] = useHash();
+  const { closeModal } = useCloseModal();
   const [ editingPlant, setEditingPlant ] = useState({
     nickname: ''
   });
@@ -58,7 +58,7 @@ const AddPlantModal = () => {
   }
 
   function cancel() {
-    close();
+    closeModal();
   }
   function save() {
 
@@ -71,11 +71,8 @@ const AddPlantModal = () => {
         wateringHistory: []
       });
 
-    close();
+    closeModal();
 
-  }
-  function close() {
-    setHash(`#/`);
   }
 
   return (

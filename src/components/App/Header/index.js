@@ -14,6 +14,12 @@ const Header = () => {
 
       <h1>Planty</h1>
 
+      <ul className={style.nav}>
+        <li><a href="#/">Today</a></li>
+        <li><a href="#/timeline">Timeline</a></li>
+        <li><a href="#/species">Species</a></li>
+      </ul>
+
     </div>
   );
 

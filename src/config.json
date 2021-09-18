@@ -6,8 +6,10 @@
     "validRoutes": [
       "",
       "add",
-      "plant/*/edit",
-      "species"
+      "edit/*",
+      "timeline",
+      "timeline/edit/*",
+      "species",
     ]
   },
   "images": {

@@ -18,13 +18,16 @@
       li {
         text-transform: uppercase;
         font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.05em;
 
         & + li {
           margin-left: 15px;
         }
 
         a {
-          color: black;
+          color: #666;
+          text-decoration: none;
         }
 
         &.selected {

@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import firebase from '@firebase/app';
 import '@firebase/storage';
-import { useHash } from 'react-use';
 import { times, isEqual } from 'lodash';
 import moment from 'moment';
 
 import config from '~/src/config';
+import { useCloseModal } from '~/src/hooks/modals';
 import Modal from '~/src/components/shared/Modal';
 
 import * as style from './index.module.scss';
@@ -20,7 +20,7 @@ const EditPlantModal = ({
   const species = useSelector((state) => state.species);
   const plants = useSelector((state) => state.plants);
 
-  const [ hash, setHash ] = useHash();
+  const { closeModal } = useCloseModal();
   const [ editingPlant, setEditingPlant ] = useState(null);
 
   const plant       = plants.find((p) => p.id === plantId);
@@ -57,7 +57,7 @@ const EditPlantModal = ({
       .ref(`users/${userId}/plants/${plantId}`)
       .remove();
 
-    close();
+    closeModal();
 
   }
   function onFileSelect(e) {
@@ -136,7 +136,7 @@ const EditPlantModal = ({
   }
 
   function cancel() {
-    close();
+    closeModal();
   }
   function save() {
 
@@ -148,11 +148,8 @@ const EditPlantModal = ({
         ...editingPlant
       });
 
-    close();
+    closeModal();
 
-  }
-  function close() {
-    setHash(`#/`);
   }
 
   return (
@@ -214,6 +211,18 @@ const EditPlantModal = ({
                   </option>
                 ))}
               </select>
+            </p>
+
+            <p>
+              <label
+                htmlFor='dateBorn'>
+                Birth date
+              </label>
+              <input
+                type='date'
+                name='dateBorn'
+                value={editingPlant?.dateBorn}
+                onChange={onFieldChange} />
             </p>
 
           </div>

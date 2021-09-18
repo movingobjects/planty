@@ -1,0 +1,61 @@
+
+@import 'src/styles/vars.scss';
+
+:local {
+
+  div.wrap {
+
+    h2 {
+      margin-top: 25px;
+    }
+
+    ul.plants {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background-color: white;
+      outline: none;
+      font-family: $fontSans;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+
+      &:active {
+        background-color: $colorHighlight;
+        color: white;
+      }
+
+    }
+
+    div.wrapAddBtn {
+      position: fixed;
+      bottom: 50px;
+      right: 50px;
+      z-index: 50;
+
+      button {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        color: white;
+        background-color: $colorHighlight;
+        box-shadow:
+          2px 5px 15px 5px rgba(100%, 0, 0, 0.15),
+          1px 7px 10px rgba(25%, 0, 25%, 0.1);
+
+        &:active {
+          background-color: white;
+          color: $colorHighlight;
+        }
+
+      }
+    }
+
+  }
+
+}

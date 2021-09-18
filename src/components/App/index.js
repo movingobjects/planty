@@ -12,12 +12,12 @@ import Route from '~/src/components/Router/Route';
 import Header from './Header';
 import LoginView from './LoginView';
 import SpeciesList from './SpeciesList';
-import PlantsView from './PlantsView';
+import TimelineView from './TimelineView';
+import TodayView from './TodayView';
 import AddPlantModal from './modals/AddPlantModal';
 import EditPlantModal from './modals/EditPlantModal';
 
 import * as style from './index.module.scss';
-
 
 const App = () => {
 
@@ -147,12 +147,14 @@ const App = () => {
 
         <Switch>
           <Route path='#/species' component={SpeciesList} />
-          <Route path='#/' component={PlantsView} />
+          <Route path='#/timeline' component={TimelineView} />
+          <Route path='#/' component={TodayView} />
         </Switch>
 
         <Switch>
           <Route path='#/add' component={AddPlantModal} />
-          <Route path='#/plant/:plantId/edit' component={EditPlantModal} />
+          <Route path='#/edit/:plantId' component={EditPlantModal} />
+          <Route path='#/timeline/edit/:plantId' component={EditPlantModal} />
         </Switch>
 
       </main>
