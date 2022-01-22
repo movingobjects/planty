@@ -5,35 +5,6 @@
 
   div.wrap {
 
-    .image {
-      max-width: 100%;
-      max-height: 250px;
-      overflow: hidden;
-      img {
-        max-width: 100%;
-      }
-    }
-
-    input[type='file'] {
-      display: none;
-    }
-
-    label.upload {
-      cursor: pointer;
-      border: none;
-      background-color: white;
-      outline: none;
-      font-family: $fontSans;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      font-weight: 700;
-      font-size: 11px;
-      border: 2px solid $colorHighlight;
-      color: $colorHighlight;
-      padding: 6px 10px;
-      border-radius: 4px;
-    }
-
   }
 
 }

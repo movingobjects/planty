@@ -65,10 +65,6 @@ const PlantCard = ({
 
   }
 
-  function onEditClick() {
-    setHash(`#/edit/${plant.id}`);
-  }
-
   return (
     <li
       className={classNames({
@@ -83,14 +79,7 @@ const PlantCard = ({
         )}
       </div>
 
-      <div className={style.wrapEditBtn}>
-        <button
-          onClick={onEditClick}>
-          Edit
-        </button>
-      </div>
-
-      <p>
+      <p className={style.name}>
         <strong>{plant.nickname}</strong><br />
         {specie?.commonName}
       </p>

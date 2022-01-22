@@ -3,8 +3,26 @@
 
 :local {
 
+  $sidebarW: 250px;
+
   div.wrap {
-    padding: 50px;
+
+    > aside {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: $sidebarW;
+    }
+
+    > main {
+      position: absolute;
+      left: $sidebarW;
+      right: 0;
+      top: 0;
+
+    }
+
   }
 
 }

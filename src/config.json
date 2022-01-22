@@ -5,11 +5,12 @@
   "router": {
     "validRoutes": [
       "",
-      "add",
-      "edit/*",
       "timeline",
-      "timeline/edit/*",
-      "species",
+      "edit",
+      "edit/plant/*",
+      "edit/specie/*",
+      "edit/new/plant",
+      "edit/new/specie",
     ]
   },
   "images": {

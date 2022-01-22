@@ -45,11 +45,15 @@ export function sortByBirthDate(plantA, plantB) {
 
 }
 
-export function calcDateNextWater(dates) {
+export function calcDateNextWater(dates, maxCount = 5) {
 
   if (dates.length < 2) {
     return Date.now();
   }
+
+  const count = Math.min(dates.length, maxCount);
+
+  dates = dates.slice(-count);
 
   const first  = dates[0],
         latest = dates[dates.length - 1];

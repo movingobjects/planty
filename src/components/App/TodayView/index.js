@@ -6,7 +6,6 @@ import firebase from '@firebase/app';
 import { map, times } from 'lodash';
 import moment from 'moment';
 import { useHash } from 'react-use';
-import { RiAddLine } from 'react-icons/ri';
 
 import PlantCard from './PlantCard';
 
@@ -36,10 +35,6 @@ const TodayView = () => {
   const userId = useSelector((state) => state.userId);
   const plants = useSelector((state) => state.plants);
 
-  function onAddClick() {
-    setHash(`#/today/add`);
-  }
-
   function isDueToday(p) {
     return p.dateNextWater <= dateTodayEnd;
   }
@@ -59,14 +54,6 @@ const TodayView = () => {
 
   return (
     <div className={style.wrap}>
-
-      <div className={style.wrapAddBtn}>
-        <button
-          onClick={onAddClick}>
-          <RiAddLine
-            size='4em' />
-        </button>
-      </div>
 
       {!!plantsToday.length && (
         <>

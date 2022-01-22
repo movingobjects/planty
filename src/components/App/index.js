@@ -9,13 +9,15 @@ import { sortByDateNextWater } from '~/src/utils';
 
 import Switch from '~/src/components/Router/Switch';
 import Route from '~/src/components/Router/Route';
-import Header from './Header';
+import Sidebar from './Sidebar';
 import LoginView from './LoginView';
-import SpeciesList from './SpeciesList';
+import EditView from './EditView';
 import TimelineView from './TimelineView';
 import TodayView from './TodayView';
 import AddPlantModal from './modals/AddPlantModal';
+import AddSpecieModal from './modals/AddSpecieModal';
 import EditPlantModal from './modals/EditPlantModal';
+import EditSpecieModal from './modals/EditSpecieModal';
 
 import * as style from './index.module.scss';
 
@@ -102,6 +104,16 @@ const App = () => {
 
   }
 
+  function signOut() {
+
+    firebase.auth().signOut().then(() => {
+      console.log('Sign-out successful.');
+    }).catch((error) => {
+      console.log('An error happened.');
+    });
+
+  }
+
   function onSpeciesDataUpdate(data) {
 
     // Maps object to array
@@ -141,20 +153,23 @@ const App = () => {
   return (
     <div className={style.wrap}>
 
-      <Header />
+      <aside>
+        <Sidebar />
+      </aside>
 
       <main>
 
         <Switch>
-          <Route path='#/species' component={SpeciesList} />
+          <Route path='#/edit' component={EditView} />
           <Route path='#/timeline' component={TimelineView} />
           <Route path='#/' component={TodayView} />
         </Switch>
 
         <Switch>
-          <Route path='#/add' component={AddPlantModal} />
-          <Route path='#/edit/:plantId' component={EditPlantModal} />
-          <Route path='#/timeline/edit/:plantId' component={EditPlantModal} />
+          <Route path='#/edit/new/plant' component={AddPlantModal} />
+          <Route path='#/edit/new/plant' component={AddSpecieModal} />
+          <Route path='#/edit/plant/:plantId' component={EditPlantModal} />
+          <Route path='#/edit/specie/:specieId' component={EditSpecieModal} />
         </Switch>
 
       </main>
