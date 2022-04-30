@@ -86,13 +86,14 @@ function SpeciesView() {
 
       <ul>
         {species.map((specie) => (
-          <li key={specie.id || specie.scientificName}>
-            ({specie.id})
-            {specie.commonName} ({specie.scientificName})
+          <li
+            key={specie.id || specie.scientificName}>
             <button
               onClick={() => deleteSpecie(specie)}>
               &times;
             </button>
+            &nbsp;
+            {specie.commonName} (<em>{specie.scientificName}</em>) [{specie.id}]
           </li>
         ))}
       </ul>

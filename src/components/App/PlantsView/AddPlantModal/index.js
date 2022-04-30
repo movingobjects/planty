@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
 
-import {
-  createPlant as createPlantMutation,
-  deletePlant as deletePlantMutation
-} from 'graphql/mutations';
-
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
@@ -81,6 +76,7 @@ const AddPlantModal = ({
 
     </Modal>
   )
+
 }
 
 export default AddPlantModal;

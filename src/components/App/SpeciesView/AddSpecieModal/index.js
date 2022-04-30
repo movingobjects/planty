@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
 
-import {
-  createSpecie as createSpecieMutation,
-  deleteSpecie as deleteSpecieMutation
-} from 'graphql/mutations';
-
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
@@ -82,6 +77,7 @@ const AddSpecieModal = ({
 
     </Modal>
   )
+
 }
 
 export default AddSpecieModal;

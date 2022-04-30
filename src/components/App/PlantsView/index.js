@@ -98,25 +98,22 @@ function PlantsView() {
 
       <ul>
         {plants.map(plant => (
-          <li key={plant.id || plant.name}>
+          <li
+            key={plant.id || plant.name}>
+            <button
+              onClick={() => deletePlant(plant)}>
+              &times;
+            </button>
+            &nbsp;
             {!!plant.image && (
-              <p>
-                <img
-                  alt={plant.name}
-                  src={plant.image}
-                  style={{
-                    width: 200
-                  }} />
-              </p>
+              <img
+                alt={plant.name}
+                src={plant.image}
+                style={{
+                  width: 50
+                }} />
             )}
-            <p>
-              {plant.name} ({plant.specie.commonName})
-            </p>
-            <p>
-              <button onClick={() => deletePlant(plant)}>
-                &times;
-              </button>
-            </p>
+            {plant.name} ({plant.specie.commonName}) [{plant.id}]
           </li>
         ))}
       </ul>
