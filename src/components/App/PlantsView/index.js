@@ -17,6 +17,10 @@ function PlantsView() {
   const [ plants, setPlants ] = useState([]);
   const [ formData, setFormData ] = useState(emptyFormState);
 
+  const canAdd = (
+    !!formData?.name?.length
+  )
+
   useEffect(() => {
     fetchPlants();
   }, []);
@@ -37,7 +41,7 @@ function PlantsView() {
   }
 
   async function addPlant() {
-    if (!formData.name) return;
+    if (!canAdd) return;
     await API.graphql({
       query: createPlantMutation,
       variables: {
@@ -82,7 +86,7 @@ function PlantsView() {
   return (
     <div className={style.wrap}>
 
-      <h2>PlantsView</h2>
+      <h2>Plants</h2>
 
       <div>
         <h3>Add plant</h3>
@@ -101,7 +105,12 @@ function PlantsView() {
           type="file"
           onChange={onFileSelect} />
 
-        <button onClick={addPlant}>Add Plant</button>
+        <button
+          disabled={!canAdd}
+          onClick={addPlant}>
+          Add Plant
+        </button>
+
       </div>
 
       <div>
@@ -109,19 +118,21 @@ function PlantsView() {
         <ul>
           {plants.map(plant => (
             <li key={plant.id || plant.name}>
-              <p>
-                {!!plant.image && (
+              {!!plant.image && (
+                <p>
                   <img
                     alt={plant.name}
                     src={plant.image}
                     style={{
-                      width: 100
+                      width: 200
                     }} />
-                )}
-                {plant.name}
-                &nbsp;
-                <button
-                  onClick={() => deletePlant(plant)}>
+                </p>
+              )}
+              <p>
+                {plant.name} ({plant.specie.commonName})
+              </p>
+              <p>
+                <button onClick={() => deletePlant(plant)}>
                   &times;
                 </button>
               </p>

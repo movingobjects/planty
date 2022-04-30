@@ -1,10 +1,11 @@
 import React from 'react';
 import { Authenticator } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css';
+// import '@aws-amplify/ui-react/styles.css';
 
 import style from './index.module.scss';
 
 import PlantsView from './PlantsView';
+import SpeciesView from './SpeciesView';
 
 function App() {
 
@@ -13,9 +14,12 @@ function App() {
       <Authenticator>
         {({ signOut, user }) => (
           <>
-            <h1>Hello {user?.attributes?.email}</h1>
-            <PlantsView />
+            <h2>Hello {user?.attributes?.email}</h2>
             <button onClick={signOut}>Sign out</button>
+            <hr />
+            <SpeciesView />
+            <hr />
+            <PlantsView />
           </>
         )}
       </Authenticator>

@@ -2,8 +2,25 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
+type User @model {
+  id: ID!
+  email: String
+  name: String
+  plants: [Plant] @hasMany
+}
+
+type Specie @model {
+  id: ID!
+  commonName: String
+  scientificName: String
+}
+
 type Plant @model {
   id: ID!
+  userId: ID!
+  user: User @belongsTo(fields: ["userId"])
+  specieId: ID!
+  specie: Specie @hasOne(fields: ["specieId"])
   name: String!
   image: String
 }
