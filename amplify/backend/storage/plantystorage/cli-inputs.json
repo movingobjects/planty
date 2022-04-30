@@ -1,0 +1,14 @@
+{
+  "resourceName": "plantystorage",
+  "policyUUID": "24009bf8",
+  "bucketName": "planty-storage",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
