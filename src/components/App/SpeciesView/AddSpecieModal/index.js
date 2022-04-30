@@ -9,10 +9,10 @@ const EMPTY_FORM_STATE = {
   scientificName: ''
 }
 
-const AddSpecieModal = ({
-  onCancel = () => { },
+export default function AddSpecieModal({
+  onClose = () => { },
   onAdd = (data) => { }
-}) => {
+}) {
 
   const [ formData, setFormData ] = useState(EMPTY_FORM_STATE);
 
@@ -37,33 +37,42 @@ const AddSpecieModal = ({
     if (canAdd) {
       onAdd(formData);
       setFormData(EMPTY_FORM_STATE);
+      onClose();
     }
   }
 
   return (
     <Modal
-      onEscKey={onCancel}
-      onClickOff={onCancel}>
+      onEscKey={onClose}
+      onClickOff={onClose}>
 
       <div className={style.wrap}>
 
         <h2>Add Specie</h2>
 
         <p>
+          <label
+            htmlFor='commonName'>
+            Common name
+          </label>
           <input
             name='commonName'
-            placeholder='Common name'
             value={formData.commonName}
             onChange={onInputChange} />
         </p>
 
         <p>
+          <label
+            htmlFor='scientificName'>
+            Scientific name
+          </label>
           <input
             name='scientificName'
-            placeholder='Scientific name'
             value={formData.scientificName}
             onChange={onInputChange} />
         </p>
+
+        <hr />
 
         <p>
           <button
@@ -79,5 +88,3 @@ const AddSpecieModal = ({
   )
 
 }
-
-export default AddSpecieModal;

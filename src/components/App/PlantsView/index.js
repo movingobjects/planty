@@ -1,83 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { API, Storage } from 'aws-amplify';
-import { listPlants } from 'graphql/queries';
 import {
-  createPlant as createPlantMutation,
-  deletePlant as deletePlantMutation
+  createPlant,
+  deletePlant
 } from 'graphql/mutations';
 
+import { AppContext } from 'components/App';
 import AddPlantModal from './AddPlantModal';
 
 import style from './index.module.scss';
 
-function PlantsView() {
+export default function PlantsView({
+  onChange = () => { }
+}) {
 
-  const [ plants, setPlants ] = useState([]);
+  const { plants } = useContext(AppContext);
   const [ addModalOn, setAddModalOn ] = useState(false);
 
-  useEffect(() => {
-    fetchPlants();
-  }, []);
+  async function onAdd(plantData) {
 
-  function onAddClick() {
-    setAddModalOn(true);
-  }
-  function onCancelAddModal() {
-    setAddModalOn(false);
-  }
-
-  async function fetchPlants() {
-    const apiData = await API.graphql({
-      query: listPlants
-    });
-    const plantsFromAPI = apiData.data.listPlants.items;
-    await Promise.all(plantsFromAPI.map(async plant => {
-      if (plant.image) {
-        const image = await Storage.get(plant.image);
-        plant.image = image;
-      }
-      return plant;
-    }))
-    setPlants(apiData.data.listPlants.items);
-  }
-
-  async function addPlant(formData) {
-
-    if (formData.image) {
-      const filename = formData.image.name;
-      await Storage.put(filename, formData.image);
-      formData.image = filename;
+    if (plantData?.image) {
+      const filename = plantData?.image?.name;
+      await Storage.put(filename, plantData?.image);
+      plantData.image = filename;
     }
 
     await API.graphql({
-      query: createPlantMutation,
+      query: createPlant,
       variables: {
-        input: formData
+        input: plantData
       }
     });
 
-    if (formData.image) {
-      formData.image = await Storage.get(formData.image);
-    }
-
-    setPlants([
-      ...plants,
-      formData
-    ]);
+    onChange();
 
   }
+  async function onDelete({ id }) {
 
-  async function deletePlant({ id }) {
-    const nextPlants = plants.filter(plant => plant.id !== id);
-    setPlants(nextPlants);
     await API.graphql({
-      query: deletePlantMutation,
+      query: deletePlant,
       variables: {
-        input: {
-          id
-        }
+        input: { id }
       }
     });
+
+    onChange();
+
   }
 
   return (
@@ -85,35 +53,39 @@ function PlantsView() {
 
       {addModalOn && (
         <AddPlantModal
-          onAdd={addPlant}
-          onCancel={onCancelAddModal} />
+          onAdd={onAdd}
+          onClose={() => {
+            setAddModalOn(false);
+          }} />
       )}
 
       <h2>Plants</h2>
 
       <button
-        onClick={onAddClick}>
+        onClick={() => {
+          setAddModalOn(true);
+        }}>
         Add Plant
       </button>
 
       <ul>
         {plants.map(plant => (
           <li
-            key={plant.id || plant.name}>
+            key={plant?.id || plant?.name}>
             <button
-              onClick={() => deletePlant(plant)}>
+              onClick={() => onDelete(plant?.id)}>
               &times;
             </button>
             &nbsp;
-            {!!plant.image && (
+            {!!plant?.image && (
               <img
-                alt={plant.name}
-                src={plant.image}
+                alt={plant?.name}
+                src={plant?.image}
                 style={{
                   width: 50
                 }} />
             )}
-            {plant.name} ({plant.specie.commonName}) [{plant.id}]
+            {plant?.name} ({plant?.specie?.commonName}) [{plant?.id}]
           </li>
         ))}
       </ul>
@@ -122,5 +94,3 @@ function PlantsView() {
   );
 
 }
-
-export default PlantsView;

@@ -4,13 +4,13 @@ import { useKey } from 'react-use';
 
 import style from './index.module.scss';
 
-const Modal = ({
+export default function Modal({
   children = null,
   width,
   onClickOff = () => { },
   onEnterKey = () => { },
   onEscKey = () => { }
-}) => {
+}) {
 
   function onClickOutsidePanel(e) {
 
@@ -43,5 +43,3 @@ const Modal = ({
   );
 
 }
-
-export default Modal;

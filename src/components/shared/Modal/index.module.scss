@@ -2,36 +2,32 @@
 @use 'styles/zIndexes';
 @use 'styles/colors';
 
-:local {
+.wrap {
+  z-index: zIndexes.$modal;
 
-  div.wrap {
-    z-index: zIndexes.$modal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
 
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
+  background: colors.$overlay;
 
-    background: colors.$overlay;
+  .panel {
+    width: 750px;
+    padding: 30px;
+    background-color: white;
 
-    .panel {
-      width: 750px;
-      padding: 30px;
-      background-color: white;
+    footer {
+      text-align: right;
 
-      footer {
-        text-align: right;
-
-        button + button {
-          margin-left: 10px;
-        }
+      button + button {
+        margin-left: 10px;
       }
-
     }
 
   }

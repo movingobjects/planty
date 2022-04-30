@@ -1,71 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { API, Storage } from 'aws-amplify';
-import { listSpecies } from 'graphql/queries';
+import React, { useState, useContext } from 'react';
+import { API } from 'aws-amplify';
 import {
-  createSpecie as createSpecieMutation,
-  deleteSpecie as deleteSpecieMutation
+  createSpecie,
+  deleteSpecie
 } from 'graphql/mutations';
 
+import { AppContext } from 'components/App';
 import AddSpecieModal from './AddSpecieModal';
 
 import style from './index.module.scss';
 
-function SpeciesView() {
+export default function SpeciesView({
+  onChange = () => { }
+}) {
 
-  const [ species, setSpecies ] = useState([]);
+  const { species } = useContext(AppContext);
   const [ addModalOn, setAddModalOn ] = useState(false);
 
-  useEffect(() => {
-    fetchSpecies();
-  }, []);
-
-  function onAddClick() {
-    setAddModalOn(true);
-  }
-  function onCancelAddModal() {
-    setAddModalOn(false);
-  }
-
-  async function fetchSpecies() {
-    const apiData = await API.graphql({
-      query: listSpecies
-    });
-    const speciesFromAPI = apiData.data.listSpecies.items;
-    await Promise.all(speciesFromAPI.map(async specie => {
-      if (specie.image) {
-        const image = await Storage.get(specie.image);
-        specie.image = image;
-      }
-      return specie;
-    }))
-    setSpecies(apiData.data.listSpecies.items);
-  }
-  async function addSpecie(formData) {
+  async function onAdd(specieData) {
 
     await API.graphql({
-      query: createSpecieMutation,
+      query: createSpecie,
       variables: {
-        input: formData
+        input: specieData
       }
     });
 
-    setSpecies([
-      ...species,
-      formData
-    ]);
+    onChange();
 
   }
-  async function deleteSpecie({ id }) {
-    const nextSpecies = species.filter(specie => specie.id !== id);
-    setSpecies(nextSpecies);
+  async function onDelete({ id }) {
+
     await API.graphql({
-      query: deleteSpecieMutation,
+      query: deleteSpecie,
       variables: {
         input: {
           id
         }
       }
     });
+
+    onChange();
+
   }
 
   return (
@@ -73,27 +49,31 @@ function SpeciesView() {
 
       {addModalOn && (
         <AddSpecieModal
-          onAdd={addSpecie}
-          onCancel={onCancelAddModal} />
+          onAdd={onAdd}
+          onClose={() => {
+            setAddModalOn(false);
+          }} />
       )}
 
       <h2>Species</h2>
 
       <button
-        onClick={onAddClick}>
+        onClick={() => {
+          setAddModalOn(true);
+        }}>
         Add Specie
       </button>
 
       <ul>
         {species.map((specie) => (
           <li
-            key={specie.id || specie.scientificName}>
+            key={specie?.id || specie?.scientificName}>
             <button
-              onClick={() => deleteSpecie(specie)}>
+              onClick={() => onDelete(specie)}>
               &times;
             </button>
             &nbsp;
-            {specie.commonName} (<em>{specie.scientificName}</em>) [{specie.id}]
+            {specie?.commonName} (<em>{specie?.scientificName}</em>) [{specie?.id}]
           </li>
         ))}
       </ul>
@@ -101,5 +81,3 @@ function SpeciesView() {
     </div>
   );
 }
-
-export default SpeciesView;
