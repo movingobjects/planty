@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { API, Storage } from 'aws-amplify';
-import { listPlants } from './graphql/queries';
+import { listPlants } from 'graphql/queries';
 import {
   createPlant as createPlantMutation,
   deletePlant as deletePlantMutation
-} from './graphql/mutations';
+} from 'graphql/mutations';
+
+import style from './index.module.scss';
 
 const initialFormState = {
   name: ''
 };
 
-function CollectionView() {
+function PlantsView() {
 
   const [plants, setPlants] = useState([]);
   const [formData, setFormData] = useState(initialFormState);
@@ -64,25 +66,32 @@ function CollectionView() {
 
 
   return (
-    <div>
-      <h1>My Plants App</h1>
-      <input
-        onChange={e => setFormData({ ...formData, 'name': e.target.value})}
-        placeholder="Plant name"
-        value={formData.name}
-      />
-      <input
-        type="file"
-        onChange={onFileChange}
-      />
-      <button onClick={createPlant}>Create Plant</button>
-      <div style={{marginBottom: 30}}>
+    <div className={style.wrap}>
+      <h1>Planty</h1>
+      <fieldset>
+        <input
+          onChange={e => setFormData({ ...formData, 'name': e.target.value})}
+          placeholder="Plant name"
+          value={formData.name}
+        />
+        <input
+          type="file"
+          onChange={onFileChange}
+        />
+        <button onClick={createPlant}>Create Plant</button>
+      </fieldset>
+      <div>
         {plants.map(plant => (
           <div key={plant.id || plant.name}>
-            {plant.image && (
-              <img alt={plant.name} src={plant.image} style={{width: 400}} />
-            )}
             <h2>{plant.name}</h2>
+            {plant.image && (
+              <img
+                alt={plant.name}
+                src={plant.image}
+                style={{
+                  width: 400
+                }} />
+            )}
             <button onClick={() => deletePlant(plant)}>Delete plant</button>
           </div>
         ))}
@@ -91,4 +100,4 @@ function CollectionView() {
   );
 }
 
-export default CollectionView;
+export default PlantsView;
