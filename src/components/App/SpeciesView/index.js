@@ -6,26 +6,25 @@ import {
   deleteSpecie as deleteSpecieMutation
 } from 'graphql/mutations';
 
-import style from './index.module.scss';
+import AddSpecieModal from './AddSpecieModal';
 
-const emptyFormState = {
-  commonName: '',
-  scientificName: ''
-}
+import style from './index.module.scss';
 
 function SpeciesView() {
 
   const [ species, setSpecies ] = useState([]);
-  const [ formData, setFormData ] = useState(emptyFormState);
-
-  const canAdd = (
-    !!formData?.commonName?.length &&
-    !!formData?.scientificName?.length
-  );
+  const [ addModalOn, setAddModalOn ] = useState(false);
 
   useEffect(() => {
     fetchSpecies();
   }, []);
+
+  function onAddClick() {
+    setAddModalOn(true);
+  }
+  function onCancelAddModal() {
+    setAddModalOn(false);
+  }
 
   async function fetchSpecies() {
     const apiData = await API.graphql({
@@ -41,23 +40,20 @@ function SpeciesView() {
     }))
     setSpecies(apiData.data.listSpecies.items);
   }
-  async function addSpecie() {
-    if (!canAdd) return;
+  async function addSpecie(formData) {
+
     await API.graphql({
       query: createSpecieMutation,
       variables: {
         input: formData
       }
     });
-    if (formData.image) {
-      const image = await Storage.get(formData.image);
-      formData.image = image;
-    }
+
     setSpecies([
       ...species,
       formData
     ]);
-    setFormData(emptyFormState);
+
   }
   async function deleteSpecie({ id }) {
     const nextSpecies = species.filter(specie => specie.id !== id);
@@ -72,60 +68,34 @@ function SpeciesView() {
     });
   }
 
-  function onInputChange(e) {
-
-    const field = e?.target?.name,
-          value = e?.target?.value;
-
-    setFormData({
-      ...formData,
-      [field]: value
-    });
-
-  }
-
   return (
     <div className={style.wrap}>
 
+      {addModalOn && (
+        <AddSpecieModal
+          onAdd={addSpecie}
+          onCancel={onCancelAddModal} />
+      )}
+
       <h2>Species</h2>
 
-      <div>
-        <h3>Add specie</h3>
+      <button
+        onClick={onAddClick}>
+        Add Specie
+      </button>
 
-        <input
-          name='commonName'
-          placeholder='Common name'
-          value={formData.commonName}
-          onChange={onInputChange} />
-
-        <input
-          name='scientificName'
-          placeholder='Scientific Name'
-          value={formData.scientificName}
-          onChange={onInputChange} />
-
-        <button
-          disabled={!canAdd}
-          onClick={addSpecie}>
-          Add Specie
-        </button>
-      </div>
-
-      <div>
-        <h3>Species</h3>
-        <ul>
-          {species.map((specie) => (
-            <li key={specie.id || specie.scientificName}>
-              ({specie.id})
-              {specie.commonName} ({specie.scientificName})
-              <button
-                onClick={() => deleteSpecie(specie)}>
-                &times;
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul>
+        {species.map((specie) => (
+          <li key={specie.id || specie.scientificName}>
+            ({specie.id})
+            {specie.commonName} ({specie.scientificName})
+            <button
+              onClick={() => deleteSpecie(specie)}>
+              &times;
+            </button>
+          </li>
+        ))}
+      </ul>
 
     </div>
   );
