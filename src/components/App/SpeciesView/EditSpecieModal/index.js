@@ -1,10 +1,6 @@
-import React, {
-  useState,
-  useContext
-} from 'react';
+import React, { useState } from 'react';
 import { pick } from 'lodash';
 
-import { AppContext } from 'components/App';
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';

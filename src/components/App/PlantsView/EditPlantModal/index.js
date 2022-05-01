@@ -26,7 +26,7 @@ export default function EditPlantModal({
   onEdit = (data) => { }
 }) {
 
-  const { user, species } = useContext(AppContext);
+  const { species } = useContext(AppContext);
 
   const [ formData, setFormData ] = useState(pick(plant, ...EDITABLE_FIELDS));
 
