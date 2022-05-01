@@ -1,14 +1,18 @@
 import React, {
   useState,
   useEffect,
+  useCallback,
   createContext
 } from 'react';
-import { Authenticator } from '@aws-amplify/ui-react';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import { API, Storage } from 'aws-amplify';
 import {
   listSpecies,
-  listPlants
+  listPlants,
+  getUser
 } from 'graphql/queries';
+import { createUser } from 'graphql/mutations';
+
 // import '@aws-amplify/ui-react/styles.css';
 
 import style from './index.module.scss';
@@ -18,26 +22,26 @@ import SpeciesView from './SpeciesView';
 
 export const AppContext = createContext();
 
-export default function App() {
+function App({
+  signOut,
+  user: authUser
+}) {
 
+  const [ user, setUser ] = useState(null);
   const [ species, setSpecies ] = useState([]);
   const [ plants, setPlants ] = useState([]);
 
-  useEffect(() => {
-    fetchSpecies();
-    fetchPlants();
-  }, []);
+  const fetchPlants = useCallback(async () => {
 
-  function onSpeciesChange(nextSpecies) {
-    fetchSpecies();
-  }
-  function onPlantsChange(nextPlants) {
-    fetchPlants();
-  }
-
-  async function fetchPlants() {
     const apiData = await API.graphql({
-      query: listPlants
+      query: listPlants,
+      variables: {
+        filter: {
+          userId: {
+            eq: user?.id
+          }
+        }
+      }
     });
     const plantsFromAPI = apiData.data.listPlants.items;
 
@@ -54,8 +58,9 @@ export default function App() {
 
     setPlants(items);
 
-  }
-  async function fetchSpecies() {
+  }, [ user ]);
+
+  const fetchSpecies = useCallback(async () => {
 
     const apiData = await API.graphql({
       query: listSpecies
@@ -66,29 +71,89 @@ export default function App() {
 
     setSpecies(items);
 
-  }
+  }, [ ]);
 
+  useEffect(() => {
+
+    async function fetchUser() {
+
+      const {
+        username: userId,
+        attributes: {
+          email
+        }
+      } = authUser;
+
+      const apiData = await API.graphql({
+        query: getUser,
+        variables: {
+          id: userId
+        }
+      });
+      const savedUser = apiData.data.getUser;
+
+      if (savedUser) {
+        setUser(savedUser);
+
+      } else {
+        await API.graphql({
+          query: createUser,
+          variables: {
+            input: {
+              id: userId,
+              firstName: email.split('@')[0],
+              email: email
+            }
+          }
+        });
+        fetchUser();
+
+      }
+
+    }
+
+    if (authUser) {
+      fetchUser();
+    }
+
+  }, [ authUser ]);
+
+  useEffect(() => {
+    if (user) {
+      fetchPlants();
+      fetchSpecies();
+    }
+  }, [
+    user,
+    fetchPlants,
+    fetchSpecies
+  ])
+
+  function onSpeciesChange(nextSpecies) {
+    fetchSpecies();
+  }
+  function onPlantsChange(nextPlants) {
+    fetchPlants();
+  }
   return (
-    <div className={style.wrap}>
-      <Authenticator>
-        {({ signOut, user }) => (
-          <AppContext.Provider value={{
-            user,
-            plants,
-            species
-          }}>
-            <h2>Hello {user?.attributes?.email}</h2>
-            <button onClick={signOut}>Sign out</button>
-            <hr />
-            <SpeciesView
-              onChange={onSpeciesChange} />
-            <hr />
-            <PlantsView
-              onChange={onPlantsChange} />
-          </AppContext.Provider>
-        )}
-      </Authenticator>
-    </div>
+    <AppContext.Provider value={{
+      user,
+      plants,
+      species
+    }}>
+      <div className={style.wrap}>
+        <h2>Hello {user?.firstName}</h2>
+        <button onClick={signOut}>Sign out</button>
+        <hr />
+        <SpeciesView
+          onChange={onSpeciesChange} />
+        <hr />
+        <PlantsView
+          onChange={onPlantsChange} />
+      </div>
+    </AppContext.Provider>
   );
 
 }
+
+export default withAuthenticator(App);

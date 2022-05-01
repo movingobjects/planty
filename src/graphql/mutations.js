@@ -9,7 +9,8 @@ export const createUser = /* GraphQL */ `
     createUser(input: $input, condition: $condition) {
       id
       email
-      name
+      firstName
+      lastName
       plants {
         items {
           id
@@ -36,7 +37,8 @@ export const updateUser = /* GraphQL */ `
     updateUser(input: $input, condition: $condition) {
       id
       email
-      name
+      firstName
+      lastName
       plants {
         items {
           id
@@ -63,7 +65,8 @@ export const deleteUser = /* GraphQL */ `
     deleteUser(input: $input, condition: $condition) {
       id
       email
-      name
+      firstName
+      lastName
       plants {
         items {
           id
@@ -135,7 +138,8 @@ export const createPlant = /* GraphQL */ `
       user {
         id
         email
-        name
+        firstName
+        lastName
         plants {
           nextToken
         }
@@ -169,7 +173,8 @@ export const updatePlant = /* GraphQL */ `
       user {
         id
         email
-        name
+        firstName
+        lastName
         plants {
           nextToken
         }
@@ -203,7 +208,8 @@ export const deletePlant = /* GraphQL */ `
       user {
         id
         email
-        name
+        firstName
+        lastName
         plants {
           nextToken
         }
