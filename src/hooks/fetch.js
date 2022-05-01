@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
-import { API, Storage } from 'aws-amplify';
+import { API } from 'aws-amplify';
 import {
   listSpecies,
   listPlants,
   getUser
 } from 'graphql/queries';
 import { createUser } from 'graphql/mutations';
+import { useStorage } from 'hooks/storage';
 
 export function useFetchUser(authUser) {
 
@@ -52,6 +53,8 @@ export function useFetchUser(authUser) {
 
 export function useFetchPlants(user) {
 
+  const { getFilePath } = useStorage();
+
   const fetchPlants = useCallback(async () => {
 
     const apiData = await API.graphql({
@@ -64,12 +67,11 @@ export function useFetchPlants(user) {
         }
       }
     });
-    const plantsFromAPI = apiData.data.listPlants.items;
+    const rawPlants = apiData.data.listPlants.items;
 
-    await Promise.all(plantsFromAPI.map(async plant => {
+    await Promise.all(rawPlants.map(async (plant) => {
       if (plant.image) {
-        const image = await Storage.get(plant.image);
-        plant.image = image;
+        plant.image = await getFilePath(plant.image);
       }
       return plant;
     }))

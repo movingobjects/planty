@@ -5,7 +5,7 @@ import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
 
-const EDITABLE_FIELDS = [
+const FIELDS = [
   'id',
   'email',
   'firstName',
@@ -19,7 +19,7 @@ export default function EditProfileModal({
   onSave = (data) => { }
 }) {
 
-  const [ formData, setFormData ] = useState(pick(user, ...EDITABLE_FIELDS));
+  const [ formData, setFormData ] = useState(pick(user, ...FIELDS));
 
   const canSave = (
     !!formData?.email?.length &&
@@ -42,6 +42,16 @@ export default function EditProfileModal({
     if (canSave) {
       onSave(formData);
       onClose();
+    }
+  }
+
+  function onImageSelect(e) {
+    const file = e?.target?.files?.[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        profileImg: file
+      });
     }
   }
 
@@ -76,16 +86,16 @@ export default function EditProfileModal({
             onChange={onInputChange} />
         </p>
 
-        {/* <p>
+        <p>
           <label
             htmlFor='image'>
-            Image
+            Profile image
           </label>
           <input
             name='image'
             type='file'
             onChange={onImageSelect} />
-        </p> */}
+        </p>
 
         <hr />
 

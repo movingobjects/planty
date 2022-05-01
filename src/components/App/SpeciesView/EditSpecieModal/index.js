@@ -5,7 +5,7 @@ import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
 
-const EDITABLE_FIELDS = [
+const FIELDS = [
   'id',
   'commonName',
   'scientificName'
@@ -18,7 +18,7 @@ export default function EditSpecieModal({
   onSave = (data) => { }
 }) {
 
-  const [ formData, setFormData ] = useState(pick(specie, ...EDITABLE_FIELDS));
+  const [ formData, setFormData ] = useState(pick(specie, ...FIELDS));
 
   const canSave = (
     !!formData?.commonName?.length &&

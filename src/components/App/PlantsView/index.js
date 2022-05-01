@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { API, Storage } from 'aws-amplify';
+import { API } from 'aws-amplify';
 import * as mutations from 'graphql/mutations';
 
+import { useStorage } from 'hooks/storage';
 import { AppContext } from 'components/App';
 import AddPlantModal from './AddPlantModal';
 import EditPlantModal from './EditPlantModal';
@@ -12,16 +13,22 @@ export default function PlantsView({
   onChange = () => { }
 }) {
 
+  const { uploadFile } = useStorage();
   const { plants } = useContext(AppContext);
   const [ addModalOn, setAddModalOn ] = useState(false);
   const [ editingPlantId, setEditingPlantId ] = useState(null);
 
+  function getPlantImagePath(plantId) {
+    return `plants/${plantId}/${Date.now()}`;
+  }
+
   async function onAdd(plantData) {
 
     if (plantData?.image) {
-      const filename = plantData?.image?.name;
-      await Storage.put(filename, plantData?.image);
-      plantData.image = filename;
+      plantData.image = await uploadFile(
+        plantData?.image,
+        getPlantImagePath(plantData?.id)
+      );
     }
 
     await API.graphql({
@@ -35,6 +42,15 @@ export default function PlantsView({
 
   }
   async function onSave(plantData) {
+
+    const hasNewImage = !!plantData?.image?.name?.length;
+
+    if (hasNewImage) {
+      plantData.image = await uploadFile(
+        plantData?.image,
+        getPlantImagePath(plantData?.id)
+      );
+    }
 
     await API.graphql({
       query: mutations.updatePlant,

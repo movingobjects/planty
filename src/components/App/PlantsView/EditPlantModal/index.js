@@ -9,7 +9,7 @@ import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
 
-const EDITABLE_FIELDS = [
+const FIELDS = [
   'id',
   'name',
   'specieId',
@@ -28,7 +28,7 @@ export default function EditPlantModal({
 
   const { species } = useContext(AppContext);
 
-  const [ formData, setFormData ] = useState(pick(plant, ...EDITABLE_FIELDS));
+  const [ formData, setFormData ] = useState(pick(plant, ...FIELDS));
 
   const canSave = (
     !!formData?.name?.length &&
@@ -114,6 +114,39 @@ export default function EditPlantModal({
               </option>
             ))}
           </select>
+        </p>
+
+        <p>
+          <label
+            htmlFor='source'>
+            Source
+          </label>
+          <input
+            name='source'
+            value={formData.source || ''}
+            onChange={onInputChange} />
+        </p>
+
+        <p>
+          <label
+            htmlFor='dateBorn'>
+            Date born
+          </label>
+          <input
+            name='dateBorn'
+            value={formData.dateBorn || ''}
+            onChange={onInputChange} />
+        </p>
+
+        <p>
+          <label
+            htmlFor='dateRetired'>
+            Date retired
+          </label>
+          <input
+            name='dateRetired'
+            value={formData.dateRetired || ''}
+            onChange={onInputChange} />
         </p>
 
         <p>
