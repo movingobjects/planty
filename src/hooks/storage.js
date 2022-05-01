@@ -7,13 +7,8 @@ export function useStorage() {
     return Promise.resolve(path);
   }
 
-  const getFilePath = async (path) => {
-    return await Storage.get(path);
-  }
-
   return {
-    uploadFile,
-    getFilePath
+    uploadFile
   }
 
 }

@@ -2,4 +2,24 @@
 
 .wrap {
 
+  ul.plants {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    li {
+      display: inline-block;
+      flex-basis: 320px;
+
+      img.plantImg {
+        width: 100%;
+      }
+
+    }
+
+  }
+
 }

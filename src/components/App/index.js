@@ -4,6 +4,7 @@ import React, {
   createContext
 } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Storage } from 'aws-amplify';
 import {
   useFetchUser,
   useFetchPlants,
@@ -13,8 +14,6 @@ import { API } from 'aws-amplify';
 import * as subscriptions from 'graphql/subscriptions';
 
 // import '@aws-amplify/ui-react/styles.css';
-
-import { useStorage } from 'hooks/storage';
 
 import Header from './Header';
 import PlantsView from './PlantsView';
@@ -28,8 +27,6 @@ function App({
   signOut,
   user: authUser
 }) {
-
-  const { getFilePath } = useStorage();
 
   const [ user, setUser ] = useState(null);
   const [ species, setSpecies ] = useState([]);
@@ -69,7 +66,7 @@ function App({
           const apiUser = value.data.onUserChange;
 
           if (!!apiUser.profileImg?.length) {
-            apiUser.profileImg = await getFilePath(apiUser.profileImg);
+            apiUser.profileImg = await Storage.get(apiUser.profileImg);
           }
 
           setUser(apiUser);
@@ -102,11 +99,11 @@ function App({
         <Header
           onSignOut={signOut} />
 
-        <SpeciesView
-          onChange={onSpeciesChange} />
-
         <PlantsView
           onChange={onPlantsChange} />
+
+        <SpeciesView
+          onChange={onSpeciesChange} />
 
       </div>
     </AppContext.Provider>

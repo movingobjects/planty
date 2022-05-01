@@ -1,16 +1,13 @@
 import { useCallback } from 'react';
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import {
   listSpecies,
   listPlants,
   getUser
 } from 'graphql/queries';
 import { createUser } from 'graphql/mutations';
-import { useStorage } from 'hooks/storage';
 
 export function useFetchUser(authUser) {
-
-  const { getFilePath } = useStorage();
 
   const fetchUser = useCallback(async () => {
 
@@ -32,7 +29,7 @@ export function useFetchUser(authUser) {
     if (savedUser) {
 
       if (!!savedUser.profileImg?.length) {
-        savedUser.profileImg = await getFilePath(savedUser.profileImg);
+        savedUser.profileImg = await Storage.get(savedUser.profileImg);
       }
 
       return Promise.resolve(savedUser);
@@ -60,8 +57,6 @@ export function useFetchUser(authUser) {
 
 export function useFetchPlants(user) {
 
-  const { getFilePath } = useStorage();
-
   const fetchPlants = useCallback(async () => {
 
     const apiData = await API.graphql({
@@ -78,7 +73,7 @@ export function useFetchPlants(user) {
 
     await Promise.all(rawPlants.map(async (plant) => {
       if (plant.image) {
-        plant.image = await getFilePath(plant.image);
+        plant.image = await Storage.get(plant.image);
       }
       return plant;
     }));

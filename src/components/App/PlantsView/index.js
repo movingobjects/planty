@@ -4,8 +4,10 @@ import * as mutations from 'graphql/mutations';
 
 import { useStorage } from 'hooks/storage';
 import { AppContext } from 'components/App';
+
 import AddPlantModal from './AddPlantModal';
 import EditPlantModal from './EditPlantModal';
+import PlantCard from './PlantCard';
 
 import style from './index.module.scss';
 
@@ -104,26 +106,15 @@ export default function PlantsView({
 
       <h2>Plants</h2>
 
-      <ul>
+      <ul className={style.plants}>
         {plants.map(plant => (
           <li
             key={plant?.id || plant?.name}>
-            <button
-              onClick={() => {
+            <PlantCard
+              plant={plant}
+              onEditClick={() => {
                 setEditingPlantId(plant.id);
-              }}>
-              Edit
-            </button>
-            &nbsp;
-            {!!plant?.image && (
-              <img
-                alt={plant?.name}
-                src={plant?.image}
-                style={{
-                  width: 50
-                }} />
-            )}
-            {plant?.name} ({plant?.specie?.commonName}) [{plant?.id}]
+              }} />
           </li>
         ))}
       </ul>
