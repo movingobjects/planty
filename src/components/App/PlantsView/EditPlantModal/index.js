@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useContext
-} from 'react';
+import React, { useState, useContext } from 'react';
 import { pick } from 'lodash';
 
 import { AppContext } from 'components/App';

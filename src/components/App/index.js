@@ -14,11 +14,13 @@ import * as subscriptions from 'graphql/subscriptions';
 
 // import '@aws-amplify/ui-react/styles.css';
 
-import style from './index.module.scss';
+import { useStorage } from 'hooks/storage';
 
 import Header from './Header';
 import PlantsView from './PlantsView';
 import SpeciesView from './SpeciesView';
+
+import style from './index.module.scss';
 
 export const AppContext = createContext();
 
@@ -26,6 +28,8 @@ function App({
   signOut,
   user: authUser
 }) {
+
+  const { getFilePath } = useStorage();
 
   const [ user, setUser ] = useState(null);
   const [ species, setSpecies ] = useState([]);
@@ -60,8 +64,16 @@ function App({
     const userSub = API.graphql({
       query: subscriptions.onUserChange
     }).subscribe({
-        next: ({ provider, value }) => {
-          setUser(value.data.onUserChange)
+        next: async ({ provider, value }) => {
+
+          const apiUser = value.data.onUserChange;
+
+          if (!!apiUser.profileImg?.length) {
+            apiUser.profileImg = await getFilePath(apiUser.profileImg);
+          }
+
+          setUser(apiUser);
+
         },
         error: (error) => console.warn(error)
     });

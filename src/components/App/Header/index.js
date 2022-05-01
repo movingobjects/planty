@@ -7,6 +7,7 @@ import { API } from 'aws-amplify';
 
 import style from './index.module.scss';
 
+import { useStorage } from 'hooks/storage';
 import { AppContext } from 'components/App';
 import EditProfileModal from './EditProfileModal';
 
@@ -14,6 +15,7 @@ export default function Header({
   onSignOut = () => { }
 }) {
 
+  const { uploadFile } = useStorage();
   const { user } = useContext(AppContext);
   const [ editModalOn, setEditModalOn ] = useState(false);
 
@@ -21,7 +23,23 @@ export default function Header({
     setEditModalOn(true);
   }
 
+  function getUserImagePath(file, userId) {
+    const timestamp = Date.now(),
+          ext       = file?.name?.split('.').pop();
+    return `users/${userId}/${timestamp}.${ext}`;
+  }
+
   async function onSaveProfile(userData) {
+
+    const hasNewImage = !!userData?.profileImg?.name?.length;
+
+    if (hasNewImage) {
+      userData.profileImg = await uploadFile(
+        userData?.profileImg,
+        getUserImagePath(userData?.profileImg, userData?.id)
+      );
+    }
+
     await API.graphql({
       query: mutations.updateUser,
       variables: {
@@ -47,10 +65,16 @@ export default function Header({
       </div>
 
       <div className={style.wrapUserMenu}>
+        <div className={style.wrapProfileImg}>
+          {!!user?.profileImg?.length && (
+            <img
+              alt={user?.firstName}
+              src={user?.profileImg} />
+            )}
+          </div>
+        <p>Hello {user?.firstName}</p>
         <p>
-          Hello {user?.firstName}
-          &nbsp;(<a href="#" onClick={onEditProfileClick}>Edit profile</a>
-          , <a href="#" onClick={onSignOut}>Sign out</a>)
+          (<a href="#" onClick={onEditProfileClick}>Edit profile</a>, <a href="#" onClick={onSignOut}>Sign out</a>)
         </p>
       </div>
 

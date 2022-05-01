@@ -10,6 +10,8 @@ import { useStorage } from 'hooks/storage';
 
 export function useFetchUser(authUser) {
 
+  const { getFilePath } = useStorage();
+
   const fetchUser = useCallback(async () => {
 
     const {
@@ -28,6 +30,11 @@ export function useFetchUser(authUser) {
     const savedUser = apiData.data.getUser;
 
     if (savedUser) {
+
+      if (!!savedUser.profileImg?.length) {
+        savedUser.profileImg = await getFilePath(savedUser.profileImg);
+      }
+
       return Promise.resolve(savedUser);
 
     } else {
@@ -74,7 +81,7 @@ export function useFetchPlants(user) {
         plant.image = await getFilePath(plant.image);
       }
       return plant;
-    }))
+    }));
 
     const items = apiData.data.listPlants.items
       .sort((a, b) => a.name.localeCompare(b.name));

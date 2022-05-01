@@ -18,16 +18,20 @@ export default function PlantsView({
   const [ addModalOn, setAddModalOn ] = useState(false);
   const [ editingPlantId, setEditingPlantId ] = useState(null);
 
-  function getPlantImagePath(plantId) {
-    return `plants/${plantId}/${Date.now()}`;
+  function getPlantImagePath(file, plantId) {
+    const timestamp = Date.now(),
+          ext       = file?.name?.split('.').pop();
+    return `plants/${plantId}/${timestamp}.${ext}`;
   }
 
   async function onAdd(plantData) {
 
-    if (plantData?.image) {
+    const hasNewImage = !!plantData?.image?.name?.length;
+
+    if (hasNewImage) {
       plantData.image = await uploadFile(
         plantData?.image,
-        getPlantImagePath(plantData?.id)
+        getPlantImagePath(plantData?.image, plantData?.id)
       );
     }
 
@@ -48,7 +52,7 @@ export default function PlantsView({
     if (hasNewImage) {
       plantData.image = await uploadFile(
         plantData?.image,
-        getPlantImagePath(plantData?.id)
+        getPlantImagePath(plantData?.image, plantData?.id)
       );
     }
 
