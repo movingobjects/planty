@@ -34,7 +34,7 @@ export default function PlantsView({
     onChange();
 
   }
-  async function onEdit(plantData) {
+  async function onSave(plantData) {
 
     await API.graphql({
       query: mutations.updatePlant,
@@ -76,7 +76,7 @@ export default function PlantsView({
         <EditPlantModal
           plant={plants.find((p) => p.id === editingPlantId)}
           onDelete={onDelete}
-          onEdit={onEdit}
+          onSave={onSave}
           onClose={() => {
             setEditingPlantId(null);
           }} />

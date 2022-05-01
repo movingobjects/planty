@@ -23,7 +23,7 @@ export default function EditPlantModal({
   plant = { },
   onClose = () => { },
   onDelete = () => { },
-  onEdit = (data) => { }
+  onSave = (data) => { }
 }) {
 
   const { species } = useContext(AppContext);
@@ -72,7 +72,7 @@ export default function EditPlantModal({
   }
   function onSaveClick(e) {
     if (canSave) {
-      onEdit(formData);
+      onSave(formData);
       onClose();
     }
   }
@@ -93,7 +93,7 @@ export default function EditPlantModal({
           </label>
           <input
             name='name'
-            value={formData.name}
+            value={formData.name || ''}
             onChange={onInputChange} />
         </p>
 
@@ -104,7 +104,7 @@ export default function EditPlantModal({
           </label>
           <select
             name='specieId'
-            value={formData.specieId}
+            value={formData.specieId || ''}
             onChange={onSpecieIdChange}>
             {species.map((s) => (
               <option

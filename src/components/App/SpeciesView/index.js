@@ -28,7 +28,7 @@ export default function SpeciesView({
     onChange();
 
   }
-  async function onEdit(specieData) {
+  async function onSave(specieData) {
 
     await API.graphql({
       query: mutations.updateSpecie,
@@ -70,7 +70,7 @@ export default function SpeciesView({
         <EditSpecieModal
           specie={species.find((p) => p.id === editingSpecieId)}
           onDelete={onDelete}
-          onEdit={onEdit}
+          onSave={onSave}
           onClose={() => {
             setEditingSpecieId(null);
           }} />

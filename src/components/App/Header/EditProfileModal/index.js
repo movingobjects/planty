@@ -7,22 +7,23 @@ import style from './index.module.scss';
 
 const EDITABLE_FIELDS = [
   'id',
-  'commonName',
-  'scientificName'
-]
+  'email',
+  'firstName',
+  'lastName',
+  'profileImg'
+];
 
-export default function EditSpecieModal({
-  specie = { },
+export default function EditProfileModal({
+  user = { },
   onClose = () => { },
-  onDelete = () => { },
   onSave = (data) => { }
 }) {
 
-  const [ formData, setFormData ] = useState(pick(specie, ...EDITABLE_FIELDS));
+  const [ formData, setFormData ] = useState(pick(user, ...EDITABLE_FIELDS));
 
   const canSave = (
-    !!formData?.commonName?.length &&
-    !!formData?.scientificName?.length
+    !!formData?.email?.length &&
+    !!formData?.firstName?.length
   );
 
   function onInputChange(e) {
@@ -37,12 +38,6 @@ export default function EditSpecieModal({
 
   }
 
-  function onDeleteClick(e) {
-    if (canSave) {
-      onDelete(specie.id);
-      onClose();
-    }
-  }
   function onSaveClick(e) {
     if (canSave) {
       onSave(formData);
@@ -57,38 +52,42 @@ export default function EditSpecieModal({
 
       <div className={style.wrap}>
 
-        <h2>Edit Specie</h2>
+        <h2>Edit User</h2>
 
         <p>
           <label
-            htmlFor='commonName'>
-            Common name
+            htmlFor='firstName'>
+            First name
           </label>
           <input
-            name='commonName'
-            value={formData.commonName || ''}
+            name='firstName'
+            value={formData.firstName || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='scientificName'>
-            Scientific name
+            htmlFor='lastName'>
+            Last name
           </label>
           <input
-            name='scientificName'
-            value={formData.scientificName || ''}
+            name='lastName'
+            value={formData.lastName || ''}
             onChange={onInputChange} />
         </p>
+
+        {/* <p>
+          <label
+            htmlFor='image'>
+            Image
+          </label>
+          <input
+            name='image'
+            type='file'
+            onChange={onImageSelect} />
+        </p> */}
 
         <hr />
-
-        <p>
-          <button
-            onClick={onDeleteClick}>
-            Delete
-          </button>
-        </p>
 
         <p>
           <button

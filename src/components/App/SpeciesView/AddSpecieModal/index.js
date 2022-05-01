@@ -56,7 +56,7 @@ export default function AddSpecieModal({
           </label>
           <input
             name='commonName'
-            value={formData.commonName}
+            value={formData.commonName || ''}
             onChange={onInputChange} />
         </p>
 
@@ -67,7 +67,7 @@ export default function AddSpecieModal({
           </label>
           <input
             name='scientificName'
-            value={formData.scientificName}
+            value={formData.scientificName || ''}
             onChange={onInputChange} />
         </p>
 

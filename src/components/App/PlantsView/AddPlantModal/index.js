@@ -81,7 +81,7 @@ export default function AddPlantModal({
           </label>
           <input
             name='name'
-            value={formData.name}
+            value={formData.name || ''}
             onChange={onInputChange} />
         </p>
 
@@ -92,7 +92,7 @@ export default function AddPlantModal({
           </label>
           <select
             name='specieId'
-            value={formData.specieId}
+            value={formData.specieId || ''}
             onChange={onSpecieIdChange}>
             {species.map((s) => (
               <option
