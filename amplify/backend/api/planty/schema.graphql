@@ -34,3 +34,12 @@ type Plant @model {
 type Watering {
   date: String
 }
+
+type Subscription {
+  onUserChange: User
+    @aws_subscribe(mutations: [
+      "createUser",
+      "updateUser",
+      "deleteUser"
+    ])
+}

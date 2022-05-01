@@ -1,6 +1,19 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onUserChange = /* GraphQL */ `
+  subscription OnUserChange {
+    onUserChange {
+      id
+      email
+      firstName
+      lastName
+      profileImg
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {

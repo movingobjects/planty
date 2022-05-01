@@ -22,16 +22,12 @@ export default function Header({
   }
 
   async function onSaveProfile(userData) {
-
     await API.graphql({
       query: mutations.updateUser,
       variables: {
         input: userData
       }
     });
-
-    console.log('User changed', userData);
-
   }
 
   return (

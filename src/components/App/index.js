@@ -9,6 +9,8 @@ import {
   useFetchPlants,
   useFetchSpecies
 } from 'hooks/fetch';
+import { API } from 'aws-amplify';
+import * as subscriptions from 'graphql/subscriptions';
 
 // import '@aws-amplify/ui-react/styles.css';
 
@@ -53,11 +55,28 @@ function App({
     fetchSpecies
   ])
 
-  function onSpeciesChange(nextSpecies) {
-    fetchSpecies();
+  useEffect(() => {
+
+    const userSub = API.graphql({
+      query: subscriptions.onUserChange
+    }).subscribe({
+        next: ({ provider, value }) => {
+          setUser(value.data.onUserChange)
+        },
+        error: (error) => console.warn(error)
+    });
+
+    return () => {
+      userSub.unsubscribe();
+    };
+
+  }, [ ]);
+
+  function onSpeciesChange() {
+    fetchSpecies().then((result) => setSpecies(result));
   }
-  function onPlantsChange(nextPlants) {
-    fetchPlants();
+  function onPlantsChange() {
+    fetchPlants().then((result) => setPlants(result));
   }
 
   return (
