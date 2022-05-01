@@ -59,7 +59,8 @@ function App({
   useEffect(() => {
 
     const userSub = API.graphql({
-      query: subscriptions.onUserChange
+      query: subscriptions.onUserChange,
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     }).subscribe({
         next: async ({ provider, value }) => {
 

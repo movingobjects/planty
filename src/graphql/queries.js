@@ -11,6 +11,7 @@ export const getUser = /* GraphQL */ `
       profileImg
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -29,6 +30,7 @@ export const listUsers = /* GraphQL */ `
         profileImg
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -42,6 +44,7 @@ export const getSpecie = /* GraphQL */ `
       scientificName
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -58,6 +61,7 @@ export const listSpecies = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -76,6 +80,7 @@ export const getPlant = /* GraphQL */ `
         profileImg
         createdAt
         updatedAt
+        owner
       }
       specieId
       specie {
@@ -84,6 +89,7 @@ export const getPlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
+        owner
       }
       name
       image
@@ -96,6 +102,7 @@ export const getPlant = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -117,6 +124,7 @@ export const listPlants = /* GraphQL */ `
           profileImg
           createdAt
           updatedAt
+          owner
         }
         specieId
         specie {
@@ -125,6 +133,7 @@ export const listPlants = /* GraphQL */ `
           scientificName
           createdAt
           updatedAt
+          owner
         }
         name
         image
@@ -137,6 +146,7 @@ export const listPlants = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }

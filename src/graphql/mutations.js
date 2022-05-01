@@ -14,6 +14,7 @@ export const createUser = /* GraphQL */ `
       profileImg
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -30,6 +31,7 @@ export const updateUser = /* GraphQL */ `
       profileImg
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -46,6 +48,7 @@ export const deleteUser = /* GraphQL */ `
       profileImg
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -60,6 +63,7 @@ export const createSpecie = /* GraphQL */ `
       scientificName
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -74,6 +78,7 @@ export const updateSpecie = /* GraphQL */ `
       scientificName
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -88,6 +93,7 @@ export const deleteSpecie = /* GraphQL */ `
       scientificName
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -107,6 +113,7 @@ export const createPlant = /* GraphQL */ `
         profileImg
         createdAt
         updatedAt
+        owner
       }
       specieId
       specie {
@@ -115,6 +122,7 @@ export const createPlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
+        owner
       }
       name
       image
@@ -127,6 +135,7 @@ export const createPlant = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -146,6 +155,7 @@ export const updatePlant = /* GraphQL */ `
         profileImg
         createdAt
         updatedAt
+        owner
       }
       specieId
       specie {
@@ -154,6 +164,7 @@ export const updatePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
+        owner
       }
       name
       image
@@ -166,6 +177,7 @@ export const updatePlant = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -185,6 +197,7 @@ export const deletePlant = /* GraphQL */ `
         profileImg
         createdAt
         updatedAt
+        owner
       }
       specieId
       specie {
@@ -193,6 +206,7 @@ export const deletePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
+        owner
       }
       name
       image
@@ -205,6 +219,7 @@ export const deletePlant = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;

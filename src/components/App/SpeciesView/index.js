@@ -22,7 +22,8 @@ export default function SpeciesView({
       query: mutations.createSpecie,
       variables: {
         input: specieData
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
     onChange();
@@ -34,7 +35,8 @@ export default function SpeciesView({
       query: mutations.updateSpecie,
       variables: {
         input: specieData
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
     onChange();
@@ -48,7 +50,8 @@ export default function SpeciesView({
         input: {
           id: specieId
         }
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
     onChange();

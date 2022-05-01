@@ -11,12 +11,13 @@ export const onUserChange = /* GraphQL */ `
       profileImg
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser {
-    onCreateUser {
+  subscription OnCreateUser($owner: String) {
+    onCreateUser(owner: $owner) {
       id
       email
       firstName
@@ -24,12 +25,13 @@ export const onCreateUser = /* GraphQL */ `
       profileImg
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser {
-    onUpdateUser {
+  subscription OnUpdateUser($owner: String) {
+    onUpdateUser(owner: $owner) {
       id
       email
       firstName
@@ -37,12 +39,13 @@ export const onUpdateUser = /* GraphQL */ `
       profileImg
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser {
-    onDeleteUser {
+  subscription OnDeleteUser($owner: String) {
+    onDeleteUser(owner: $owner) {
       id
       email
       firstName
@@ -50,45 +53,49 @@ export const onDeleteUser = /* GraphQL */ `
       profileImg
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onCreateSpecie = /* GraphQL */ `
-  subscription OnCreateSpecie {
-    onCreateSpecie {
+  subscription OnCreateSpecie($owner: String) {
+    onCreateSpecie(owner: $owner) {
       id
       commonName
       scientificName
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateSpecie = /* GraphQL */ `
-  subscription OnUpdateSpecie {
-    onUpdateSpecie {
+  subscription OnUpdateSpecie($owner: String) {
+    onUpdateSpecie(owner: $owner) {
       id
       commonName
       scientificName
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteSpecie = /* GraphQL */ `
-  subscription OnDeleteSpecie {
-    onDeleteSpecie {
+  subscription OnDeleteSpecie($owner: String) {
+    onDeleteSpecie(owner: $owner) {
       id
       commonName
       scientificName
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onCreatePlant = /* GraphQL */ `
-  subscription OnCreatePlant {
-    onCreatePlant {
+  subscription OnCreatePlant($owner: String) {
+    onCreatePlant(owner: $owner) {
       id
       userId
       user {
@@ -99,6 +106,7 @@ export const onCreatePlant = /* GraphQL */ `
         profileImg
         createdAt
         updatedAt
+        owner
       }
       specieId
       specie {
@@ -107,6 +115,7 @@ export const onCreatePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
+        owner
       }
       name
       image
@@ -119,12 +128,13 @@ export const onCreatePlant = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdatePlant = /* GraphQL */ `
-  subscription OnUpdatePlant {
-    onUpdatePlant {
+  subscription OnUpdatePlant($owner: String) {
+    onUpdatePlant(owner: $owner) {
       id
       userId
       user {
@@ -135,6 +145,7 @@ export const onUpdatePlant = /* GraphQL */ `
         profileImg
         createdAt
         updatedAt
+        owner
       }
       specieId
       specie {
@@ -143,6 +154,7 @@ export const onUpdatePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
+        owner
       }
       name
       image
@@ -155,12 +167,13 @@ export const onUpdatePlant = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeletePlant = /* GraphQL */ `
-  subscription OnDeletePlant {
-    onDeletePlant {
+  subscription OnDeletePlant($owner: String) {
+    onDeletePlant(owner: $owner) {
       id
       userId
       user {
@@ -171,6 +184,7 @@ export const onDeletePlant = /* GraphQL */ `
         profileImg
         createdAt
         updatedAt
+        owner
       }
       specieId
       specie {
@@ -179,6 +193,7 @@ export const onDeletePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
+        owner
       }
       name
       image
@@ -191,6 +206,7 @@ export const onDeletePlant = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;

@@ -41,7 +41,8 @@ export default function PlantsView({
       query: mutations.createPlant,
       variables: {
         input: plantData
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
     onChange();
@@ -62,7 +63,8 @@ export default function PlantsView({
       query: mutations.updatePlant,
       variables: {
         input: plantData
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
     onChange();
@@ -76,7 +78,8 @@ export default function PlantsView({
         input: {
           id: plantId
         }
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
     onChange();

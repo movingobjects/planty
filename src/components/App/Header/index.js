@@ -44,7 +44,8 @@ export default function Header({
       query: mutations.updateUser,
       variables: {
         input: userData
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
   }
 

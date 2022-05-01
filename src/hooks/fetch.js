@@ -22,7 +22,8 @@ export function useFetchUser(authUser) {
       query: getUser,
       variables: {
         id: userId
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
     const savedUser = apiData.data.getUser;
 
@@ -43,7 +44,8 @@ export function useFetchUser(authUser) {
             firstName: email.split('@')[0],
             email: email
           }
-        }
+        },
+        authMode: 'AMAZON_COGNITO_USER_POOLS'
       });
       fetchUser();
 
@@ -67,7 +69,8 @@ export function useFetchPlants(user) {
             eq: user?.id
           }
         }
-      }
+      },
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
     const rawPlants = apiData.data.listPlants.items;
 
@@ -94,7 +97,8 @@ export function useFetchSpecies() {
   const fetchSpecies = useCallback(async () => {
 
     const apiData = await API.graphql({
-      query: listSpecies
+      query: listSpecies,
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
     const items = apiData.data.listSpecies.items
