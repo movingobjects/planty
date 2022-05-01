@@ -74,7 +74,8 @@ export default function Header({
           </div>
         <p>Hello {user?.firstName}</p>
         <p>
-          (<a href="#" onClick={onEditProfileClick}>Edit profile</a>, <a href="#" onClick={onSignOut}>Sign out</a>)
+          <span onClick={onEditProfileClick}>Edit profile</span>
+          <span onClick={onSignOut}>Sign out</span>
         </p>
       </div>
 

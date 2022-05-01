@@ -24,6 +24,20 @@
 
     }
 
+    span {
+      text-decoration: underline;
+      color: blue;
+      cursor: pointer;
+
+      & + span {
+        margin-left: 5px;
+      }
+
+      &:hover {
+        color: red;
+      }
+    }
+
   }
 
 }
