@@ -1,25 +1,33 @@
-import React, { useState } from 'react';
+import React, {
+  useState,
+  useContext
+} from 'react';
+import { pick } from 'lodash';
 
+import { AppContext } from 'components/App';
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
 
-const EMPTY_FORM_STATE = {
-  commonName: '',
-  scientificName: ''
-}
+const EDITABLE_FIELDS = [
+  'id',
+  'commonName',
+  'scientificName'
+]
 
-export default function AddSpecieModal({
+export default function EditSpecieModal({
+  specie = { },
   onClose = () => { },
-  onAdd = (data) => { }
+  onDelete = () => { },
+  onEdit = (data) => { }
 }) {
 
-  const [ formData, setFormData ] = useState(EMPTY_FORM_STATE);
+  const [ formData, setFormData ] = useState(pick(specie, ...EDITABLE_FIELDS));
 
-  const canAdd = (
+  const canSave = (
     !!formData?.commonName?.length &&
     !!formData?.scientificName?.length
-  )
+  );
 
   function onInputChange(e) {
 
@@ -33,9 +41,15 @@ export default function AddSpecieModal({
 
   }
 
-  function onAddClick(e) {
-    if (canAdd) {
-      onAdd(formData);
+  function onDeleteClick(e) {
+    if (canSave) {
+      onDelete(specie.id);
+      onClose();
+    }
+  }
+  function onSaveClick(e) {
+    if (canSave) {
+      onEdit(formData);
       onClose();
     }
   }
@@ -47,7 +61,7 @@ export default function AddSpecieModal({
 
       <div className={style.wrap}>
 
-        <h2>Add Specie</h2>
+        <h2>Edit Specie</h2>
 
         <p>
           <label
@@ -75,9 +89,16 @@ export default function AddSpecieModal({
 
         <p>
           <button
-            disabled={!canAdd}
-            onClick={onAddClick}>
-            Add Specie
+            onClick={onDeleteClick}>
+            Delete
+          </button>
+        </p>
+
+        <p>
+          <button
+            disabled={!canSave}
+            onClick={onSaveClick}>
+            Save changes
           </button>
         </p>
 

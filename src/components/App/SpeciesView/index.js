@@ -4,6 +4,7 @@ import * as mutations from 'graphql/mutations';
 
 import { AppContext } from 'components/App';
 import AddSpecieModal from './AddSpecieModal';
+import EditSpecieModal from './EditSpecieModal';
 
 import style from './index.module.scss';
 
@@ -13,6 +14,7 @@ export default function SpeciesView({
 
   const { species } = useContext(AppContext);
   const [ addModalOn, setAddModalOn ] = useState(false);
+  const [ editingSpecieId, setEditingSpecieId ] = useState(null);
 
   async function onAdd(specieData) {
 
@@ -26,13 +28,25 @@ export default function SpeciesView({
     onChange();
 
   }
-  async function onDelete({ id }) {
+  async function onEdit(specieData) {
+
+    await API.graphql({
+      query: mutations.updateSpecie,
+      variables: {
+        input: specieData
+      }
+    });
+
+    onChange();
+
+  }
+  async function onDelete(specieId) {
 
     await API.graphql({
       query: mutations.deleteSpecie,
       variables: {
         input: {
-          id
+          id: specieId
         }
       }
     });
@@ -52,6 +66,16 @@ export default function SpeciesView({
           }} />
       )}
 
+      {!!editingSpecieId?.length && (
+        <EditSpecieModal
+          specie={species.find((p) => p.id === editingSpecieId)}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onClose={() => {
+            setEditingSpecieId(null);
+          }} />
+      )}
+
       <h2>Species</h2>
 
       <ul>
@@ -59,8 +83,10 @@ export default function SpeciesView({
           <li
             key={specie?.id || specie?.scientificName}>
             <button
-              onClick={() => onDelete(specie)}>
-              &times;
+              onClick={() => {
+                setEditingSpecieId(specie.id);
+              }}>
+              Edit
             </button>
             &nbsp;
             {specie?.commonName} (<em>{specie?.scientificName}</em>) [{specie?.id}]
