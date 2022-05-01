@@ -2,29 +2,35 @@ import React, {
   useState,
   useContext
 } from 'react';
+import { pick } from 'lodash';
 
 import { AppContext } from 'components/App';
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
 
-export default function AddPlantModal({
+const EDITABLE_FIELDS = [
+  'id',
+  'name',
+  'specieId',
+  'dateBorn',
+  'dateRetired',
+  'image',
+  'source'
+]
+
+export default function EditPlantModal({
+  plant = { },
   onClose = () => { },
-  onAdd = (data) => { }
+  onDelete = () => { },
+  onEdit = (data) => { }
 }) {
 
   const { user, species } = useContext(AppContext);
 
-  const emptyFormState = {
-    name: '',
-    specieId: species?.[0]?.id || '',
-    userId: user?.id,
-    waterings: []
-  };
+  const [ formData, setFormData ] = useState(pick(plant, ...EDITABLE_FIELDS));
 
-  const [ formData, setFormData ] = useState(emptyFormState);
-
-  const canAdd = (
+  const canSave = (
     !!formData?.name?.length &&
     !!formData?.specieId?.length
   );
@@ -58,9 +64,15 @@ export default function AddPlantModal({
     }
   }
 
-  function onAddClick(e) {
-    if (canAdd) {
-      onAdd(formData);
+  function onDeleteClick(e) {
+    if (canSave) {
+      onDelete(plant.id);
+      onClose();
+    }
+  }
+  function onSaveClick(e) {
+    if (canSave) {
+      onEdit(formData);
       onClose();
     }
   }
@@ -72,7 +84,7 @@ export default function AddPlantModal({
 
       <div className={style.wrap}>
 
-        <h2>Add Plant</h2>
+        <h2>Edit Plant</h2>
 
         <p>
           <label
@@ -119,9 +131,16 @@ export default function AddPlantModal({
 
         <p>
           <button
-            disabled={!canAdd}
-            onClick={onAddClick}>
-            Add Plant
+            onClick={onDeleteClick}>
+            Delete
+          </button>
+        </p>
+
+        <p>
+          <button
+            disabled={!canSave}
+            onClick={onSaveClick}>
+            Save changes
           </button>
         </p>
 

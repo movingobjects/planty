@@ -25,12 +25,12 @@ type Plant @model {
   name: String!
   image: String
   source: String
-  dateBorn: Int
-  dateNextWater: Int
-  dateRetired: Int
+  dateBorn: String
+  dateNextWater: String
+  dateRetired: String
   waterings: [Watering]!
 }
 
 type Watering {
-  date: Int
+  date: String
 }

@@ -1,13 +1,11 @@
 import React, { useState, useContext } from 'react';
+import moment from 'moment';
 import { API, Storage } from 'aws-amplify';
-import {
-  // updateUser,
-  createPlant,
-  deletePlant
-} from 'graphql/mutations';
+import * as mutations from 'graphql/mutations';
 
 import { AppContext } from 'components/App';
 import AddPlantModal from './AddPlantModal';
+import EditPlantModal from './EditPlantModal';
 
 import style from './index.module.scss';
 
@@ -17,6 +15,7 @@ export default function PlantsView({
 
   const { plants } = useContext(AppContext);
   const [ addModalOn, setAddModalOn ] = useState(false);
+  const [ editingPlantId, setEditingPlantId ] = useState(null);
 
   async function onAdd(plantData) {
 
@@ -27,7 +26,7 @@ export default function PlantsView({
     }
 
     await API.graphql({
-      query: createPlant,
+      query: mutations.createPlant,
       variables: {
         input: plantData
       }
@@ -36,12 +35,26 @@ export default function PlantsView({
     onChange();
 
   }
-  async function onDelete(id) {
+  async function onEdit(plantData) {
 
     await API.graphql({
-      query: deletePlant,
+      query: mutations.updatePlant,
       variables: {
-        input: { id }
+        input: plantData
+      }
+    });
+
+    onChange();
+
+  }
+  async function onDelete(plantId) {
+
+    await API.graphql({
+      query: mutations.deletePlant,
+      variables: {
+        input: {
+          id: plantId
+        }
       }
     });
 
@@ -60,6 +73,16 @@ export default function PlantsView({
           }} />
       )}
 
+      {!!editingPlantId?.length && (
+        <EditPlantModal
+          plant={plants.find((p) => p.id === editingPlantId)}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onClose={() => {
+            setEditingPlantId(null);
+          }} />
+      )}
+
       <h2>Plants</h2>
 
       <ul>
@@ -68,9 +91,9 @@ export default function PlantsView({
             key={plant?.id || plant?.name}>
             <button
               onClick={() => {
-                onDelete(plant.id)
+                setEditingPlantId(plant.id);
               }}>
-              &times;
+              Edit
             </button>
             &nbsp;
             {!!plant?.image && (
@@ -82,9 +105,6 @@ export default function PlantsView({
                 }} />
             )}
             {plant?.name} ({plant?.specie?.commonName}) [{plant?.id}]
-            <pre>
-              {JSON.stringify(plant, null, 2)}
-            </pre>
           </li>
         ))}
       </ul>

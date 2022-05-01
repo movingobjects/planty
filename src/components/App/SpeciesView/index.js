@@ -1,9 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { API } from 'aws-amplify';
-import {
-  createSpecie,
-  deleteSpecie
-} from 'graphql/mutations';
+import * as mutations from 'graphql/mutations';
 
 import { AppContext } from 'components/App';
 import AddSpecieModal from './AddSpecieModal';
@@ -20,7 +17,7 @@ export default function SpeciesView({
   async function onAdd(specieData) {
 
     await API.graphql({
-      query: createSpecie,
+      query: mutations.createSpecie,
       variables: {
         input: specieData
       }
@@ -32,7 +29,7 @@ export default function SpeciesView({
   async function onDelete({ id }) {
 
     await API.graphql({
-      query: deleteSpecie,
+      query: mutations.deleteSpecie,
       variables: {
         input: {
           id
