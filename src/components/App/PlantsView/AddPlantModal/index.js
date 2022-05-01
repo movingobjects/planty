@@ -18,7 +18,8 @@ export default function AddPlantModal({
   const emptyFormState = {
     name: '',
     specieId: species?.[0]?.id || '',
-    userId: user?.id
+    userId: user?.id,
+    waterings: []
   };
 
   const [ formData, setFormData ] = useState(emptyFormState);

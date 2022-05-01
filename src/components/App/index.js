@@ -31,6 +31,42 @@ function App({
   const [ species, setSpecies ] = useState([]);
   const [ plants, setPlants ] = useState([]);
 
+  const fetchUser = useCallback(async () => {
+
+    const {
+      username: userId,
+      attributes: {
+        email
+      }
+    } = authUser;
+
+    const apiData = await API.graphql({
+      query: getUser,
+      variables: {
+        id: userId
+      }
+    });
+    const savedUser = apiData.data.getUser;
+
+    if (savedUser) {
+      setUser(savedUser);
+
+    } else {
+      await API.graphql({
+        query: createUser,
+        variables: {
+          input: {
+            id: userId,
+            firstName: email.split('@')[0],
+            email: email
+          }
+        }
+      });
+      fetchUser();
+
+    }
+
+  }, [ authUser ]);
   const fetchPlants = useCallback(async () => {
 
     const apiData = await API.graphql({
@@ -59,7 +95,6 @@ function App({
     setPlants(items);
 
   }, [ user ]);
-
   const fetchSpecies = useCallback(async () => {
 
     const apiData = await API.graphql({
@@ -74,49 +109,13 @@ function App({
   }, [ ]);
 
   useEffect(() => {
-
-    async function fetchUser() {
-
-      const {
-        username: userId,
-        attributes: {
-          email
-        }
-      } = authUser;
-
-      const apiData = await API.graphql({
-        query: getUser,
-        variables: {
-          id: userId
-        }
-      });
-      const savedUser = apiData.data.getUser;
-
-      if (savedUser) {
-        setUser(savedUser);
-
-      } else {
-        await API.graphql({
-          query: createUser,
-          variables: {
-            input: {
-              id: userId,
-              firstName: email.split('@')[0],
-              email: email
-            }
-          }
-        });
-        fetchUser();
-
-      }
-
-    }
-
     if (authUser) {
       fetchUser();
     }
-
-  }, [ authUser ]);
+  }, [
+    authUser,
+    fetchUser
+  ]);
 
   useEffect(() => {
     if (user) {
@@ -135,6 +134,7 @@ function App({
   function onPlantsChange(nextPlants) {
     fetchPlants();
   }
+
   return (
     <AppContext.Provider value={{
       user,
@@ -142,14 +142,20 @@ function App({
       species
     }}>
       <div className={style.wrap}>
+
         <h2>Hello {user?.firstName}</h2>
         <button onClick={signOut}>Sign out</button>
+
         <hr />
+
         <SpeciesView
           onChange={onSpeciesChange} />
+
         <hr />
+
         <PlantsView
           onChange={onPlantsChange} />
+
       </div>
     </AppContext.Provider>
   );

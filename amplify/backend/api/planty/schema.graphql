@@ -7,7 +7,7 @@ type User @model {
   email: String
   firstName: String
   lastName: String
-  plants: [Plant] @hasMany
+  profileImg: String
 }
 
 type Specie @model {
@@ -19,9 +19,18 @@ type Specie @model {
 type Plant @model {
   id: ID!
   userId: ID!
-  user: User @belongsTo(fields: ["userId"])
+  user: User @hasOne(fields: ["userId"])
   specieId: ID!
   specie: Specie @hasOne(fields: ["specieId"])
   name: String!
   image: String
+  source: String
+  dateBorn: Int
+  dateNextWater: Int
+  dateRetired: Int
+  waterings: [Watering]!
+}
+
+type Watering {
+  date: Int
 }

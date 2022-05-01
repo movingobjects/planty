@@ -11,19 +11,7 @@ export const createUser = /* GraphQL */ `
       email
       firstName
       lastName
-      plants {
-        items {
-          id
-          userId
-          specieId
-          name
-          image
-          createdAt
-          updatedAt
-          userPlantsId
-        }
-        nextToken
-      }
+      profileImg
       createdAt
       updatedAt
     }
@@ -39,19 +27,7 @@ export const updateUser = /* GraphQL */ `
       email
       firstName
       lastName
-      plants {
-        items {
-          id
-          userId
-          specieId
-          name
-          image
-          createdAt
-          updatedAt
-          userPlantsId
-        }
-        nextToken
-      }
+      profileImg
       createdAt
       updatedAt
     }
@@ -67,19 +43,7 @@ export const deleteUser = /* GraphQL */ `
       email
       firstName
       lastName
-      plants {
-        items {
-          id
-          userId
-          specieId
-          name
-          image
-          createdAt
-          updatedAt
-          userPlantsId
-        }
-        nextToken
-      }
+      profileImg
       createdAt
       updatedAt
     }
@@ -140,9 +104,7 @@ export const createPlant = /* GraphQL */ `
         email
         firstName
         lastName
-        plants {
-          nextToken
-        }
+        profileImg
         createdAt
         updatedAt
       }
@@ -156,9 +118,15 @@ export const createPlant = /* GraphQL */ `
       }
       name
       image
+      source
+      dateBorn
+      dateNextWater
+      dateRetired
+      waterings {
+        date
+      }
       createdAt
       updatedAt
-      userPlantsId
     }
   }
 `;
@@ -175,9 +143,7 @@ export const updatePlant = /* GraphQL */ `
         email
         firstName
         lastName
-        plants {
-          nextToken
-        }
+        profileImg
         createdAt
         updatedAt
       }
@@ -191,9 +157,15 @@ export const updatePlant = /* GraphQL */ `
       }
       name
       image
+      source
+      dateBorn
+      dateNextWater
+      dateRetired
+      waterings {
+        date
+      }
       createdAt
       updatedAt
-      userPlantsId
     }
   }
 `;
@@ -210,9 +182,7 @@ export const deletePlant = /* GraphQL */ `
         email
         firstName
         lastName
-        plants {
-          nextToken
-        }
+        profileImg
         createdAt
         updatedAt
       }
@@ -226,9 +196,15 @@ export const deletePlant = /* GraphQL */ `
       }
       name
       image
+      source
+      dateBorn
+      dateNextWater
+      dateRetired
+      waterings {
+        date
+      }
       createdAt
       updatedAt
-      userPlantsId
     }
   }
 `;

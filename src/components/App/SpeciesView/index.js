@@ -57,13 +57,6 @@ export default function SpeciesView({
 
       <h2>Species</h2>
 
-      <button
-        onClick={() => {
-          setAddModalOn(true);
-        }}>
-        Add Specie
-      </button>
-
       <ul>
         {species.map((specie) => (
           <li
@@ -77,6 +70,13 @@ export default function SpeciesView({
           </li>
         ))}
       </ul>
+
+      <button
+        onClick={() => {
+          setAddModalOn(true);
+        }}>
+        + Add Specie
+      </button>
 
     </div>
   );

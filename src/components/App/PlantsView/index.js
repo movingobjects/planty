@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { API, Storage } from 'aws-amplify';
 import {
+  // updateUser,
   createPlant,
   deletePlant
 } from 'graphql/mutations';
@@ -35,7 +36,7 @@ export default function PlantsView({
     onChange();
 
   }
-  async function onDelete({ id }) {
+  async function onDelete(id) {
 
     await API.graphql({
       query: deletePlant,
@@ -61,19 +62,14 @@ export default function PlantsView({
 
       <h2>Plants</h2>
 
-      <button
-        onClick={() => {
-          setAddModalOn(true);
-        }}>
-        Add Plant
-      </button>
-
       <ul>
         {plants.map(plant => (
           <li
             key={plant?.id || plant?.name}>
             <button
-              onClick={() => onDelete(plant?.id)}>
+              onClick={() => {
+                onDelete(plant.id)
+              }}>
               &times;
             </button>
             &nbsp;
@@ -86,9 +82,19 @@ export default function PlantsView({
                 }} />
             )}
             {plant?.name} ({plant?.specie?.commonName}) [{plant?.id}]
+            <pre>
+              {JSON.stringify(plant, null, 2)}
+            </pre>
           </li>
         ))}
       </ul>
+
+      <button
+        onClick={() => {
+          setAddModalOn(true);
+        }}>
+        + Add Plant
+      </button>
 
     </div>
   );

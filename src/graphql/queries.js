@@ -8,19 +8,7 @@ export const getUser = /* GraphQL */ `
       email
       firstName
       lastName
-      plants {
-        items {
-          id
-          userId
-          specieId
-          name
-          image
-          createdAt
-          updatedAt
-          userPlantsId
-        }
-        nextToken
-      }
+      profileImg
       createdAt
       updatedAt
     }
@@ -38,9 +26,7 @@ export const listUsers = /* GraphQL */ `
         email
         firstName
         lastName
-        plants {
-          nextToken
-        }
+        profileImg
         createdAt
         updatedAt
       }
@@ -87,9 +73,7 @@ export const getPlant = /* GraphQL */ `
         email
         firstName
         lastName
-        plants {
-          nextToken
-        }
+        profileImg
         createdAt
         updatedAt
       }
@@ -103,9 +87,15 @@ export const getPlant = /* GraphQL */ `
       }
       name
       image
+      source
+      dateBorn
+      dateNextWater
+      dateRetired
+      waterings {
+        date
+      }
       createdAt
       updatedAt
-      userPlantsId
     }
   }
 `;
@@ -124,6 +114,7 @@ export const listPlants = /* GraphQL */ `
           email
           firstName
           lastName
+          profileImg
           createdAt
           updatedAt
         }
@@ -137,9 +128,15 @@ export const listPlants = /* GraphQL */ `
         }
         name
         image
+        source
+        dateBorn
+        dateNextWater
+        dateRetired
+        waterings {
+          date
+        }
         createdAt
         updatedAt
-        userPlantsId
       }
       nextToken
     }
