@@ -63,7 +63,6 @@ export const createSpecie = /* GraphQL */ `
       scientificName
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -78,7 +77,6 @@ export const updateSpecie = /* GraphQL */ `
       scientificName
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -93,7 +91,6 @@ export const deleteSpecie = /* GraphQL */ `
       scientificName
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -122,7 +119,6 @@ export const createPlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
-        owner
       }
       name
       image
@@ -164,7 +160,6 @@ export const updatePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
-        owner
       }
       name
       image
@@ -206,7 +201,6 @@ export const deletePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
-        owner
       }
       name
       image

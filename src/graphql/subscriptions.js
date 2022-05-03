@@ -58,38 +58,35 @@ export const onDeleteUser = /* GraphQL */ `
   }
 `;
 export const onCreateSpecie = /* GraphQL */ `
-  subscription OnCreateSpecie($owner: String) {
-    onCreateSpecie(owner: $owner) {
+  subscription OnCreateSpecie {
+    onCreateSpecie {
       id
       commonName
       scientificName
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onUpdateSpecie = /* GraphQL */ `
-  subscription OnUpdateSpecie($owner: String) {
-    onUpdateSpecie(owner: $owner) {
+  subscription OnUpdateSpecie {
+    onUpdateSpecie {
       id
       commonName
       scientificName
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onDeleteSpecie = /* GraphQL */ `
-  subscription OnDeleteSpecie($owner: String) {
-    onDeleteSpecie(owner: $owner) {
+  subscription OnDeleteSpecie {
+    onDeleteSpecie {
       id
       commonName
       scientificName
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -115,7 +112,6 @@ export const onCreatePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
-        owner
       }
       name
       image
@@ -154,7 +150,6 @@ export const onUpdatePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
-        owner
       }
       name
       image
@@ -193,7 +188,6 @@ export const onDeletePlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
-        owner
       }
       name
       image

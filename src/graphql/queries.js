@@ -44,7 +44,6 @@ export const getSpecie = /* GraphQL */ `
       scientificName
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -61,7 +60,6 @@ export const listSpecies = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -89,7 +87,6 @@ export const getPlant = /* GraphQL */ `
         scientificName
         createdAt
         updatedAt
-        owner
       }
       name
       image
@@ -133,7 +130,6 @@ export const listPlants = /* GraphQL */ `
           scientificName
           createdAt
           updatedAt
-          owner
         }
         name
         image
