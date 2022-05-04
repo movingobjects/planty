@@ -3,6 +3,29 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 15px;
+
+  .wrapMenu {
+    flex-grow: 1;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      li {
+        display: inline-block;
+        & + li {
+          margin-left: 10px;
+        }
+        &.selected {
+          a {
+            pointer-events: none;
+            text-decoration: none;
+            color: black;
+          }
+        }
+      }
+    }
+  }
 
   .wrapUserMenu {
     display: flex;
@@ -24,18 +47,8 @@
 
     }
 
-    span {
-      text-decoration: underline;
-      color: blue;
-      cursor: pointer;
-
-      & + span {
-        margin-left: 5px;
-      }
-
-      &:hover {
-        color: red;
-      }
+    a + a {
+      margin-left: 10px;
     }
 
   }

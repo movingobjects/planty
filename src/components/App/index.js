@@ -3,6 +3,11 @@ import React, {
   useEffect,
   createContext
 } from 'react';
+import {
+  Routes,
+  Route,
+  Navigate
+} from 'react-router-dom';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Storage } from 'aws-amplify';
 import {
@@ -15,6 +20,7 @@ import * as subscriptions from 'graphql/subscriptions';
 
 // import '@aws-amplify/ui-react/styles.css';
 
+import EditProfileView from './EditProfileView';
 import Header from './Header';
 import PlantsView from './PlantsView';
 import SpeciesView from './SpeciesView';
@@ -100,11 +106,12 @@ function App({
         <Header
           onSignOut={signOut} />
 
-        <PlantsView
-          onChange={onPlantsChange} />
-
-        <SpeciesView
-          onChange={onSpeciesChange} />
+        <Routes>
+          <Route path="/" element={<Navigate to='/plants' replace />} />
+          <Route path='/plants' element={<PlantsView />} />
+          <Route path='/species' element={<SpeciesView />} />
+          <Route path='/edit-profile' element={<EditProfileView />} />
+        </Routes>
 
       </div>
     </AppContext.Provider>
