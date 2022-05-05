@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { API } from 'aws-amplify';
 import * as mutations from 'graphql/mutations';
 import { Routes, Route, Link } from 'react-router-dom';
@@ -16,8 +16,6 @@ export default function SpeciesView() {
     species,
     onSpeciesChange
   } = useContext(AppContext);
-  const [ addModalOn, setAddModalOn ] = useState(false);
-  const [ editingSpecieId, setEditingSpecieId ] = useState(null);
 
   async function onAdd(specieData) {
 

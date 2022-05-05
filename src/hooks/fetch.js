@@ -1,11 +1,13 @@
 import { useCallback } from 'react';
 import { API, Storage } from 'aws-amplify';
+
 import {
   listSpecies,
   listPlants,
   getUser
 } from 'graphql/queries';
 import { createUser } from 'graphql/mutations';
+import { sortByDateNextWater } from 'utils';
 
 export function useFetchUser(authUser) {
 
@@ -82,7 +84,7 @@ export function useFetchPlants(user) {
     }));
 
     const items = apiData.data.listPlants.items
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .sort(sortByDateNextWater);
 
     return Promise.resolve(items);
 

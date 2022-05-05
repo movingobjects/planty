@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { API } from 'aws-amplify';
 import * as mutations from 'graphql/mutations';
 import { Routes, Route, Link } from 'react-router-dom';
@@ -14,12 +14,14 @@ import style from './index.module.scss';
 
 export default function PlantsView() {
 
-  const {
+  let {
     plants,
     onPlantsChange
   } = useContext(AppContext);
+
   const { uploadFile } = useStorage();
-  const [ editingPlantId, setEditingPlantId ] = useState(null);
+
+  plants = plants.filter((p) => !p.dateRetired);
 
   function getPlantImagePath(file, plantId) {
     const timestamp = Date.now(),
@@ -58,6 +60,8 @@ export default function PlantsView() {
         plantData?.image,
         getPlantImagePath(plantData?.image, plantData?.id)
       );
+    } else {
+      delete plantData.image;
     }
 
     await API.graphql({

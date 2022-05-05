@@ -75,6 +75,8 @@ export default function EditProfileView({
         userData?.profileImg,
         getUserImagePath(userData?.profileImg, userData?.id)
       );
+    } else {
+      delete userData.profileImg;
     }
 
     await API.graphql({
