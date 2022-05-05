@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { API } from 'aws-amplify';
 import * as mutations from 'graphql/mutations';
 import { Routes, Route, Link } from 'react-router-dom';

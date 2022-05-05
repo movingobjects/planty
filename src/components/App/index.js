@@ -88,6 +88,9 @@ function App({
 
   }, [ ]);
 
+  function onUserChange() {
+    fetchUser().then((user) => setUser(user));
+  }
   function onSpeciesChange() {
     fetchSpecies().then((result) => setSpecies(result));
     fetchPlants().then((result) => setPlants(result));
@@ -101,6 +104,7 @@ function App({
       user,
       plants,
       species,
+      onUserChange,
       onPlantsChange,
       onSpeciesChange
     }}>

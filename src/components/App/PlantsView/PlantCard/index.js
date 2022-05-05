@@ -3,11 +3,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-import {
-  getDateLastWatered,
-  getWateringHistoryArray,
-  calcDateNextWater
-} from 'utils';
+import { getDateLastWatered } from 'utils';
 
 import style from './index.module.scss';
 

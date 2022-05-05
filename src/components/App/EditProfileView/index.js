@@ -1,4 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect
+} from 'react';
 import { pick } from 'lodash';
 import { API } from 'aws-amplify';
 
@@ -16,21 +20,26 @@ const FIELDS = [
   'profileImg'
 ];
 
-export default function EditProfileView({
-  onSave = (data) => { }
-}) {
+export default function EditProfileView() {
 
-  const { user } = useContext(AppContext);
+  const {
+    user,
+    onUserChange
+  } = useContext(AppContext);
   const { uploadFile } = useStorage();
 
   const [ formData, setFormData ] = useState(pick(user, ...FIELDS));
 
-  const hasChanges = FIELDS.some((f) => user[f] !== formData[f]);
+  const hasChanges = FIELDS.some((f) => user?.[f] !== formData?.[f]);
   const isValid    = (
     !!formData?.email?.length &&
     !!formData?.firstName?.length
   );
   const canSave = isValid && hasChanges;
+
+  useEffect(() => {
+    setFormData(pick(user, ...FIELDS));
+  }, [ user ]);
 
   function onInputChange(e) {
 
@@ -46,7 +55,7 @@ export default function EditProfileView({
 
   function onSaveClick(e) {
     if (canSave) {
-      onSave(formData);
+      saveProfile(formData);
     }
   }
 
@@ -66,7 +75,7 @@ export default function EditProfileView({
     return `users/${userId}/${timestamp}.${ext}`;
   }
 
-  async function onSaveProfile(userData) {
+  async function saveProfile(userData) {
 
     const hasNewImage = !!userData?.profileImg?.name?.length;
 
@@ -86,6 +95,8 @@ export default function EditProfileView({
       },
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
+
+    onUserChange();
 
   }
 
