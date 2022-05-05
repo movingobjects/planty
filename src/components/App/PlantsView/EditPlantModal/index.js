@@ -1,5 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect
+} from 'react';
 import { pick } from 'lodash';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { AppContext } from 'components/App';
 import Modal from 'components/shared/Modal';
@@ -17,13 +22,14 @@ const FIELDS = [
 ]
 
 export default function EditPlantModal({
-  plant = { },
-  onClose = () => { },
   onDelete = () => { },
   onSave = (data) => { }
 }) {
 
-  const { species } = useContext(AppContext);
+  const navigate = useNavigate();
+  const { species, plants } = useContext(AppContext);
+  const { id: plantId } = useParams();
+  const plant = plants.find((p) => p.id === plantId);
 
   const [ formData, setFormData ] = useState(pick(plant, ...FIELDS));
 
@@ -31,6 +37,10 @@ export default function EditPlantModal({
     !!formData?.name?.length &&
     !!formData?.specieId?.length
   );
+
+  useEffect(() => {
+    setFormData(pick(plant, ...FIELDS));
+  }, [ plant ]);
 
   function onInputChange(e) {
 
@@ -72,6 +82,14 @@ export default function EditPlantModal({
       onSave(formData);
       onClose();
     }
+  }
+
+  function onClose() {
+    navigate('/plants')
+  }
+
+  if (!plant) {
+    return null;
   }
 
   return (

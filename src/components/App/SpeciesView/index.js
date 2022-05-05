@@ -1,18 +1,21 @@
 import React, { useState, useContext } from 'react';
 import { API } from 'aws-amplify';
 import * as mutations from 'graphql/mutations';
+import { Routes, Route, Link } from 'react-router-dom';
 
 import { AppContext } from 'components/App';
+
 import AddSpecieModal from './AddSpecieModal';
 import EditSpecieModal from './EditSpecieModal';
 
 import style from './index.module.scss';
 
-export default function SpeciesView({
-  onChange = () => { }
-}) {
+export default function SpeciesView() {
 
-  const { species } = useContext(AppContext);
+  const {
+    species,
+    onSpeciesChange
+  } = useContext(AppContext);
   const [ addModalOn, setAddModalOn ] = useState(false);
   const [ editingSpecieId, setEditingSpecieId ] = useState(null);
 
@@ -26,7 +29,7 @@ export default function SpeciesView({
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
-    onChange();
+    onSpeciesChange();
 
   }
   async function onSave(specieData) {
@@ -39,7 +42,7 @@ export default function SpeciesView({
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
-    onChange();
+    onSpeciesChange();
 
   }
   async function onDelete(specieId) {
@@ -54,55 +57,45 @@ export default function SpeciesView({
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
-    onChange();
+    onSpeciesChange();
 
   }
 
   return (
     <div className={style.wrap}>
 
-      {addModalOn && (
-        <AddSpecieModal
-          onAdd={onAdd}
-          onClose={() => {
-            setAddModalOn(false);
-          }} />
-      )}
-
-      {!!editingSpecieId?.length && (
-        <EditSpecieModal
-          specie={species.find((p) => p.id === editingSpecieId)}
-          onDelete={onDelete}
-          onSave={onSave}
-          onClose={() => {
-            setEditingSpecieId(null);
-          }} />
-      )}
+      <Routes>
+        <Route path='edit/:id' element={(
+          <EditSpecieModal
+            onDelete={onDelete}
+            onSave={onSave} />
+        )} />
+        <Route path='add' element={(
+          <AddSpecieModal
+            onAdd={onAdd} />
+        )} />
+      </Routes>
 
       <h2>Species</h2>
+
+      <div className={style.wrapAdd}>
+        <Link
+          to='/species/add'
+          alt='Add specie'>
+          Add specie
+        </Link>
+      </div>
 
       <ul>
         {species.map((specie) => (
           <li
             key={specie?.id || specie?.scientificName}>
-            <button
-              onClick={() => {
-                setEditingSpecieId(specie.id);
-              }}>
-              Edit
-            </button>
+            {specie?.commonName} (<em>{specie?.scientificName}</em>)
             &nbsp;
-            {specie?.commonName} (<em>{specie?.scientificName}</em>) [{specie?.id}]
+            <Link to={`/species/edit/${specie?.id}`}>Edit</Link>
           </li>
         ))}
       </ul>
-
-      <button
-        onClick={() => {
-          setAddModalOn(true);
-        }}>
-        + Add Specie
-      </button>
 
     </div>
   );

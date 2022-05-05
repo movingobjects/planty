@@ -2,6 +2,10 @@
 
 .wrap {
 
+  .wrapAdd {
+    margin-bottom: 25px;
+  }
+
   ul.plants {
     list-style: none;
     margin: 0;
@@ -13,11 +17,6 @@
     li {
       display: inline-block;
       flex-basis: 320px;
-
-      img.plantImg {
-        width: 100%;
-      }
-
     }
 
   }

@@ -1,13 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
+import {
+  getDateLastWatered,
+  getWateringHistoryArray,
+  calcDateNextWater
+} from 'utils';
 
 import style from './index.module.scss';
 
 export default function PlantCard({
   plant = { },
-  onEditClick = () => { }
+  onWaterClick = () => { },
+  onDeferClick = () => { }
 }) {
 
   const {
+    id,
     name,
     image,
     specie
@@ -24,15 +33,23 @@ export default function PlantCard({
       )}
 
       <p>
-        <strong>{name}</strong>
+        <strong>{name}</strong> <Link to={`/plants/edit/${id}`}>Edit</Link>
         <br />
         <em>{specie?.commonName}</em>
       </p>
 
-      <button
-        onClick={onEditClick}>
-        Edit
-      </button>
+      <div className={style.wrapActions}>
+
+        <button
+          onClick={onWaterClick}>
+          Water
+        </button>
+
+        <button
+          onClick={onDeferClick}>
+          Defer 1 day
+        </button>
+      </div>
 
     </div>
   );

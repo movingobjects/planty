@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { API } from 'aws-amplify';
 import * as mutations from 'graphql/mutations';
+import { Routes, Route, Link } from 'react-router-dom';
 
 import { useStorage } from 'hooks/storage';
 import { AppContext } from 'components/App';
@@ -11,13 +12,13 @@ import PlantCard from './PlantCard';
 
 import style from './index.module.scss';
 
-export default function PlantsView({
-  onChange = () => { }
-}) {
+export default function PlantsView() {
 
+  const {
+    plants,
+    onPlantsChange
+  } = useContext(AppContext);
   const { uploadFile } = useStorage();
-  const { plants } = useContext(AppContext);
-  const [ addModalOn, setAddModalOn ] = useState(false);
   const [ editingPlantId, setEditingPlantId ] = useState(null);
 
   function getPlantImagePath(file, plantId) {
@@ -45,7 +46,7 @@ export default function PlantsView({
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
-    onChange();
+    onPlantsChange();
 
   }
   async function onSave(plantData) {
@@ -67,7 +68,7 @@ export default function PlantsView({
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
-    onChange();
+    onPlantsChange();
 
   }
   async function onDelete(plantId) {
@@ -82,52 +83,44 @@ export default function PlantsView({
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     });
 
-    onChange();
+    onPlantsChange();
 
   }
 
   return (
     <div className={style.wrap}>
 
-      {addModalOn && (
-        <AddPlantModal
-          onAdd={onAdd}
-          onClose={() => {
-            setAddModalOn(false);
-          }} />
-      )}
-
-      {!!editingPlantId?.length && (
-        <EditPlantModal
-          plant={plants.find((p) => p.id === editingPlantId)}
-          onDelete={onDelete}
-          onSave={onSave}
-          onClose={() => {
-            setEditingPlantId(null);
-          }} />
-      )}
+      <Routes>
+        <Route path='edit/:id' element={(
+          <EditPlantModal
+            onDelete={onDelete}
+            onSave={onSave} />
+        )} />
+        <Route path='add' element={(
+          <AddPlantModal
+            onAdd={onAdd} />
+        )} />
+      </Routes>
 
       <h2>Plants</h2>
+
+      <div className={style.wrapAdd}>
+        <Link
+          to='/plants/add'
+          alt='Add plant'>
+          Add plant
+        </Link>
+      </div>
 
       <ul className={style.plants}>
         {plants.map(plant => (
           <li
             key={plant?.id || plant?.name}>
             <PlantCard
-              plant={plant}
-              onEditClick={() => {
-                setEditingPlantId(plant.id);
-              }} />
+              plant={plant} />
           </li>
         ))}
       </ul>
-
-      <button
-        onClick={() => {
-          setAddModalOn(true);
-        }}>
-        + Add Plant
-      </button>
 
     </div>
   );

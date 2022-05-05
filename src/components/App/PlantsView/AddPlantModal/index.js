@@ -2,6 +2,7 @@ import React, {
   useState,
   useContext
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { AppContext } from 'components/App';
 import Modal from 'components/shared/Modal';
@@ -9,10 +10,10 @@ import Modal from 'components/shared/Modal';
 import style from './index.module.scss';
 
 export default function AddPlantModal({
-  onClose = () => { },
   onAdd = (data) => { }
 }) {
 
+  const navigate = useNavigate();
   const { user, species } = useContext(AppContext);
 
   const emptyFormState = {
@@ -63,6 +64,9 @@ export default function AddPlantModal({
       onAdd(formData);
       onClose();
     }
+  }
+  function onClose() {
+    navigate('/plants')
   }
 
   return (

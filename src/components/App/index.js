@@ -90,6 +90,7 @@ function App({
 
   function onSpeciesChange() {
     fetchSpecies().then((result) => setSpecies(result));
+    fetchPlants().then((result) => setPlants(result));
   }
   function onPlantsChange() {
     fetchPlants().then((result) => setPlants(result));
@@ -99,7 +100,9 @@ function App({
     <AppContext.Provider value={{
       user,
       plants,
-      species
+      species,
+      onPlantsChange,
+      onSpeciesChange
     }}>
       <div className={style.wrap}>
 
@@ -107,9 +110,9 @@ function App({
           onSignOut={signOut} />
 
         <Routes>
-          <Route path="/" element={<Navigate to='/plants' replace />} />
-          <Route path='/plants' element={<PlantsView />} />
-          <Route path='/species' element={<SpeciesView />} />
+          <Route path='/' element={<Navigate to='/plants' replace />} />
+          <Route path='/plants/*' element={<PlantsView />} />
+          <Route path='/species/*' element={<SpeciesView />} />
           <Route path='/edit-profile' element={<EditProfileView />} />
         </Routes>
 

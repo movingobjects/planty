@@ -10,6 +10,20 @@
 
   img.plantImg {
     width: 100%;
+    object-fit: cover;
+    height: 200px;
+  }
+
+  .wrapActions {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+
+    button {
+      display: block;
+      flex-grow: 1;
+      flex-basis: 50%;
+    }
   }
 
 }

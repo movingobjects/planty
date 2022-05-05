@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect
+} from 'react';
 import { pick } from 'lodash';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { AppContext } from 'components/App';
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
@@ -12,11 +18,14 @@ const FIELDS = [
 ]
 
 export default function EditSpecieModal({
-  specie = { },
-  onClose = () => { },
   onDelete = () => { },
   onSave = (data) => { }
 }) {
+
+  const navigate = useNavigate();
+  const { species } = useContext(AppContext);
+  const { id: specieId } = useParams();
+  const specie = species.find((s) => s.id === specieId);
 
   const [ formData, setFormData ] = useState(pick(specie, ...FIELDS));
 
@@ -24,6 +33,10 @@ export default function EditSpecieModal({
     !!formData?.commonName?.length &&
     !!formData?.scientificName?.length
   );
+
+  useEffect(() => {
+    setFormData(pick(specie, ...FIELDS));
+  }, [ specie ]);
 
   function onInputChange(e) {
 
@@ -48,6 +61,10 @@ export default function EditSpecieModal({
       onSave(formData);
       onClose();
     }
+  }
+
+  function onClose() {
+    navigate('/species')
   }
 
   return (

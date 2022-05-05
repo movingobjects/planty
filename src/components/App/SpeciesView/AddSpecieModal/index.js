@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Modal from 'components/shared/Modal';
 
@@ -10,10 +11,10 @@ const EMPTY_FORM_STATE = {
 }
 
 export default function AddSpecieModal({
-  onClose = () => { },
   onAdd = (data) => { }
 }) {
 
+  const navigate = useNavigate();
   const [ formData, setFormData ] = useState(EMPTY_FORM_STATE);
 
   const canAdd = (
@@ -38,6 +39,9 @@ export default function AddSpecieModal({
       onAdd(formData);
       onClose();
     }
+  }
+  function onClose() {
+    navigate('/species')
   }
 
   return (
