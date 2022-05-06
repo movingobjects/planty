@@ -2,7 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-
+import {
+  IoPlayForward,
+  IoWater
+} from 'react-icons/io5'
 import { getDaysSinceLastWatering } from 'utils';
 
 import style from './index.module.scss';
@@ -59,7 +62,12 @@ export default function PlantCard({
       )}
 
       <p>
-        <strong>{name}</strong> <Link to={`/plants/edit/${id}`}>Edit</Link>
+        <strong>{name}</strong>
+        <Link
+          to={`/plants/edit/${id}`}
+          className={style.editBtn}>
+          Edit
+        </Link>
         <br />
         <em>{specie?.commonName}</em>
       </p>
@@ -73,10 +81,12 @@ export default function PlantCard({
 
         <br />
 
-        Last watered:&nbsp;
-        <span className={style.lastWaterDate}>
-          {getLastWaterDateText(plant)}
-        </span>
+        <em>
+          Last watered&nbsp;
+          <span className={style.lastWaterDate}>
+            {getLastWaterDateText(plant)}
+          </span>
+        </em>
 
       </p>
 
@@ -86,15 +96,20 @@ export default function PlantCard({
           className={style.waterBtn}
           disabled={wateredToday}
           onClick={onWater}>
-          Water
+          <i><IoWater /></i> Water
+          {!isDueToday && (
+            <> early</>
+          )}
         </button>
 
-        <button
-          className={style.deferBtn}
-          disabled={wateredToday}
-          onClick={onDefer}>
-          Defer 1 day
-        </button>
+        {!!isDueToday && (
+          <button
+            className={style.deferBtn}
+            disabled={wateredToday}
+            onClick={onDefer}>
+            <i><IoPlayForward /></i> Later
+          </button>
+        )}
       </div>
 
     </div>
