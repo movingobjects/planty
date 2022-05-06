@@ -3,14 +3,14 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-import { getDateLastWatered } from 'utils';
+import { getTimeFromLastWater } from 'utils';
 
 import style from './index.module.scss';
 
 export default function PlantCard({
   plant = { },
-  onWaterClick = () => { },
-  onDeferClick = () => { }
+  onWater = () => { },
+  onDefer = () => { }
 }) {
 
   const {
@@ -18,16 +18,18 @@ export default function PlantCard({
     name,
     image,
     specie,
+    waterings,
     dateNextWater
   } = plant || { };
 
-  const mmtLastWatered = moment(getDateLastWatered(plant)),
-        mmtNextWater   = moment(dateNextWater);
+  const mmtNextWater = moment(dateNextWater),
+        mmtToday     = moment().startOf('day');
 
-  const isOverdue = moment().diff(mmtNextWater, 'days') > 0,
-        isToday   = moment().diff(mmtNextWater, 'days') >= 0;
+  const isOverdue = mmtToday.diff(mmtNextWater, 'days') > 0,
+        isToday   = mmtToday.diff(mmtNextWater, 'days') >= 0;
 
-  const nextWaterDateText = (isToday && !isOverdue) ? 'Today' : mmtNextWater.fromNow();
+  const nextWaterDateText = (isToday && !isOverdue) ? 'Today' : mmtNextWater.from(moment().startOf('day')),
+        lastWateredText   = getTimeFromLastWater(plant);
 
   return (
     <div className={classNames({
@@ -52,18 +54,18 @@ export default function PlantCard({
       <p>
         Next water: <span className={style.nextWaterDate}>{nextWaterDateText}</span>
         <br />
-        Last watered: {mmtLastWatered.fromNow()}
+        Last watered: {lastWateredText}
       </p>
 
       <div className={style.wrapActions}>
 
         <button
-          onClick={onWaterClick}>
+          onClick={onWater}>
           Water
         </button>
 
         <button
-          onClick={onDeferClick}>
+          onClick={onDefer}>
           Defer 1 day
         </button>
       </div>

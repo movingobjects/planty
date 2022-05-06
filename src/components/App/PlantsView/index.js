@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
+import moment from 'moment';
 import { API } from 'aws-amplify';
 import * as mutations from 'graphql/mutations';
 import { Routes, Route, Link } from 'react-router-dom';
 
 import { useStorage } from 'hooks/storage';
 import { AppContext } from 'components/App';
+import { calcDateNextWater } from 'utils';
 
 import AddPlantModal from './AddPlantModal';
 import EditPlantModal from './EditPlantModal';
@@ -91,6 +93,41 @@ export default function PlantsView() {
 
   }
 
+  function onPlantWater(plantId) {
+
+    const plant = plants.find((p) => p.id === plantId);
+    if (!plant) return;
+
+    const waterings = [
+      ...plant.waterings,
+      { date: moment().format('YYYY-MM-DD') }
+    ];
+
+    const dateNextWater = calcDateNextWater(waterings);
+
+    onSave({
+      id: plantId,
+      waterings,
+      dateNextWater
+    });
+
+  }
+  function onPlantDefer(plantId) {
+
+    const plant = plants.find((p) => p.id === plantId);
+    if (!plant) return;
+
+    const dateNextWater = moment(plant.dateNextWater)
+      .add(1, 'days')
+      .format('YYYY-MM-DD');
+
+    onSave({
+      id: plantId,
+      dateNextWater
+    })
+
+  }
+
   return (
     <div className={style.wrap}>
 
@@ -121,7 +158,9 @@ export default function PlantsView() {
           <li
             key={plant?.id || plant?.name}>
             <PlantCard
-              plant={plant} />
+              plant={plant}
+              onWater={() => onPlantWater(plant?.id)}
+              onDefer={() => onPlantDefer(plant?.id)} />
           </li>
         ))}
       </ul>

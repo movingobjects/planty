@@ -1,5 +1,14 @@
 
 .wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  background: white;
+  padding: 0 50px;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.025);
+
   display: flex;
   justify-content: space-between;
   align-items: center;

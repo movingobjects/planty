@@ -14,7 +14,7 @@
     flex-wrap: wrap;
     gap: 10px;
 
-    li {
+    > li {
       display: inline-block;
       flex-basis: 320px;
     }

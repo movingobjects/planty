@@ -26,6 +26,11 @@ export default function Header({
     );
   }
 
+  function onSignOutClick(e) {
+    e.preventDefault();
+    onSignOut();
+  }
+
   return (
     <div className={style.wrap}>
 
@@ -54,10 +59,7 @@ export default function Header({
           <Link
             to='/'
             alt='Sign out'
-            onClick={(e) => {
-              e.preventDefault();
-              onSignOut();
-            }}>
+            onClick={onSignOutClick}>
             Sign out
           </Link>
         </p>

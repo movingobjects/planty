@@ -15,8 +15,8 @@ export function sortByDateLastWatered(plantA, plantB) {
 }
 
 export function sortByDateNextWater(plantA, plantB) {
-  const dateA = plantA?.dateNextWater,
-        dateB = plantB?.dateNextWater;
+  const dateA = plantA?.dateNextWater || moment().format('YYYY-MM-DD'),
+        dateB = plantB?.dateNextWater || moment().format('YYYY-MM-DD');
   return dateA.localeCompare(dateB);
 }
 export function sortByBirthDate(plantA, plantB) {
@@ -25,24 +25,41 @@ export function sortByBirthDate(plantA, plantB) {
   return dateA.localeCompare(dateB);
 }
 
-export function calcDateNextWater(dates, maxCount = 5) {
+export function calcDateNextWater(waterings, maxCount = 5) {
 
-  if (dates.length < 2) {
+  if (waterings.length < 2) {
     return moment().format('YYYY-MM-DD');
   }
 
-  const count = Math.min(dates.length, maxCount);
+  waterings = waterings.slice(-Math.min(waterings.length, maxCount));
 
-  dates = dates.slice(-count);
+  const dateA   = moment(waterings.shift()?.date),
+        dateB   = moment(waterings.pop()?.date),
+        diff    = dateB.diff(dateA, 'days'),
+        avgDays = diff / (waterings?.length - 1);
 
-  const first  = moment(dates[0]).valueOf(),
-        latest = moment(dates[dates.length - 1]).valueOf(),
-        next   = latest + (latest - first) / (dates.length - 1);
-
-  return moment(next).format('YYYY-MM-DD');
+  return moment(dateB)
+    .add(avgDays, 'days')
+    .format('YYYY-MM-DD');
 
 }
 
 export function getDateLastWatered(plant) {
   return getLatestWatering(plant)?.date;
+}
+
+export function getTimeFromLastWater(plant) {
+
+  const diff = moment()
+    .startOf('day')
+    .diff(getDateLastWatered(plant), 'days');
+
+  if (diff === 0) {
+    return 'Today';
+  } else if (diff === 1) {
+    return 'Yesterday';
+  } else {
+    return `${diff} days ago`;
+  }
+
 }
