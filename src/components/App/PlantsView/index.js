@@ -117,7 +117,7 @@ export default function PlantsView() {
     const plant = plants.find((p) => p.id === plantId);
     if (!plant) return;
 
-    const dateNextWater = moment(plant.dateNextWater)
+    const dateNextWater = moment()
       .add(1, 'days')
       .format('YYYY-MM-DD');
 
