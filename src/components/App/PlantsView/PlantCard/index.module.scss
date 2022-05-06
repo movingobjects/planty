@@ -2,20 +2,40 @@
 
 .wrap {
 
+  $colorWater: #6bc;
+  $colorOverdue: #c73;
+  $colorDefer: #da0;
+  $colorDone: #bc6;
+  $colorDisabled: #9aa;
+
   border: 1px solid #eee;
   padding: 20px;
   border-radius: 5px;
   background-color: white;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.025);
 
-  &.today .nextWaterDate {
-    font-weight: bold;
-    color: #09f;
+  &.dueToday {
+    background-color: transparentize($colorWater, 0.85);
+    .nextWaterDate {
+      font-weight: bold;
+      color: $colorWater;
+    }
   }
 
-  &.overdue .nextWaterDate {
-    font-weight: bold;
-    color: #f30;
+  &.overdue {
+    background-color: transparentize($colorOverdue, 0.85);
+    .nextWaterDate {
+      font-weight: bold;
+      color: $colorOverdue;
+    }
+  }
+
+  &.wateredToday {
+    background-color: transparentize($colorDone, 0.85);
+    .lastWaterDate {
+      font-weight: bold;
+      color: $colorDone;
+    }
   }
 
   img.plantImg {
@@ -27,13 +47,56 @@
   .wrapActions {
     display: flex;
     justify-content: space-between;
-    gap: 5px;
+    gap: 10px;
 
     button {
       display: block;
       flex-grow: 1;
       flex-basis: 50%;
+
+      appearance: none;
+      padding: 7px 0;
+      border: 2px solid black;
+      border-radius: 7px;
+
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: bold;
+      font-size: 12px;
+
+      &.waterBtn {
+        border-color: $colorWater;
+        color: $colorWater;
+        background-color: transparentize($colorWater, 0.85);
+
+        &:active {
+          background-color: $colorWater;
+          color: white;
+        }
+
+      }
+
+      &.deferBtn {
+        border-color: $colorDefer;
+        color: $colorDefer;
+        background-color: transparentize($colorDefer, 0.85);
+
+        &:active {
+          background-color: $colorDefer;
+          color: white;
+        }
+      }
+
+      &[disabled] {
+        pointer-events: none;
+        opacity: 0.5;
+        border-color: $colorDisabled;
+        color: $colorDisabled;
+        background-color: transparentize($colorDisabled, 0.85);
+      }
+
     }
+
   }
 
 }

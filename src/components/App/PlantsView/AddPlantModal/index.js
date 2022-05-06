@@ -2,6 +2,7 @@ import React, {
   useState,
   useContext
 } from 'react';
+import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
 import { AppContext } from 'components/App';
@@ -20,6 +21,7 @@ export default function AddPlantModal({
     name: '',
     specieId: species?.[0]?.id || '',
     userId: user?.id,
+    dateNextWater: moment().format('YYYY-MM-DD'),
     waterings: []
   };
 

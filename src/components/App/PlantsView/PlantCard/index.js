@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-import { getTimeFromLastWater } from 'utils';
+import { getDaysSinceLastWatering } from 'utils';
 
 import style from './index.module.scss';
 
@@ -18,24 +18,37 @@ export default function PlantCard({
     name,
     image,
     specie,
-    waterings,
     dateNextWater
   } = plant || { };
 
   const mmtNextWater = moment(dateNextWater),
         mmtToday     = moment().startOf('day');
 
-  const isOverdue = mmtToday.diff(mmtNextWater, 'days') > 0,
-        isToday   = mmtToday.diff(mmtNextWater, 'days') >= 0;
+  const isOverdue  = mmtToday.diff(mmtNextWater, 'days') > 0,
+        isDueToday = mmtToday.diff(mmtNextWater, 'days') >= 0;
 
-  const nextWaterDateText = (isToday && !isOverdue) ? 'Today' : mmtNextWater.from(moment().startOf('day')),
-        lastWateredText   = getTimeFromLastWater(plant);
+  const nextWaterDateText     = (isDueToday && !isOverdue) ? 'Today' : mmtNextWater.from(moment().startOf('day')),
+        daysSinceLastWatering = getDaysSinceLastWatering(plant),
+        wateredToday          = daysSinceLastWatering === 0;
+
+  function getLastWaterDateText() {
+    if (daysSinceLastWatering === null) {
+      return 'Never';
+    } else if (daysSinceLastWatering === 0) {
+      return 'Today';
+    } else if (daysSinceLastWatering === 1) {
+      return 'Yesterday';
+    } else {
+      return `${daysSinceLastWatering} days ago`;
+    }
+  }
 
   return (
     <div className={classNames({
       [style.wrap]: true,
-      [style.today]: isToday,
-      [style.overdue]: isOverdue
+      [style.dueToday]: isDueToday,
+      [style.overdue]: isOverdue,
+      [style.wateredToday]: wateredToday
     })}>
 
       {!!image?.length && (
@@ -52,19 +65,33 @@ export default function PlantCard({
       </p>
 
       <p>
-        Next water: <span className={style.nextWaterDate}>{nextWaterDateText}</span>
+
+        Next water:&nbsp;
+        <span className={style.nextWaterDate}>
+          {nextWaterDateText}
+        </span>
+
         <br />
-        Last watered: {lastWateredText}
+
+        Last watered:&nbsp;
+        <span className={style.lastWaterDate}>
+          {getLastWaterDateText(plant)}
+        </span>
+
       </p>
 
       <div className={style.wrapActions}>
 
         <button
+          className={style.waterBtn}
+          disabled={wateredToday}
           onClick={onWater}>
           Water
         </button>
 
         <button
+          className={style.deferBtn}
+          disabled={wateredToday}
           onClick={onDefer}>
           Defer 1 day
         </button>
