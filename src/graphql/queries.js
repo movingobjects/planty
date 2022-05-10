@@ -36,6 +36,37 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
+export const getRoom = /* GraphQL */ `
+  query GetRoom($id: ID!) {
+    getRoom(id: $id) {
+      id
+      name
+      level
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listRooms = /* GraphQL */ `
+  query ListRooms(
+    $filter: ModelRoomFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        level
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const getSpecie = /* GraphQL */ `
   query GetSpecie($id: ID!) {
     getSpecie(id: $id) {
@@ -97,6 +128,15 @@ export const getPlant = /* GraphQL */ `
       waterings {
         date
       }
+      roomId
+      room {
+        id
+        name
+        level
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
       owner
@@ -139,6 +179,15 @@ export const listPlants = /* GraphQL */ `
         dateRetired
         waterings {
           date
+        }
+        roomId
+        room {
+          id
+          name
+          level
+          createdAt
+          updatedAt
+          owner
         }
         createdAt
         updatedAt

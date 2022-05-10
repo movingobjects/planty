@@ -7,6 +7,13 @@ type User @model
   profileImg: String
 }
 
+type Room @model
+  @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  name: String
+  level: Int
+}
+
 type Specie @model
   @auth(rules: [{ allow: private }]) {
   id: ID!
@@ -28,6 +35,8 @@ type Plant @model
   dateNextWater: String
   dateRetired: String
   waterings: [Watering]!
+  roomId: ID!
+  room: Room @hasOne(fields: ["roomId"])
 }
 
 type Watering {
