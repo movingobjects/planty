@@ -18,7 +18,7 @@ export function calcDateNextWater(waterings, maxCount = 5) {
   const dateA   = moment(waterings.shift()?.date),
         dateB   = moment(waterings.pop()?.date),
         diff    = dateB.diff(dateA, 'days'),
-        avgDays = diff / (waterings?.length - 1);
+        avgDays = diff / (waterings?.length + 1);
 
   return moment(dateB)
     .add(avgDays, 'days')
