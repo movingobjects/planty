@@ -52,6 +52,51 @@ export const deleteUser = /* GraphQL */ `
     }
   }
 `;
+export const createRoom = /* GraphQL */ `
+  mutation CreateRoom(
+    $input: CreateRoomInput!
+    $condition: ModelRoomConditionInput
+  ) {
+    createRoom(input: $input, condition: $condition) {
+      id
+      name
+      level
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateRoom = /* GraphQL */ `
+  mutation UpdateRoom(
+    $input: UpdateRoomInput!
+    $condition: ModelRoomConditionInput
+  ) {
+    updateRoom(input: $input, condition: $condition) {
+      id
+      name
+      level
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteRoom = /* GraphQL */ `
+  mutation DeleteRoom(
+    $input: DeleteRoomInput!
+    $condition: ModelRoomConditionInput
+  ) {
+    deleteRoom(input: $input, condition: $condition) {
+      id
+      name
+      level
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const createSpecie = /* GraphQL */ `
   mutation CreateSpecie(
     $input: CreateSpecieInput!
@@ -129,6 +174,15 @@ export const createPlant = /* GraphQL */ `
       waterings {
         date
       }
+      roomId
+      room {
+        id
+        name
+        level
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
       owner
@@ -170,6 +224,15 @@ export const updatePlant = /* GraphQL */ `
       waterings {
         date
       }
+      roomId
+      room {
+        id
+        name
+        level
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
       owner
@@ -210,6 +273,15 @@ export const deletePlant = /* GraphQL */ `
       dateRetired
       waterings {
         date
+      }
+      roomId
+      room {
+        id
+        name
+        level
+        createdAt
+        updatedAt
+        owner
       }
       createdAt
       updatedAt

@@ -57,6 +57,42 @@ export const onDeleteUser = /* GraphQL */ `
     }
   }
 `;
+export const onCreateRoom = /* GraphQL */ `
+  subscription OnCreateRoom($owner: String) {
+    onCreateRoom(owner: $owner) {
+      id
+      name
+      level
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateRoom = /* GraphQL */ `
+  subscription OnUpdateRoom($owner: String) {
+    onUpdateRoom(owner: $owner) {
+      id
+      name
+      level
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteRoom = /* GraphQL */ `
+  subscription OnDeleteRoom($owner: String) {
+    onDeleteRoom(owner: $owner) {
+      id
+      name
+      level
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const onCreateSpecie = /* GraphQL */ `
   subscription OnCreateSpecie {
     onCreateSpecie {
@@ -122,6 +158,15 @@ export const onCreatePlant = /* GraphQL */ `
       waterings {
         date
       }
+      roomId
+      room {
+        id
+        name
+        level
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
       owner
@@ -160,6 +205,15 @@ export const onUpdatePlant = /* GraphQL */ `
       waterings {
         date
       }
+      roomId
+      room {
+        id
+        name
+        level
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
       owner
@@ -197,6 +251,15 @@ export const onDeletePlant = /* GraphQL */ `
       dateRetired
       waterings {
         date
+      }
+      roomId
+      room {
+        id
+        name
+        level
+        createdAt
+        updatedAt
+        owner
       }
       createdAt
       updatedAt
