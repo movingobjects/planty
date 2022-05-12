@@ -3,13 +3,6 @@
 
 .wrap {
 
-  $colorWater: #6bc;
-  $colorOverdue: #d95;
-  $colorDefer: #99c;
-  $colorDone: #bc6;
-  $colorDisabled: #9aa;
-  $colorEdit: #d95;
-
   border: 1px solid transparentize(black, 0.9);
   padding: 20px;
   border-radius: 5px;
@@ -34,41 +27,41 @@
     text-transform: uppercase;
     letter-spacing: 0.075em;
     text-decoration: none;
-    color: $colorEdit;
-    background-color: transparentize($colorEdit, 0.85);
+    color: colors.$edit;
+    background-color: transparentize(colors.$edit, 0.85);
     border-radius: 5px;
     margin-left: 10px;
     vertical-align: 2px;
     &:active {
       color: white;
-      background-color: $colorEdit;
+      background-color: colors.$edit;
     }
   }
 
   &.dueToday {
-    background-color: transparentize($colorWater, 0.85);
-    border-color: transparentize($colorWater, 0.75);
+    background-color: transparentize(colors.$water, 0.85);
+    border-color: transparentize(colors.$water, 0.75);
     .nextWaterDate {
       font-weight: bold;
-      color: $colorWater;
+      color: colors.$water;
     }
   }
 
   &.overdue {
-    background-color: transparentize($colorOverdue, 0.85);
-    border-color: transparentize($colorOverdue, 0.75);
+    background-color: transparentize(colors.$overdue, 0.85);
+    border-color: transparentize(colors.$overdue, 0.75);
     .nextWaterDate {
       font-weight: bold;
-      color: $colorOverdue;
+      color: colors.$overdue;
     }
   }
 
   &.wateredToday {
-    background-color: transparentize($colorDone, 0.85);
-    border-color: transparentize($colorDone, 0.75);
+    background-color: transparentize(colors.$done, 0.85);
+    border-color: transparentize(colors.$done, 0.75);
     .lastWaterDate {
       font-weight: bold;
-      color: $colorDone;
+      color: colors.$done;
     }
   }
 
@@ -107,21 +100,21 @@
       }
 
       &.waterBtn {
-        background-color: $colorWater;
+        background-color: colors.$water;
         color: white;
 
         &:active {
-          background-color: darken($colorWater, 15%);
+          background-color: darken(colors.$water, 15%);
         }
 
       }
 
       &.deferBtn {
-        background-color: $colorDefer;
+        background-color: colors.$defer;
         color: white;
 
         &:active {
-          background-color: darken($colorDefer, 15%);
+          background-color: darken(colors.$defer, 15%);
         }
       }
 
@@ -129,7 +122,7 @@
         pointer-events: none;
         opacity: 0.5;
         color: white;
-        background-color: $colorDisabled
+        background-color: colors.$disabled
       }
 
     }

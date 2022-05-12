@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import classNames from 'classnames';
 import moment from 'moment';
 import { API } from 'aws-amplify';
 import * as mutations from 'graphql/mutations';
@@ -18,10 +19,13 @@ export default function PlantsView() {
 
   let {
     plants,
+    rooms,
     onPlantsChange
   } = useContext(AppContext);
 
   const { uploadFile } = useStorage();
+
+  const [ roomFilter, setRoomFilter ] = useState();
 
   plants = plants.filter((p) => !p.dateRetired);
 
@@ -145,6 +149,21 @@ export default function PlantsView() {
 
       <h2>Plants</h2>
 
+      <ul className={style.roomFilter}>
+        <li
+          className={(!roomFilter?.length) ? style.selected : null}
+          onClick={() => setRoomFilter(null)}>
+          Any room
+        </li>
+        {rooms.map((r) => (
+          <li
+            className={(roomFilter === r.id) ? style.selected : null}
+            onClick={() => setRoomFilter(r.id)}>
+            {r.name}
+          </li>
+        ))}
+      </ul>
+
       <div className={style.wrapAdd}>
         <Link
           to='/plants/add'
@@ -154,14 +173,19 @@ export default function PlantsView() {
       </div>
 
       <ul className={style.plants}>
-        {plants.map(plant => (
-          <li
-            key={plant?.id || plant?.name}>
-            <PlantCard
-              plant={plant}
-              onWater={() => onPlantWater(plant?.id)}
-              onDefer={() => onPlantDefer(plant?.id)} />
-          </li>
+        {plants
+          .filter((p) => (
+            !roomFilter?.length ||
+            p.roomId === roomFilter
+          ))
+          .map((plant) => (
+            <li
+              key={plant?.id || plant?.name}>
+              <PlantCard
+                plant={plant}
+                onWater={() => onPlantWater(plant?.id)}
+                onDefer={() => onPlantDefer(plant?.id)} />
+            </li>
         ))}
       </ul>
 
