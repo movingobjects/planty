@@ -42,6 +42,7 @@ export default function Header({
         <ul>
           {renderMenuLink('Plants', '/plants')}
           {renderMenuLink('Species', '/species')}
+          {renderMenuLink('Rooms', '/rooms')}
         </ul>
       </div>
 

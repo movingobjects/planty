@@ -3,6 +3,7 @@ import { API, Storage } from 'aws-amplify';
 
 import {
   listSpecies,
+  listRooms,
   listPlants,
   getUser
 } from 'graphql/queries';
@@ -59,6 +60,46 @@ export function useFetchUser(authUser) {
 
 }
 
+export function useFetchSpecies() {
+
+  const fetchSpecies = useCallback(async () => {
+
+    const apiData = await API.graphql({
+      query: listSpecies,
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+
+    const items = apiData.data.listSpecies.items
+      .sort((a, b) => a.commonName.localeCompare(b.commonName));
+
+    return Promise.resolve(items);
+
+  }, [ ]);
+
+  return fetchSpecies;
+
+}
+
+export function useFetchRooms() {
+
+  const fetchSpecies = useCallback(async () => {
+
+    const apiData = await API.graphql({
+      query: listRooms,
+      authMode: 'AMAZON_COGNITO_USER_POOLS'
+    });
+
+    const items = apiData.data.listRooms.items
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    return Promise.resolve(items);
+
+  }, [ ]);
+
+  return fetchSpecies;
+
+}
+
 export function useFetchPlants(user) {
 
   const fetchPlants = useCallback(async () => {
@@ -91,25 +132,5 @@ export function useFetchPlants(user) {
   }, [ user ]);
 
   return fetchPlants;
-
-}
-
-export function useFetchSpecies() {
-
-  const fetchSpecies = useCallback(async () => {
-
-    const apiData = await API.graphql({
-      query: listSpecies,
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    const items = apiData.data.listSpecies.items
-      .sort((a, b) => a.commonName.localeCompare(b.commonName));
-
-    return Promise.resolve(items);
-
-  }, [ ]);
-
-  return fetchSpecies;
 
 }

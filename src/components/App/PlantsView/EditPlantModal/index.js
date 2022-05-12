@@ -18,7 +18,8 @@ const FIELDS = [
   'dateBorn',
   'dateRetired',
   'image',
-  'source'
+  'source',
+  'roomId',
 ]
 
 export default function EditPlantModal({
@@ -27,8 +28,12 @@ export default function EditPlantModal({
 }) {
 
   const navigate = useNavigate();
-  const { species, plants } = useContext(AppContext);
   const { id: plantId } = useParams();
+  const {
+    species,
+    plants,
+    rooms
+  } = useContext(AppContext);
   const plant = plants.find((p) => p.id === plantId);
 
   const [ formData, setFormData ] = useState(pick(plant, ...FIELDS));
@@ -58,6 +63,14 @@ export default function EditPlantModal({
     setFormData({
       ...formData,
       specieId: e.target.value
+    })
+
+  }
+  function onRoomIdChange(e) {
+
+    setFormData({
+      ...formData,
+      roomId: e.target.value
     })
 
   }
@@ -114,7 +127,7 @@ export default function EditPlantModal({
 
         <p>
           <label
-            htmlFor='specie'>
+            htmlFor='specieId'>
             Specie
           </label>
           <select
@@ -173,6 +186,25 @@ export default function EditPlantModal({
             name='image'
             type='file'
             onChange={onImageSelect} />
+        </p>
+
+        <p>
+          <label
+            htmlFor='roomId'>
+            Room
+          </label>
+          <select
+            name='roomId'
+            value={formData.roomId || ''}
+            onChange={onRoomIdChange}>
+            {rooms.map((r) => (
+              <option
+                key={r.id}
+                value={r.id}>
+                {r.name}
+              </option>
+            ))}
+          </select>
         </p>
 
         <hr />

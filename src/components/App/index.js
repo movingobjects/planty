@@ -12,8 +12,9 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Storage } from 'aws-amplify';
 import {
   useFetchUser,
-  useFetchPlants,
-  useFetchSpecies
+  useFetchSpecies,
+  useFetchRooms,
+  useFetchPlants
 } from 'hooks/fetch';
 import { API } from 'aws-amplify';
 import * as subscriptions from 'graphql/subscriptions';
@@ -24,6 +25,7 @@ import EditProfileView from './EditProfileView';
 import Header from './Header';
 import PlantsView from './PlantsView';
 import SpeciesView from './SpeciesView';
+import RoomsView from './RoomsView';
 
 import style from './index.module.scss';
 
@@ -36,11 +38,13 @@ function App({
 
   const [ user, setUser ] = useState(null);
   const [ species, setSpecies ] = useState([]);
+  const [ rooms, setRooms ] = useState([]);
   const [ plants, setPlants ] = useState([]);
 
   const fetchUser    = useFetchUser(authUser),
-        fetchPlants  = useFetchPlants(user),
-        fetchSpecies = useFetchSpecies();
+        fetchSpecies = useFetchSpecies(),
+        fetchRooms   = useFetchRooms(),
+        fetchPlants  = useFetchPlants(user);
 
   useEffect(() => {
     if (authUser) {
@@ -53,13 +57,15 @@ function App({
 
   useEffect(() => {
     if (user) {
-      fetchPlants().then((result) => setPlants(result));
       fetchSpecies().then((result) => setSpecies(result));
+      fetchRooms().then((result) => setRooms(result));
+      fetchPlants().then((result) => setPlants(result));
     }
   }, [
     user,
-    fetchPlants,
-    fetchSpecies
+    fetchSpecies,
+    fetchRooms,
+    fetchPlants
   ])
 
   useEffect(() => {
@@ -95,6 +101,10 @@ function App({
     fetchSpecies().then((result) => setSpecies(result));
     fetchPlants().then((result) => setPlants(result));
   }
+  function onRoomsChange() {
+    fetchRooms().then((result) => setRooms(result));
+    fetchPlants().then((result) => setPlants(result));
+  }
   function onPlantsChange() {
     fetchPlants().then((result) => setPlants(result));
   }
@@ -104,9 +114,11 @@ function App({
       user,
       plants,
       species,
+      rooms,
       onUserChange,
-      onPlantsChange,
-      onSpeciesChange
+      onSpeciesChange,
+      onRoomsChange,
+      onPlantsChange
     }}>
       <div className={style.wrap}>
 
@@ -117,6 +129,7 @@ function App({
           <Route path='/' element={<Navigate to='/plants' replace />} />
           <Route path='/plants/*' element={<PlantsView />} />
           <Route path='/species/*' element={<SpeciesView />} />
+          <Route path='/rooms/*' element={<RoomsView />} />
           <Route path='/edit-profile' element={<EditProfileView />} />
         </Routes>
 
