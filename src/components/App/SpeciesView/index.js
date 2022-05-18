@@ -88,9 +88,9 @@ export default function SpeciesView() {
         {species.map((specie) => (
           <li
             key={specie?.id || specie?.scientificName}>
-            {specie?.commonName} (<em>{specie?.scientificName}</em>)
-            &nbsp;
             <Link to={`/species/edit/${specie?.id}`}>Edit</Link>
+            &nbsp;
+            {specie?.commonName} (<em>{specie?.scientificName}</em>)
           </li>
         ))}
       </ul>
