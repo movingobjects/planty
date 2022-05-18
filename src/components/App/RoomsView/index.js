@@ -98,9 +98,9 @@ export default function RoomsView() {
           .map((room, i) => (
             <li
               key={room?.id || i}>
-              {room?.name} ({getPlantsCount(room?.id)} plants)
-              &nbsp;
               <Link to={`/rooms/edit/${room?.id}`}>Edit</Link>
+              &nbsp;
+              {room?.name} ({getPlantsCount(room?.id)} plants)
             </li>
         ))}
       </ul>
@@ -111,9 +111,9 @@ export default function RoomsView() {
           .map((room, i) => (
             <li
               key={room?.id || i}>
-              {room?.name} ({getPlantsCount(room?.id)} plants)
-              &nbsp;
               <Link to={`/rooms/edit/${room?.id}`}>Edit</Link>
+              &nbsp;
+              {room?.name} ({getPlantsCount(room?.id)} plants)
             </li>
         ))}
       </ul>
@@ -124,9 +124,9 @@ export default function RoomsView() {
           .map((room, i) => (
             <li
               key={room?.id || i}>
-              {room?.name} ({getPlantsCount(room?.id)} plants)
-              &nbsp;
               <Link to={`/rooms/edit/${room?.id}`}>Edit</Link>
+              &nbsp;
+              {room?.name} ({getPlantsCount(room?.id)} plants)
             </li>
         ))}
       </ul>
