@@ -26,7 +26,17 @@ export default function PlantsView() {
 
   const [ roomFilter, setRoomFilter ] = useState();
 
+    function getPlantsCount(roomId) {
+    return plants
+      ?.filter((p) => p.roomId === roomId)
+      ?.length;
+  }
+
+  
   plants = plants.filter((p) => !p.dateRetired);
+  rooms  = rooms.filter((r) => (
+    plants.some((p) => p.roomId === r.id)
+  );
 
   function getPlantImagePath(file, plantId) {
     const timestamp = Date.now(),
