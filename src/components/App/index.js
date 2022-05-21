@@ -24,6 +24,7 @@ import * as subscriptions from 'graphql/subscriptions';
 import EditProfileView from './EditProfileView';
 import Header from './Header';
 import PlantsView from './PlantsView';
+import TimelineView from './TimelineView';
 import SpeciesView from './SpeciesView';
 import RoomsView from './RoomsView';
 
@@ -128,6 +129,7 @@ function App({
         <Routes>
           <Route path='/' element={<Navigate to='/plants' replace />} />
           <Route path='/plants/*' element={<PlantsView />} />
+          <Route path='/timeline/*' element={<TimelineView />} />
           <Route path='/species/*' element={<SpeciesView />} />
           <Route path='/rooms/*' element={<RoomsView />} />
           <Route path='/edit-profile' element={<EditProfileView />} />

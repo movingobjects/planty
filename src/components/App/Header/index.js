@@ -41,6 +41,7 @@ export default function Header({
       <div className={style.wrapMenu}>
         <ul>
           {renderMenuLink('Plants', '/plants')}
+          {renderMenuLink('Timeline', '/timeline')}
           {renderMenuLink('Species', '/species')}
           {renderMenuLink('Rooms', '/rooms')}
         </ul>
