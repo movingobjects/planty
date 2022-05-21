@@ -26,13 +26,6 @@ export default function PlantsView() {
 
   const [ roomFilter, setRoomFilter ] = useState();
 
-    function getPlantsCount(roomId) {
-    return plants
-      ?.filter((p) => p.roomId === roomId)
-      ?.length;
-  }
-
-  
   plants = plants.filter((p) => !p.dateRetired);
   rooms  = rooms.filter((r) => (
     plants.some((p) => p.roomId === r.id)
@@ -42,6 +35,12 @@ export default function PlantsView() {
     const timestamp = Date.now(),
           ext       = file?.name?.split('.').pop();
     return `plants/${plantId}/${timestamp}.${ext}`;
+  }
+
+  function getPlantsCount(roomId) {
+    return plants
+      ?.filter((p) => p.roomId === roomId)
+      ?.length;
   }
 
   async function onAdd(plantData) {
@@ -162,13 +161,13 @@ export default function PlantsView() {
         <li
           className={(!roomFilter?.length) ? style.selected : null}
           onClick={() => setRoomFilter(null)}>
-          Any room
+          Any room ({plants.length})
         </li>
         {rooms.map((r) => (
           <li
             className={(roomFilter === r.id) ? style.selected : null}
             onClick={() => setRoomFilter(r.id)}>
-            {r.name}
+            {r.name} ({getPlantsCount(r.id)})
           </li>
         ))}
       </ul>
