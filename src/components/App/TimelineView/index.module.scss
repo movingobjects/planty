@@ -29,8 +29,11 @@
           width: 7px;
           border-radius: 50%;
           transform: translate(-50%, -50%);
-          background-color: #f3f3f3;
-          border: solid 3px colors.$water;
+          background-color: #ccc;
+
+          &.watering {
+            background-color: colors.$water;
+          }
         }
 
       }

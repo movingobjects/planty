@@ -23,6 +23,10 @@ export default function TimelineView() {
   const [ dateStart, setDateStart ] = useState(Date.now());
   const [ dateEnd ] = useState(Date.now());
 
+  const momentStart = moment(dateStart),
+        dayCount    = moment(dateEnd).diff(dateStart, 'days'),
+        weekCount   = Math.ceil(dayCount / 7);
+
   useEffect(() => {
     setDateStart(plants.reduce((minDate, p) => (
       Math.min(moment(p.waterings[0]?.date).valueOf(), minDate)
@@ -39,6 +43,19 @@ export default function TimelineView() {
 
   function renderPlant(plant) {
 
+    const isWateringDate = (index) => {
+
+      const formattedDate = momentStart
+        .clone()
+        .add(index + 1, 'days')
+        .format('YYYY-MM-DD');
+
+      return plant.waterings.some((w) => (
+        w.date === formattedDate
+      ));
+
+    }
+
     return (
       <div
         className={style.plant}
@@ -48,18 +65,20 @@ export default function TimelineView() {
 
         <div className={style.timeline}>
 
-          <div
-            className={style.line}
-            style={{
-              width: getW(dateStart, dateEnd)
-            }} />
-
-          {plant.waterings.map((w, i) => (
+          {times(dayCount, (i) => (
             <div
               key={i}
-              className={style.pt}
+              className={classNames({
+                [style.pt]: true,
+                [style.watering]: isWateringDate(i)
+              })}
               style={{
-                left: getX(moment(w.date).valueOf())
+                left: getX(
+                  momentStart
+                    .clone()
+                    .add(i + 1, 'days')
+                    .valueOf()
+                )
               }} />
           ))}
 
@@ -71,10 +90,6 @@ export default function TimelineView() {
   }
 
   function renderCalendar() {
-
-    const momentStart = moment(dateStart),
-          dayCount    = moment(dateEnd).diff(dateStart, 'days'),
-          weekCount   = Math.ceil(dayCount / 7);
 
     return (
       <div className={style.wrapCalendar}>
@@ -91,7 +106,7 @@ export default function TimelineView() {
                   .clone()
                   .add(i + 1, 'days')
                   .valueOf()
-                )
+              )
             }} />
         ))}
         {times(weekCount, (i) => (
@@ -107,7 +122,7 @@ export default function TimelineView() {
                   .clone()
                   .add(i + 1, 'weeks')
                   .valueOf()
-                )
+              )
             }} />
         ))}
       </div>
