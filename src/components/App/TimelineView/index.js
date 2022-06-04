@@ -16,12 +16,12 @@ const MS_PER_DAY = 1000 * 60 * 60  * 24,
 
 export default function TimelineView() {
 
-  let { plants } = useContext(AppContext);
+  let {
+    activePlants: plants
+  } = useContext(AppContext);
 
   const [ dateStart, setDateStart ] = useState(Date.now());
   const [ dateEnd ] = useState(Date.now());
-
-  plants = plants.filter((p) => !p.dateRetired);
 
   useEffect(() => {
     setDateStart(plants.reduce((minDate, p) => (

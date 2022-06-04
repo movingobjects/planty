@@ -17,7 +17,7 @@ import style from './index.module.scss';
 export default function PlantsView() {
 
   let {
-    plants,
+    activePlants: plants,
     rooms,
     onPlantsChange
   } = useContext(AppContext);
@@ -26,7 +26,6 @@ export default function PlantsView() {
 
   const [ roomFilter, setRoomFilter ] = useState();
 
-  plants = plants.filter((p) => !p.dateRetired);
   rooms  = rooms.filter((r) => (
     plants.some((p) => p.roomId === r.id)
   ));
@@ -165,6 +164,7 @@ export default function PlantsView() {
         </li>
         {rooms.map((r) => (
           <li
+            key={r.id}
             className={(roomFilter === r.id) ? style.selected : null}
             onClick={() => setRoomFilter(r.id)}>
             {r.name} ({getPlantsCount(r.id)})

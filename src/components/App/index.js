@@ -113,7 +113,8 @@ function App({
   return (
     <AppContext.Provider value={{
       user,
-      plants,
+      allPlants: plants,
+      activePlants: plants.filter((p) => !p.dateRetired),
       species,
       rooms,
       onUserChange,

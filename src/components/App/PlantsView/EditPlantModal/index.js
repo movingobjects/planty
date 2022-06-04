@@ -31,7 +31,7 @@ export default function EditPlantModal({
   const { id: plantId } = useParams();
   const {
     species,
-    plants,
+    allPlants: plants,
     rooms
   } = useContext(AppContext);
   const plant = plants.find((p) => p.id === plantId);

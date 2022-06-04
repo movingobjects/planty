@@ -13,7 +13,7 @@ import style from './index.module.scss';
 export default function RoomsView() {
 
   const {
-    plants,
+    activePlants: plants,
     rooms,
     onRoomsChange
   } = useContext(AppContext);
