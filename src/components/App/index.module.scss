@@ -4,3 +4,13 @@
   margin: 125px auto;
   padding: 0 25px;
 }
+
+:root {
+  --amplify-components-authenticator-modal-background-color: white;
+}
+
+:global {
+  .amplify-tabs {
+    display: none;
+  }
+}

@@ -19,7 +19,7 @@ import {
 import { API } from 'aws-amplify';
 import * as subscriptions from 'graphql/subscriptions';
 
-// import '@aws-amplify/ui-react/styles.css';
+import '@aws-amplify/ui-react/styles.css';
 
 import EditProfileView from './EditProfileView';
 import Header from './Header';
