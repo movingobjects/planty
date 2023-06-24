@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useState } from 'react';
+import { useClickAway } from 'react-use';
 import classNames from 'classnames';
 import {
   Link,
@@ -12,8 +13,24 @@ export default function Header({
   onSignOut = () => { }
 }) {
 
+  const ref = useRef(null);
   const { user } = useContext(AppContext);
   const { pathname } = useLocation();
+
+  const [ userMenuOpen, setUserMenuOpen ] = useState(false);
+
+  useClickAway(ref, () => {
+    setUserMenuOpen(false);
+  });
+
+  function onProfileImgClick() {
+    setUserMenuOpen(true);
+  }
+
+  function onSignOutClick(e) {
+    e.preventDefault();
+    onSignOut();
+  }
 
   const renderMenuLink = (title, path) => {
 
@@ -26,11 +43,6 @@ export default function Header({
     );
   }
 
-  function onSignOutClick(e) {
-    e.preventDefault();
-    onSignOut();
-  }
-
   return (
     <div className={style.wrap}>
 
@@ -38,33 +50,39 @@ export default function Header({
         <h1><Link to='/' alt='Planty'>Planty</Link></h1>
       </div>
 
-      <div className={style.wrapMenu}>
-        <ul>
+      <div
+        className={style.wrapUserMenu}>
+        <div className={style.wrapProfileImg}
+          onClick={onProfileImgClick}>
+          {!!user?.profileImg?.length && (
+            <img
+              className={style.profileImg}
+              alt={user?.firstName}
+              src={user?.profileImg} />
+          )}
+        </div>
+        <ul
+          ref={ref}
+          className={classNames({
+            [style.userMenu]: true,
+            [style.open]: userMenuOpen
+          })}>
           {renderMenuLink('Plants', '/plants')}
           {renderMenuLink('Timeline', '/timeline')}
           {renderMenuLink('Species', '/species')}
           {renderMenuLink('Rooms', '/rooms')}
+          <li>
+            <Link to='/edit-profile' alt='Edit profile'>Edit profile</Link>
+          </li>
+          <li>
+            <Link
+              to='/'
+              alt='Sign out'
+              onClick={onSignOutClick}>
+              Sign out
+            </Link>
+          </li>
         </ul>
-      </div>
-
-      <div className={style.wrapUserMenu}>
-        <div className={style.wrapProfileImg}>
-          {!!user?.profileImg?.length && (
-            <img
-              alt={user?.firstName}
-              src={user?.profileImg} />
-            )}
-          </div>
-        <p>Hello {user?.firstName}</p>
-        <p>
-          <Link to='/edit-profile' alt='Edit profile'>Edit profile</Link>
-          <Link
-            to='/'
-            alt='Sign out'
-            onClick={onSignOutClick}>
-            Sign out
-          </Link>
-        </p>
       </div>
 
     </div>
