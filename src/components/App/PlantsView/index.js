@@ -107,7 +107,7 @@ const PlantsView = () => {
         <Link
           to="/plants/add"
           alt="Add plant">
-          Add plant
+          +
         </Link>
       </div>
 

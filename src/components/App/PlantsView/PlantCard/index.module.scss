@@ -1,15 +1,14 @@
+@use 'sass:color';
 @use 'styles/colors';
 @use 'styles/fonts';
 
 .wrap {
 
-  border: 1px solid transparentize(black, 0.9);
+  border: 2px solid rgba(black, 0.1);
   padding: 20px;
-  border-radius: 5px;
-  background-color: white;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.025);
+  border-radius: 10px;
 
-  color: rgba(0, 0, 0, 0.65);
+  color: rgba(black, 0.65);
 
   strong {
     color: black;
@@ -21,15 +20,15 @@
 
   .editBtn {
     display: inline-block;
-    padding: 3px 5px;
+    padding: 0 4px;
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.075em;
     text-decoration: none;
     color: colors.$edit;
-    background-color: transparentize(colors.$edit, 0.85);
-    border-radius: 5px;
+    border: 1px solid colors.$edit;
+    border-radius: 3px;
     margin-left: 10px;
     vertical-align: 2px;
     &:active {
@@ -39,8 +38,7 @@
   }
 
   &.dueToday {
-    background-color: transparentize(colors.$water, 0.85);
-    border-color: transparentize(colors.$water, 0.75);
+    border-color: colors.$water;
     .nextWaterDate {
       font-weight: bold;
       color: colors.$water;
@@ -48,8 +46,7 @@
   }
 
   &.overdue {
-    background-color: transparentize(colors.$overdue, 0.85);
-    border-color: transparentize(colors.$overdue, 0.75);
+    border-color: colors.$overdue;
     .nextWaterDate {
       font-weight: bold;
       color: colors.$overdue;
@@ -57,8 +54,7 @@
   }
 
   &.wateredToday {
-    background-color: transparentize(colors.$done, 0.85);
-    border-color: transparentize(colors.$done, 0.75);
+    border-color: colors.$done;
     .lastWaterDate {
       font-weight: bold;
       color: colors.$done;
@@ -82,7 +78,7 @@
       flex-basis: 50%;
 
       padding: 10px 0;
-      border: none;
+      border: 2px solid transparent;
       border-radius: 7px;
 
       appearance: none;
@@ -100,29 +96,31 @@
       }
 
       &.waterBtn {
-        background-color: colors.$water;
-        color: white;
+        border-color: colors.$water;
+        color: colors.$water;
 
         &:active {
-          background-color: darken(colors.$water, 15%);
+          background-color: colors.$water;
+          color: white;
         }
 
       }
 
       &.deferBtn {
-        background-color: colors.$defer;
-        color: white;
+        border-color: colors.$defer;
+        color: colors.$defer;
 
         &:active {
-          background-color: darken(colors.$defer, 15%);
+          background-color: colors.$defer;
+          color: white;
         }
       }
 
       &[disabled] {
         pointer-events: none;
         opacity: 0.5;
-        color: white;
-        background-color: colors.$disabled
+        color: colors.$disabled;
+        border-color: colors.$disabled
       }
 
     }

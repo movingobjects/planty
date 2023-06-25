@@ -1,13 +1,42 @@
+@use 'sass:color';
 @use 'styles/colors';
 
 .wrap {
+  position: relative;
 
   .wrapAdd {
-    margin-bottom: 25px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    a {
+      $size: 65px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: $size;
+      height: $size;
+      border-radius: 50%;
+      font-size: 50px;
+      text-decoration: none;
+      background-color: colors.$green;
+      color: white;
+      box-shadow:
+        3px 5px 10px rgb(0 0 0 / 0.1),
+        2px 2px 5px rgb(0 100 0 / 0.1);
+
+      &:active {
+        background-color: color.adjust(colors.$green, $lightness: -10%);
+      }
+    }
+  }
+
+  h2,
+  ul.roomFilter {
+    display: none; // TODO
   }
 
   ul.roomFilter {
-    display: none; // TODO
     list-style: none;
     margin: 0 0 25px 0;
     padding: 0;
@@ -33,7 +62,7 @@
       }
 
       &:not(.selected):hover {
-        background-color: transparentize(colors.$green, 0.75);
+        background-color: rgba(colors.$green, 0.25);
       }
 
     }
