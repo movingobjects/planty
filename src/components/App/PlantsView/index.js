@@ -1,11 +1,14 @@
-import React, { useState, useContext } from 'react';
+import { useAtomValue } from 'jotai';
 import moment from 'moment';
-import { API } from 'aws-amplify';
-import * as mutations from 'graphql/mutations';
-import { Routes, Route, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import {
+  Link,
+  Route,
+  Routes
+} from 'react-router-dom';
 
-import { useStorage } from 'hooks/storage';
-import { AppContext } from 'components/App';
+import * as atoms from 'atoms';
+import useApi from 'hooks/useApi';
 import { calcDateNextWater } from 'utils';
 
 import AddPlantModal from './AddPlantModal';
@@ -14,27 +17,17 @@ import PlantCard from './PlantCard';
 
 import style from './index.module.scss';
 
-export default function PlantsView() {
+const PlantsView = () => {
+  const plants = useAtomValue(atoms.activePlants);
+  const rooms = useAtomValue(atoms.activeRooms);
 
-  let {
-    activePlants: plants,
-    rooms,
-    onPlantsChange
-  } = useContext(AppContext);
+  const {
+    createPlant,
+    updatePlant,
+    deletePlant
+  } = useApi();
 
-  const { uploadFile } = useStorage();
-
-  const [ roomFilter, setRoomFilter ] = useState();
-
-  rooms  = rooms.filter((r) => (
-    plants.some((p) => p.roomId === r.id)
-  ));
-
-  function getPlantImagePath(file, plantId) {
-    const timestamp = Date.now(),
-          ext       = file?.name?.split('.').pop();
-    return `plants/${plantId}/${timestamp}.${ext}`;
-  }
+  const [roomFilter, setRoomFilter] = useState();
 
   function getPlantsCount(roomId) {
     return plants
@@ -42,70 +35,7 @@ export default function PlantsView() {
       ?.length;
   }
 
-  async function onAdd(plantData) {
-
-    const hasNewImage = !!plantData?.image?.name?.length;
-
-    if (hasNewImage) {
-      plantData.image = await uploadFile(
-        plantData?.image,
-        getPlantImagePath(plantData?.image, plantData?.id)
-      );
-    }
-
-    await API.graphql({
-      query: mutations.createPlant,
-      variables: {
-        input: plantData
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onPlantsChange();
-
-  }
-  async function onSave(plantData) {
-
-    const hasNewImage = !!plantData?.image?.name?.length;
-
-    if (hasNewImage) {
-      plantData.image = await uploadFile(
-        plantData?.image,
-        getPlantImagePath(plantData?.image, plantData?.id)
-      );
-    } else {
-      delete plantData.image;
-    }
-
-    await API.graphql({
-      query: mutations.updatePlant,
-      variables: {
-        input: plantData
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onPlantsChange();
-
-  }
-  async function onDelete(plantId) {
-
-    await API.graphql({
-      query: mutations.deletePlant,
-      variables: {
-        input: {
-          id: plantId
-        }
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onPlantsChange();
-
-  }
-
   function onPlantWater(plantId) {
-
     const plant = plants.find((p) => p.id === plantId);
     if (!plant) return;
 
@@ -116,15 +46,13 @@ export default function PlantsView() {
 
     const dateNextWater = calcDateNextWater(waterings);
 
-    onSave({
+    updatePlant({
       id: plantId,
       waterings,
       dateNextWater
     });
-
   }
   function onPlantDefer(plantId) {
-
     const plant = plants.find((p) => p.id === plantId);
     if (!plant) return;
 
@@ -132,26 +60,29 @@ export default function PlantsView() {
       .add(1, 'days')
       .format('YYYY-MM-DD');
 
-    onSave({
+    updatePlant({
       id: plantId,
       dateNextWater
-    })
-
+    });
   }
 
   return (
     <div className={style.wrap}>
 
       <Routes>
-        <Route path='edit/:id' element={(
-          <EditPlantModal
-            onDelete={onDelete}
-            onSave={onSave} />
-        )} />
-        <Route path='add' element={(
-          <AddPlantModal
-            onAdd={onAdd} />
-        )} />
+        <Route
+          path="edit/:id"
+          element={(
+            <EditPlantModal
+              onDelete={deletePlant}
+              onSave={updatePlant} />
+          )} />
+        <Route
+          path="add"
+          element={(
+            <AddPlantModal
+              onAdd={createPlant} />
+          )} />
       </Routes>
 
       <h2>Plants</h2>
@@ -174,8 +105,8 @@ export default function PlantsView() {
 
       <div className={style.wrapAdd}>
         <Link
-          to='/plants/add'
-          alt='Add plant'>
+          to="/plants/add"
+          alt="Add plant">
           Add plant
         </Link>
       </div>
@@ -194,10 +125,11 @@ export default function PlantsView() {
                 onWater={() => onPlantWater(plant?.id)}
                 onDefer={() => onPlantDefer(plant?.id)} />
             </li>
-        ))}
+          ))}
       </ul>
 
     </div>
   );
+};
 
-}
+export default PlantsView;

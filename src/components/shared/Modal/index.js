@@ -1,24 +1,20 @@
-
 import React from 'react';
 import { useKey } from 'react-use';
 
 import style from './index.module.scss';
 
-export default function Modal({
+const Modal = ({
   children = null,
   width,
   onClickOff = () => { },
   onEnterKey = () => { },
   onEscKey = () => { }
-}) {
-
+}) => {
   function onClickOutsidePanel(e) {
-
     e.preventDefault();
     e.stopPropagation();
 
     onClickOff(e);
-
   }
 
   useKey('Enter', (e) => onEnterKey(e));
@@ -32,7 +28,7 @@ export default function Modal({
       <div
         className={style.panel}
         style={{ width }}
-        onClick={(e) => { e.stopPropagation() }}>
+        onClick={(e) => { e.stopPropagation(); }}>
 
         <div className={style.content}>
           {children}
@@ -41,5 +37,6 @@ export default function Modal({
       </div>
     </div>
   );
+};
 
-}
+export default Modal;

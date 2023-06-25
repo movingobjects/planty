@@ -1,59 +1,55 @@
-import React, {
-  useState,
-  useEffect,
-  createContext
-} from 'react';
-import {
-  Routes,
-  Route,
-  Navigate
-} from 'react-router-dom';
 import { withAuthenticator } from '@aws-amplify/ui-react';
-import { Storage } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
+import { useAtom, useSetAtom } from 'jotai';
+import React, { useEffect } from 'react';
 import {
-  useFetchUser,
-  useFetchSpecies,
-  useFetchRooms,
-  useFetchPlants
-} from 'hooks/fetch';
-import { API } from 'aws-amplify';
+  Navigate,
+  Route,
+  Routes
+} from 'react-router-dom';
+
+import * as atoms from 'atoms';
 import * as subscriptions from 'graphql/subscriptions';
+import useApi from 'hooks/useApi';
 
 import '@aws-amplify/ui-react/styles.css';
 
 import EditProfileView from './EditProfileView';
 import Header from './Header';
 import PlantsView from './PlantsView';
-import TimelineView from './TimelineView';
-import SpeciesView from './SpeciesView';
 import RoomsView from './RoomsView';
+import SpeciesView from './SpeciesView';
+import TimelineView from './TimelineView';
 
 import style from './index.module.scss';
 
-export const AppContext = createContext();
-
-function App({
+const App = ({
   signOut,
   user: authUser
-}) {
+}) => {
+  const setAuthUser = useSetAtom(atoms.authUser);
+  const [user, setUser] = useAtom(atoms.user);
+  const setPlants = useSetAtom(atoms.plants);
+  const setSpecies = useSetAtom(atoms.species);
+  const setRooms = useSetAtom(atoms.rooms);
 
-  const [ user, setUser ] = useState(null);
-  const [ species, setSpecies ] = useState([]);
-  const [ rooms, setRooms ] = useState([]);
-  const [ plants, setPlants ] = useState([]);
-
-  const fetchUser    = useFetchUser(authUser),
-        fetchSpecies = useFetchSpecies(),
-        fetchRooms   = useFetchRooms(),
-        fetchPlants  = useFetchPlants(user);
+  const {
+    fetchUser,
+    fetchSpecies,
+    fetchRooms,
+    fetchPlants
+  } = useApi();
 
   useEffect(() => {
     if (authUser) {
+      setAuthUser(authUser);
       fetchUser().then((user) => setUser(user));
     }
   }, [
+    setAuthUser,
+    fetchUser,
     authUser,
-    fetchUser
+    setUser
   ]);
 
   useEffect(() => {
@@ -64,82 +60,59 @@ function App({
     }
   }, [
     user,
+    setSpecies,
+    setRooms,
+    setPlants,
     fetchSpecies,
     fetchRooms,
     fetchPlants
-  ])
+  ]);
 
   useEffect(() => {
-
     const userSub = API.graphql({
       query: subscriptions.onUserChange,
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     }).subscribe({
-        next: async ({ provider, value }) => {
+      next: async ({
+        provider,
+        value
+      }) => {
+        const apiUser = value.data.onUserChange;
 
-          const apiUser = value.data.onUserChange;
+        if (apiUser.profileImg?.length) {
+          apiUser.profileImg = await Storage.get(apiUser.profileImg);
+        }
 
-          if (!!apiUser.profileImg?.length) {
-            apiUser.profileImg = await Storage.get(apiUser.profileImg);
-          }
-
-          setUser(apiUser);
-
-        },
-        error: (error) => console.warn(error)
+        setUser(apiUser);
+      },
+      // eslint-disable-next-line no-console
+      error: (error) => console.warn(error)
     });
 
     return () => {
       userSub.unsubscribe();
     };
-
-  }, [ ]);
-
-  function onUserChange() {
-    fetchUser().then((user) => setUser(user));
-  }
-  function onSpeciesChange() {
-    fetchSpecies().then((result) => setSpecies(result));
-    fetchPlants().then((result) => setPlants(result));
-  }
-  function onRoomsChange() {
-    fetchRooms().then((result) => setRooms(result));
-    fetchPlants().then((result) => setPlants(result));
-  }
-  function onPlantsChange() {
-    fetchPlants().then((result) => setPlants(result));
-  }
+  }, [
+    setUser
+  ]);
 
   return (
-    <AppContext.Provider value={{
-      user,
-      allPlants: plants,
-      activePlants: plants.filter((p) => !p.dateRetired),
-      species,
-      rooms,
-      onUserChange,
-      onSpeciesChange,
-      onRoomsChange,
-      onPlantsChange
-    }}>
-      <div className={style.wrap}>
+    <div className={style.wrap}>
 
-        <Header
-          onSignOut={signOut} />
+      <Header
+        onSignOut={signOut} />
 
-        <Routes>
-          <Route path='/' element={<Navigate to='/plants' replace />} />
-          <Route path='/plants/*' element={<PlantsView />} />
-          <Route path='/timeline/*' element={<TimelineView />} />
-          <Route path='/species/*' element={<SpeciesView />} />
-          <Route path='/rooms/*' element={<RoomsView />} />
-          <Route path='/edit-profile' element={<EditProfileView />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={<Navigate to="/plants" replace={true} />} />
+        <Route path="/plants/*" element={<PlantsView />} />
+        <Route path="/timeline/*" element={<TimelineView />} />
+        <Route path="/species/*" element={<SpeciesView />} />
+        <Route path="/rooms/*" element={<RoomsView />} />
+        <Route path="/edit-profile" element={<EditProfileView />} />
+      </Routes>
 
-      </div>
-    </AppContext.Provider>
+    </div>
   );
-
-}
+};
 
 export default withAuthenticator(App);

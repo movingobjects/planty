@@ -1,50 +1,41 @@
-import React, {
-  useState,
-  useEffect,
-  useContext
-} from 'react';
-import moment from 'moment';
 import classNames from 'classnames';
+import { useAtomValue } from 'jotai';
 import { times } from 'lodash';
+import moment from 'moment';
+import React, {
+  useEffect,
+  useState
+} from 'react';
 
-import { AppContext } from 'components/App';
+import * as atoms from 'atoms';
 
 import style from './index.module.scss';
 
-const MS_PER_DAY = 1000 * 60 * 60  * 24,
-      PX_PER_DAY = 10;
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+const PX_PER_DAY = 10;
 
-export default function TimelineView() {
+const TimelineView = () => {
+  const plants = useAtomValue(atoms.activePlants);
 
-  let {
-    activePlants: plants
-  } = useContext(AppContext);
+  const [dateStart, setDateStart] = useState(Date.now());
+  const [dateEnd] = useState(Date.now());
 
-  const [ dateStart, setDateStart ] = useState(Date.now());
-  const [ dateEnd ] = useState(Date.now());
-
-  const momentStart = moment(dateStart),
-        dayCount    = moment(dateEnd).diff(dateStart, 'days'),
-        weekCount   = Math.ceil(dayCount / 7);
+  const momentStart = moment(dateStart);
+  const dayCount = moment(dateEnd).diff(dateStart, 'days');
+  const weekCount = Math.ceil(dayCount / 7);
 
   useEffect(() => {
     setDateStart(plants.reduce((minDate, p) => (
       Math.min(moment(p.waterings[0]?.date).valueOf(), minDate)
     ), Date.now()));
-  }, [ plants ]);
+  }, [plants]);
 
-  const getX = (d) => {
-    return (d - dateStart) * (1 / MS_PER_DAY) * (PX_PER_DAY);
-  }
+  const getX = (d) => (d - dateStart) * (1 / MS_PER_DAY) * (PX_PER_DAY);
 
-  const getW = (da, db) => {
-    return getX(db) - getX(da);
-  }
+  // const getW = (da, db) => getX(db) - getX(da);
 
   function renderPlant(plant) {
-
     const isWateringDate = (index) => {
-
       const formattedDate = momentStart
         .clone()
         .add(index + 1, 'days')
@@ -53,8 +44,7 @@ export default function TimelineView() {
       return plant.waterings.some((w) => (
         w.date === formattedDate
       ));
-
-    }
+    };
 
     return (
       <div
@@ -86,11 +76,9 @@ export default function TimelineView() {
 
       </div>
     );
-
   }
 
   function renderCalendar() {
-
     return (
       <div className={style.wrapCalendar}>
         {times(dayCount, (i) => (
@@ -126,8 +114,7 @@ export default function TimelineView() {
             }} />
         ))}
       </div>
-    )
-
+    );
   }
 
   return (
@@ -142,5 +129,6 @@ export default function TimelineView() {
 
     </div>
   );
+};
 
-}
+export default TimelineView;

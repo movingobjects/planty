@@ -1,23 +1,26 @@
-import React, { useContext, useRef, useState } from 'react';
-import { useClickAway } from 'react-use';
 import classNames from 'classnames';
+import { useAtomValue } from 'jotai';
+import React, {
+  useRef, useState
+} from 'react';
 import {
   Link,
   useLocation
 } from 'react-router-dom';
+import { useClickAway } from 'react-use';
 
-import { AppContext } from 'components/App';
+import * as atoms from 'atoms';
+
 import style from './index.module.scss';
 
-export default function Header({
+const Header = ({
   onSignOut = () => { }
-}) {
-
+}) => {
   const ref = useRef(null);
-  const { user } = useContext(AppContext);
+  const user = useAtomValue(atoms.user);
   const { pathname } = useLocation();
 
-  const [ userMenuOpen, setUserMenuOpen ] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useClickAway(ref, () => {
     setUserMenuOpen(false);
@@ -32,27 +35,25 @@ export default function Header({
     onSignOut();
   }
 
-  const renderMenuLink = (title, path) => {
-
-    return (
-      <li className={classNames({
-        [style.selected]: (path === pathname)
-      })}>
-        <Link to={path} alt={title}>{title}</Link>
-      </li>
-    );
-  }
+  const renderMenuLink = (title, path) => (
+    <li className={classNames({
+      [style.selected]: (path === pathname)
+    })}>
+      <Link to={path} alt={title}>{title}</Link>
+    </li>
+  );
 
   return (
     <div className={style.wrap}>
 
       <div className={style.wrapTitle}>
-        <h1><Link to='/' alt='Planty'>Planty</Link></h1>
+        <h1><Link to="/" alt="Planty">Planty</Link></h1>
       </div>
 
       <div
         className={style.wrapUserMenu}>
-        <div className={style.wrapProfileImg}
+        <div
+          className={style.wrapProfileImg}
           onClick={onProfileImgClick}>
           {!!user?.profileImg?.length && (
             <img
@@ -72,12 +73,12 @@ export default function Header({
           {renderMenuLink('Species', '/species')}
           {renderMenuLink('Rooms', '/rooms')}
           <li>
-            <Link to='/edit-profile' alt='Edit profile'>Edit profile</Link>
+            <Link to="/edit-profile" alt="Edit profile">Edit profile</Link>
           </li>
           <li>
             <Link
-              to='/'
-              alt='Sign out'
+              to="/"
+              alt="Sign out"
               onClick={onSignOutClick}>
               Sign out
             </Link>
@@ -86,6 +87,7 @@ export default function Header({
       </div>
 
     </div>
-  )
+  );
+};
 
-}
+export default Header;

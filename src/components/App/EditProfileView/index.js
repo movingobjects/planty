@@ -1,14 +1,12 @@
-import React, {
-  useState,
-  useContext,
-  useEffect
-} from 'react';
+import { useAtomValue } from 'jotai';
 import { pick } from 'lodash';
-import { API } from 'aws-amplify';
+import React, {
+  useEffect,
+  useState
+} from 'react';
 
-import * as mutations from 'graphql/mutations';
-import { AppContext } from 'components/App';
-import { useStorage } from 'hooks/storage';
+import * as atoms from 'atoms';
+import useApi from 'hooks/useApi';
 
 import style from './index.module.scss';
 
@@ -20,18 +18,15 @@ const FIELDS = [
   'profileImg'
 ];
 
-export default function EditProfileView() {
+const EditProfileView = () => {
+  const user = useAtomValue(atoms.user);
 
-  const {
-    user,
-    onUserChange
-  } = useContext(AppContext);
-  const { uploadFile } = useStorage();
+  const { updateUser } = useApi();
 
-  const [ formData, setFormData ] = useState(pick(user, ...FIELDS));
+  const [formData, setFormData] = useState(pick(user, ...FIELDS));
 
   const hasChanges = FIELDS.some((f) => user?.[f] !== formData?.[f]);
-  const isValid    = (
+  const isValid = (
     !!formData?.email?.length &&
     !!formData?.firstName?.length
   );
@@ -39,23 +34,21 @@ export default function EditProfileView() {
 
   useEffect(() => {
     setFormData(pick(user, ...FIELDS));
-  }, [ user ]);
+  }, [user]);
 
   function onInputChange(e) {
-
-    const field = e?.target?.name,
-          value = e?.target?.value;
+    const field = e?.target?.name;
+    const value = e?.target?.value;
 
     setFormData({
       ...formData,
       [field]: value
     });
-
   }
 
   function onSaveClick(e) {
     if (canSave) {
-      saveProfile(formData);
+      updateUser(formData);
     }
   }
 
@@ -69,37 +62,6 @@ export default function EditProfileView() {
     }
   }
 
-  function getUserImagePath(file, userId) {
-    const timestamp = Date.now(),
-          ext       = file?.name?.split('.').pop();
-    return `users/${userId}/${timestamp}.${ext}`;
-  }
-
-  async function saveProfile(userData) {
-
-    const hasNewImage = !!userData?.profileImg?.name?.length;
-
-    if (hasNewImage) {
-      userData.profileImg = await uploadFile(
-        userData?.profileImg,
-        getUserImagePath(userData?.profileImg, userData?.id)
-      );
-    } else {
-      delete userData.profileImg;
-    }
-
-    await API.graphql({
-      query: mutations.updateUser,
-      variables: {
-        input: userData
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onUserChange();
-
-  }
-
   return (
 
     <div className={style.wrap}>
@@ -108,34 +70,34 @@ export default function EditProfileView() {
 
       <p>
         <label
-          htmlFor='firstName'>
+          htmlFor="firstName">
           First name
         </label>
         <input
-          name='firstName'
+          name="firstName"
           value={formData.firstName || ''}
           onChange={onInputChange} />
       </p>
 
       <p>
         <label
-          htmlFor='lastName'>
+          htmlFor="lastName">
           Last name
         </label>
         <input
-          name='lastName'
+          name="lastName"
           value={formData.lastName || ''}
           onChange={onInputChange} />
       </p>
 
       <p>
         <label
-          htmlFor='image'>
+          htmlFor="image">
           Profile image
         </label>
         <input
-          name='image'
-          type='file'
+          name="image"
+          type="file"
           onChange={onImageSelect} />
       </p>
 
@@ -151,6 +113,7 @@ export default function EditProfileView() {
 
     </div>
 
-  )
+  );
+};
 
-}
+export default EditProfileView;

@@ -1,12 +1,13 @@
-import React, {
-  useState,
-  useContext,
-  useEffect
-} from 'react';
+import { useAtomValue } from 'jotai';
 import { pick } from 'lodash';
+import React, {
+  useEffect,
+  useState
+} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { AppContext } from 'components/App';
+import * as atoms from 'atoms';
+
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
@@ -19,24 +20,23 @@ const FIELDS = [
   'dateRetired',
   'image',
   'source',
-  'roomId',
-]
+  'roomId'
+];
 
-export default function EditPlantModal({
+const EditPlantModal = ({
   onDelete = () => { },
   onSave = (data) => { }
-}) {
-
+}) => {
   const navigate = useNavigate();
   const { id: plantId } = useParams();
-  const {
-    species,
-    allPlants: plants,
-    rooms
-  } = useContext(AppContext);
+
+  const species = useAtomValue(atoms.species);
+  const plants = useAtomValue(atoms.plants);
+  const rooms = useAtomValue(atoms.rooms);
+
   const plant = plants.find((p) => p.id === plantId);
 
-  const [ formData, setFormData ] = useState(pick(plant, ...FIELDS));
+  const [formData, setFormData] = useState(pick(plant, ...FIELDS));
 
   const canSave = (
     !!formData?.name?.length &&
@@ -45,34 +45,28 @@ export default function EditPlantModal({
 
   useEffect(() => {
     setFormData(pick(plant, ...FIELDS));
-  }, [ plant ]);
+  }, [plant]);
 
   function onInputChange(e) {
-
-    const field = e?.target?.name,
-          value = e?.target?.value;
+    const field = e?.target?.name;
+    const value = e?.target?.value;
 
     setFormData({
       ...formData,
       [field]: value
     });
-
   }
   function onSpecieIdChange(e) {
-
     setFormData({
       ...formData,
       specieId: e.target.value
-    })
-
+    });
   }
   function onRoomIdChange(e) {
-
     setFormData({
       ...formData,
       roomId: e.target.value
-    })
-
+    });
   }
   function onImageSelect(e) {
     const file = e?.target?.files?.[0];
@@ -98,7 +92,7 @@ export default function EditPlantModal({
   }
 
   function onClose() {
-    navigate('/plants')
+    navigate('/plants');
   }
 
   if (!plant) {
@@ -116,22 +110,22 @@ export default function EditPlantModal({
 
         <p>
           <label
-            htmlFor='name'>
+            htmlFor="name">
             Name
           </label>
           <input
-            name='name'
+            name="name"
             value={formData.name || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='specieId'>
+            htmlFor="specieId">
             Specie
           </label>
           <select
-            name='specieId'
+            name="specieId"
             value={formData.specieId || ''}
             onChange={onSpecieIdChange}>
             {species.map((s) => (
@@ -146,55 +140,55 @@ export default function EditPlantModal({
 
         <p>
           <label
-            htmlFor='source'>
+            htmlFor="source">
             Source
           </label>
           <input
-            name='source'
+            name="source"
             value={formData.source || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='dateBorn'>
+            htmlFor="dateBorn">
             Date born
           </label>
           <input
-            name='dateBorn'
+            name="dateBorn"
             value={formData.dateBorn || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='dateRetired'>
+            htmlFor="dateRetired">
             Date retired
           </label>
           <input
-            name='dateRetired'
+            name="dateRetired"
             value={formData.dateRetired || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='image'>
+            htmlFor="image">
             Image
           </label>
           <input
-            name='image'
-            type='file'
+            name="image"
+            type="file"
             onChange={onImageSelect} />
         </p>
 
         <p>
           <label
-            htmlFor='roomId'>
+            htmlFor="roomId">
             Room
           </label>
           <select
-            name='roomId'
+            name="roomId"
             value={formData.roomId || ''}
             onChange={onRoomIdChange}>
             {rooms.map((r) => (
@@ -227,6 +221,7 @@ export default function EditPlantModal({
       </div>
 
     </Modal>
-  )
+  );
+};
 
-}
+export default EditPlantModal;

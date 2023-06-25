@@ -1,21 +1,21 @@
-import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import {
   IoPlayForward,
   IoWater
-} from 'react-icons/io5'
+} from 'react-icons/io5';
+import { Link } from 'react-router-dom';
+
 import { getDaysSinceLastWatering } from 'utils';
 
 import style from './index.module.scss';
 
-export default function PlantCard({
+const PlantCard = ({
   plant = { },
   onWater = () => { },
   onDefer = () => { }
-}) {
-
+}) => {
   const {
     id,
     name,
@@ -24,15 +24,15 @@ export default function PlantCard({
     dateNextWater
   } = plant || { };
 
-  const mmtNextWater = moment(dateNextWater),
-        mmtToday     = moment().startOf('day');
+  const mmtNextWater = moment(dateNextWater);
+  const mmtToday = moment().startOf('day');
 
-  const isOverdue  = mmtToday.diff(mmtNextWater, 'days') > 0,
-        isDueToday = mmtToday.diff(mmtNextWater, 'days') >= 0;
+  const isOverdue = mmtToday.diff(mmtNextWater, 'days') > 0;
+  const isDueToday = mmtToday.diff(mmtNextWater, 'days') >= 0;
 
-  const nextWaterDateText     = (isDueToday && !isOverdue) ? 'Today' : mmtNextWater.from(moment().startOf('day')),
-        daysSinceLastWatering = getDaysSinceLastWatering(plant),
-        wateredToday          = daysSinceLastWatering === 0;
+  const nextWaterDateText = (isDueToday && !isOverdue) ? 'Today' : mmtNextWater.from(moment().startOf('day'));
+  const daysSinceLastWatering = getDaysSinceLastWatering(plant);
+  const wateredToday = daysSinceLastWatering === 0;
 
   function getLastWaterDateText() {
     if (daysSinceLastWatering === null) {
@@ -114,5 +114,6 @@ export default function PlantCard({
 
     </div>
   );
+};
 
-}
+export default PlantCard;

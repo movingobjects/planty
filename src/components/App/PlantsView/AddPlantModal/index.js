@@ -1,21 +1,24 @@
-import React, {
-  useState,
-  useContext
-} from 'react';
+import { useAtomValue } from 'jotai';
 import moment from 'moment';
+import React, {
+
+  useState
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AppContext } from 'components/App';
+import * as atoms from 'atoms';
+
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
 
-export default function AddPlantModal({
+const AddPlantModal = ({
   onAdd = (data) => { }
-}) {
-
+}) => {
   const navigate = useNavigate();
-  const { user, species } = useContext(AppContext);
+
+  const user = useAtomValue(atoms.user);
+  const species = useAtomValue(atoms.species);
 
   const emptyFormState = {
     name: '',
@@ -25,7 +28,7 @@ export default function AddPlantModal({
     waterings: []
   };
 
-  const [ formData, setFormData ] = useState(emptyFormState);
+  const [formData, setFormData] = useState(emptyFormState);
 
   const canAdd = (
     !!formData?.name?.length &&
@@ -33,23 +36,19 @@ export default function AddPlantModal({
   );
 
   function onInputChange(e) {
-
-    const field = e?.target?.name,
-          value = e?.target?.value;
+    const field = e?.target?.name;
+    const value = e?.target?.value;
 
     setFormData({
       ...formData,
       [field]: value
     });
-
   }
   function onSpecieIdChange(e) {
-
     setFormData({
       ...formData,
       specieId: e.target.value
-    })
-
+    });
   }
   function onImageSelect(e) {
     const file = e?.target?.files?.[0];
@@ -68,7 +67,7 @@ export default function AddPlantModal({
     }
   }
   function onClose() {
-    navigate('/plants')
+    navigate('/plants');
   }
 
   return (
@@ -82,22 +81,22 @@ export default function AddPlantModal({
 
         <p>
           <label
-            htmlFor='name'>
+            htmlFor="name">
             Name
           </label>
           <input
-            name='name'
+            name="name"
             value={formData.name || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='specie'>
+            htmlFor="specie">
             Specie
           </label>
           <select
-            name='specieId'
+            name="specieId"
             value={formData.specieId || ''}
             onChange={onSpecieIdChange}>
             {species.map((s) => (
@@ -112,12 +111,12 @@ export default function AddPlantModal({
 
         <p>
           <label
-            htmlFor='image'>
+            htmlFor="image">
             Image
           </label>
           <input
-            name='image'
-            type='file'
+            name="image"
+            type="file"
             onChange={onImageSelect} />
         </p>
 
@@ -134,6 +133,7 @@ export default function AddPlantModal({
       </div>
 
     </Modal>
-  )
+  );
+};
 
-}
+export default AddPlantModal;

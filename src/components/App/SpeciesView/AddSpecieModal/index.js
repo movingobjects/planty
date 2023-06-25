@@ -8,30 +8,27 @@ import style from './index.module.scss';
 const EMPTY_FORM_STATE = {
   commonName: '',
   scientificName: ''
-}
+};
 
-export default function AddSpecieModal({
+const AddSpecieModal = ({
   onAdd = (data) => { }
-}) {
-
+}) => {
   const navigate = useNavigate();
-  const [ formData, setFormData ] = useState(EMPTY_FORM_STATE);
+  const [formData, setFormData] = useState(EMPTY_FORM_STATE);
 
   const canAdd = (
     !!formData?.commonName?.length &&
     !!formData?.scientificName?.length
-  )
+  );
 
   function onInputChange(e) {
-
-    const field = e?.target?.name,
-          value = e?.target?.value;
+    const field = e?.target?.name;
+    const value = e?.target?.value;
 
     setFormData({
       ...formData,
       [field]: value
     });
-
   }
 
   function onAddClick(e) {
@@ -41,7 +38,7 @@ export default function AddSpecieModal({
     }
   }
   function onClose() {
-    navigate('/species')
+    navigate('/species');
   }
 
   return (
@@ -55,22 +52,22 @@ export default function AddSpecieModal({
 
         <p>
           <label
-            htmlFor='commonName'>
+            htmlFor="commonName">
             Common name
           </label>
           <input
-            name='commonName'
+            name="commonName"
             value={formData.commonName || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='scientificName'>
+            htmlFor="scientificName">
             Scientific name
           </label>
           <input
-            name='scientificName'
+            name="scientificName"
             value={formData.scientificName || ''}
             onChange={onInputChange} />
         </p>
@@ -88,6 +85,7 @@ export default function AddSpecieModal({
       </div>
 
     </Modal>
-  )
+  );
+};
 
-}
+export default AddSpecieModal;

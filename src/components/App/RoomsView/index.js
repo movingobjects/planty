@@ -1,64 +1,26 @@
-import React, { useContext } from 'react';
-import { API } from 'aws-amplify';
-import * as mutations from 'graphql/mutations';
-import { Routes, Route, Link } from 'react-router-dom';
+import { useAtomValue } from 'jotai';
+import React from 'react';
+import {
+  Link, Route, Routes
+} from 'react-router-dom';
 
-import { AppContext } from 'components/App';
+import * as atoms from 'atoms';
+import useApi from 'hooks/useApi';
 
 import AddRoomModal from './AddRoomModal';
 import EditRoomModal from './EditRoomModal';
 
 import style from './index.module.scss';
 
-export default function RoomsView() {
+const RoomsView = () => {
+  const plants = useAtomValue(atoms.plants);
+  const rooms = useAtomValue(atoms.rooms);
 
   const {
-    activePlants: plants,
-    rooms,
-    onRoomsChange
-  } = useContext(AppContext);
-
-  async function onAdd(roomData) {
-
-    await API.graphql({
-      query: mutations.createRoom,
-      variables: {
-        input: roomData
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onRoomsChange();
-
-  }
-  async function onSave(roomData) {
-
-    await API.graphql({
-      query: mutations.updateRoom,
-      variables: {
-        input: roomData
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onRoomsChange();
-
-  }
-  async function onDelete(roomId) {
-
-    await API.graphql({
-      query: mutations.deleteRoom,
-      variables: {
-        input: {
-          id: roomId
-        }
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onRoomsChange();
-
-  }
+    createRoom,
+    updateRoom,
+    deleteRoom
+  } = useApi();
 
   function getPlantsCount(roomId) {
     return plants
@@ -70,23 +32,27 @@ export default function RoomsView() {
     <div className={style.wrap}>
 
       <Routes>
-        <Route path='edit/:id' element={(
-          <EditRoomModal
-            onDelete={onDelete}
-            onSave={onSave} />
-        )} />
-        <Route path='add' element={(
-          <AddRoomModal
-            onAdd={onAdd} />
-        )} />
+        <Route
+          path="edit/:id"
+          element={(
+            <EditRoomModal
+              onDelete={deleteRoom}
+              onSave={updateRoom} />
+          )} />
+        <Route
+          path="add"
+          element={(
+            <AddRoomModal
+              onAdd={createRoom} />
+          )} />
       </Routes>
 
       <h2>Rooms</h2>
 
       <div className={style.wrapAdd}>
         <Link
-          to='/rooms/add'
-          alt='Add room'>
+          to="/rooms/add"
+          alt="Add room">
           Add room
         </Link>
       </div>
@@ -102,7 +68,7 @@ export default function RoomsView() {
               &nbsp;
               {room?.name} ({getPlantsCount(room?.id)} plants)
             </li>
-        ))}
+          ))}
       </ul>
       <h3>Main level</h3>
       <ul>
@@ -115,7 +81,7 @@ export default function RoomsView() {
               &nbsp;
               {room?.name} ({getPlantsCount(room?.id)} plants)
             </li>
-        ))}
+          ))}
       </ul>
       <h3>Upstairs</h3>
       <ul>
@@ -128,9 +94,11 @@ export default function RoomsView() {
               &nbsp;
               {room?.name} ({getPlantsCount(room?.id)} plants)
             </li>
-        ))}
+          ))}
       </ul>
 
     </div>
   );
-}
+};
+
+export default RoomsView;

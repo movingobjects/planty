@@ -1,12 +1,13 @@
-import React, {
-  useState,
-  useContext,
-  useEffect
-} from 'react';
+import { useAtomValue } from 'jotai';
 import { pick } from 'lodash';
+import React, {
+  useEffect,
+  useState
+} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { AppContext } from 'components/App';
+import * as atoms from 'atoms';
+
 import Modal from 'components/shared/Modal';
 
 import style from './index.module.scss';
@@ -15,19 +16,20 @@ const FIELDS = [
   'id',
   'name',
   'level'
-]
+];
 
-export default function EditRoomModal({
+const EditRoomModal = ({
   onDelete = () => { },
   onSave = (data) => { }
-}) {
-
+}) => {
   const navigate = useNavigate();
-  const { rooms } = useContext(AppContext);
   const { id: roomId } = useParams();
+
+  const rooms = useAtomValue(atoms.rooms);
+
   const room = rooms.find((s) => s.id === roomId);
 
-  const [ formData, setFormData ] = useState(pick(room, ...FIELDS));
+  const [formData, setFormData] = useState(pick(room, ...FIELDS));
 
   const canSave = (
     !!formData?.name?.length
@@ -35,18 +37,16 @@ export default function EditRoomModal({
 
   useEffect(() => {
     setFormData(pick(room, ...FIELDS));
-  }, [ room ]);
+  }, [room]);
 
   function onInputChange(e) {
-
-    const field = e?.target?.name,
-          value = e?.target?.value;
+    const field = e?.target?.name;
+    const value = e?.target?.value;
 
     setFormData({
       ...formData,
       [field]: value
     });
-
   }
 
   function onDeleteClick(e) {
@@ -63,7 +63,7 @@ export default function EditRoomModal({
   }
 
   function onClose() {
-    navigate('/rooms')
+    navigate('/rooms');
   }
 
   return (
@@ -77,23 +77,23 @@ export default function EditRoomModal({
 
         <p>
           <label
-            htmlFor='name'>
+            htmlFor="name">
             Name
           </label>
           <input
-            name='name'
+            name="name"
             value={formData.name || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='level'>
+            htmlFor="level">
             Level
           </label>
           <input
-            name='level'
-            type='number'
+            name="level"
+            type="number"
             value={formData.level || 0}
             onChange={onInputChange} />
         </p>
@@ -118,6 +118,7 @@ export default function EditRoomModal({
       </div>
 
     </Modal>
-  )
+  );
+};
 
-}
+export default EditRoomModal;

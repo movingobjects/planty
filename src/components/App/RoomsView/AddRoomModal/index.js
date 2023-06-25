@@ -8,29 +8,26 @@ import style from './index.module.scss';
 const EMPTY_FORM_STATE = {
   name: '',
   level: 0
-}
+};
 
-export default function AddRoomModal({
+const AddRoomModal = ({
   onAdd = (data) => { }
-}) {
-
+}) => {
   const navigate = useNavigate();
-  const [ formData, setFormData ] = useState(EMPTY_FORM_STATE);
+  const [formData, setFormData] = useState(EMPTY_FORM_STATE);
 
   const canAdd = (
     !!formData?.name?.length
-  )
+  );
 
   function onInputChange(e) {
-
-    const field = e?.target?.name,
-          value = e?.target?.value;
+    const field = e?.target?.name;
+    const value = e?.target?.value;
 
     setFormData({
       ...formData,
       [field]: value
     });
-
   }
 
   function onAddClick(e) {
@@ -40,7 +37,7 @@ export default function AddRoomModal({
     }
   }
   function onClose() {
-    navigate('/rooms')
+    navigate('/rooms');
   }
 
   return (
@@ -54,23 +51,23 @@ export default function AddRoomModal({
 
         <p>
           <label
-            htmlFor='name'>
+            htmlFor="name">
             Name
           </label>
           <input
-            name='name'
+            name="name"
             value={formData.name || ''}
             onChange={onInputChange} />
         </p>
 
         <p>
           <label
-            htmlFor='level'>
+            htmlFor="level">
             Level
           </label>
           <input
-            name='level'
-            type='number'
+            name="level"
+            type="number"
             value={formData.level || 0}
             onChange={onInputChange} />
         </p>
@@ -88,6 +85,7 @@ export default function AddRoomModal({
       </div>
 
     </Modal>
-  )
+  );
+};
 
-}
+export default AddRoomModal;

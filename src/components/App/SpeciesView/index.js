@@ -1,85 +1,51 @@
-import React, { useContext } from 'react';
-import { API } from 'aws-amplify';
-import * as mutations from 'graphql/mutations';
-import { Routes, Route, Link } from 'react-router-dom';
+import { useAtomValue } from 'jotai';
+import React from 'react';
+import {
+  Link, Route, Routes
+} from 'react-router-dom';
 
-import { AppContext } from 'components/App';
+import * as atoms from 'atoms';
+import useApi from 'hooks/useApi';
 
 import AddSpecieModal from './AddSpecieModal';
 import EditSpecieModal from './EditSpecieModal';
 
 import style from './index.module.scss';
 
-export default function SpeciesView() {
+const SpeciesView = () => {
+  const species = useAtomValue(atoms.species);
 
   const {
-    species,
-    onSpeciesChange
-  } = useContext(AppContext);
-
-  async function onAdd(specieData) {
-
-    await API.graphql({
-      query: mutations.createSpecie,
-      variables: {
-        input: specieData
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onSpeciesChange();
-
-  }
-  async function onSave(specieData) {
-
-    await API.graphql({
-      query: mutations.updateSpecie,
-      variables: {
-        input: specieData
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onSpeciesChange();
-
-  }
-  async function onDelete(specieId) {
-
-    await API.graphql({
-      query: mutations.deleteSpecie,
-      variables: {
-        input: {
-          id: specieId
-        }
-      },
-      authMode: 'AMAZON_COGNITO_USER_POOLS'
-    });
-
-    onSpeciesChange();
-
-  }
+    createSpecie,
+    updateSpecie,
+    deleteSpecie
+  } = useApi();
 
   return (
     <div className={style.wrap}>
 
       <Routes>
-        <Route path='edit/:id' element={(
-          <EditSpecieModal
-            onDelete={onDelete}
-            onSave={onSave} />
-        )} />
-        <Route path='add' element={(
-          <AddSpecieModal
-            onAdd={onAdd} />
-        )} />
+        <Route
+          path="edit/:id"
+          element={(
+            <EditSpecieModal
+              onDelete={deleteSpecie}
+              onSave={updateSpecie} />
+          )} />
+        <Route
+          path="add"
+          element={(
+            <AddSpecieModal
+              onAdd={createSpecie} />
+          )} />
       </Routes>
 
       <h2>Species</h2>
 
       <div className={style.wrapAdd}>
         <Link
-          to='/species/add'
-          alt='Add specie'>
+          to="/species/add"
+          alt="Add specie">
           Add specie
         </Link>
       </div>
@@ -97,4 +63,6 @@ export default function SpeciesView() {
 
     </div>
   );
-}
+};
+
+export default SpeciesView;
